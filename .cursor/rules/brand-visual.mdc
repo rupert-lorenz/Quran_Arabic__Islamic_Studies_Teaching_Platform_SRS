@@ -1,0 +1,39 @@
+---
+description: Al Haramain visual brand — colors, heading typeface, modern layout
+alwaysApply: true
+---
+
+# Visual brand
+
+Use this system for every new screen, component, and piece of copy. Do not revert to the old cream/teal palette or the book-mark SVG.
+
+## Colors
+
+- Forest green: `#294634` (primary / `--brand`), `#3B563F` (`--brand-soft`)
+- Gold: `#CB9F64` (`--brand-accent`); pale gold wash `#F3E6D0` (`--gold`)
+- Light gray / white: `#F3F4F2` (`--background`), `#FFFFFF` (`--surface`)
+- Body text: `#333333`; muted: `#5E6B63`
+- Header/footer: dark green with gold navigation and gold primary buttons
+
+## Type
+
+- Headings (`h1`–`h6` and display titles): **Poppins**, weight 700, tight tracking (`-0.035em`). Use the `font-heading` class. Geometric rounded sans in the Medora wordmark style — not Nunito, not serif.
+- Body, forms, and UI chrome: Nunito. Arabic: Noto Sans Arabic.
+- Do not force headings to lowercase; keep readable sentence case.
+
+## Modern layout
+
+- Keep the current green/gold/gray theme. Prefer white surfaces on light gray, compact card radius (`--radius-card`), and clear hierarchy.
+- Logo is `/brand/logo.png` (Al Haramain Schools wordmark, native 253×96). Place it directly on the green header/footer with no white plate. In the site header, pin it to the top of the green bar with ~10px inset (`top-2.5` on a 65px bar), natural 96px height on `sm+`, so it hangs ~40px below like alharamainschools.co.uk. Do not top-align an oversized mark from a mid-bar spacer. Do not add a duplicate name beside it.
+- Header auth is Login only (gold). Registration is reached from the login screen. Do not restore a header Get started button.
+- Do not restore the cream promo strip under the header.
+
+```tsx
+// ❌ BAD
+<h1 className="font-extrabold font-sans">Find a teacher</h1>
+
+// ✅ GOOD
+<h1 className="font-heading font-bold tracking-tight text-brand">
+  Find a teacher
+</h1>
+```

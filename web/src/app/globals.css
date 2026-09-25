@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f3f4f2;
+  --foreground: #333333;
+  --brand: #294634;
+  --brand-soft: #3b563f;
+  --brand-accent: #cb9f64;
+  --surface: #ffffff;
+  --muted: #5e6b63;
+  --line: color-mix(in srgb, var(--brand) 12%, transparent);
+  --mint: #e6eee8;
+  --gold: #f3e6d0;
+  --peach: #f8e4d2;
+  --sky: #dceef6;
+  --rose: #f5ddd8;
+  --shadow: 0 14px 36px color-mix(in srgb, var(--brand) 9%, transparent);
+  --heading-font: var(--font-poppins), var(--font-noto-arabic), ui-sans-serif,
+    system-ui, sans-serif;
+  --logo-hang: 1.75rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-accent: var(--brand-accent);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-mint: var(--mint);
+  --color-gold: var(--gold);
+  --color-peach: var(--peach);
+  --color-sky: var(--sky);
+  --color-rose: var(--rose);
+  --font-sans: var(--font-nunito), var(--font-noto-arabic), ui-sans-serif,
+    system-ui, sans-serif;
+  --font-heading: var(--heading-font);
+  --radius-card: 1.25rem;
+  --shadow-card: var(--shadow);
+  --breakpoint-xs: 22.5rem;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 90rem;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html[dir="rtl"] {
+  --font-sans: var(--font-noto-arabic), var(--font-nunito), ui-sans-serif,
+    system-ui, sans-serif;
+  --heading-font: var(--font-noto-arabic), var(--font-poppins), ui-sans-serif,
+    system-ui, sans-serif;
+}
+
+html[dir="rtl"] input[type="email"],
+html[dir="rtl"] input[type="password"],
+html[dir="rtl"] input[type="url"],
+html[dir="rtl"] input[type="tel"],
+html[dir="rtl"] input[type="number"] {
+  direction: ltr;
+  text-align: start;
+  unicode-bidi: isolate;
+}
+
+table {
+  text-align: start;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 0.25vw + 0.95rem, 1.125rem);
+  line-height: 1.65;
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--heading-font);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 3px solid var(--brand-accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brand-accent) 45%, white);
+  color: var(--brand);
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: -3rem;
+  z-index: 60;
+  border-radius: 999px;
+  background: var(--brand);
+  color: white;
+  padding: 0.6rem 1rem;
+}
+
+.skip-link:focus {
+  top: calc(0.75rem + env(safe-area-inset-top));
+}
+
+.site-header {
+  padding-top: env(safe-area-inset-top);
+}
+
+.logo-hang-band {
+  padding-top: var(--logo-hang);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --logo-hang: 3rem;
+  }
+}
+
+.classroom-flipbook {
+  perspective: 1800px;
+}
+
+.classroom-flipbook-leaf {
+  transform: rotateY(0deg);
+  transform-origin: left center;
+  backface-visibility: hidden;
+  transition: transform 480ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.classroom-flipbook-leaf.origin-end {
+  transform-origin: right center;
+}
+
+.classroom-flipbook-leaf.origin-start.is-turned {
+  transform: rotateY(-180deg);
+}
+
+.classroom-flipbook-leaf.origin-end.is-turned {
+  transform: rotateY(180deg);
+}
+
+.classroom-flipbook-curl {
+  background: linear-gradient(225deg, #f3e6d0 0 42%, transparent 44%);
+  box-shadow: -4px 4px 8px color-mix(in srgb, var(--brand) 12%, transparent);
+}
+
+.classroom-reader:fullscreen,
+.classroom-reader:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  border-radius: 0;
+  background: var(--surface);
+  padding: 1.25rem;
+}
+
+.classroom-reader:fullscreen .classroom-reader-zoom,
+.classroom-reader:-webkit-full-screen .classroom-reader-zoom {
+  max-height: min(78vh, 52rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .classroom-flipbook-leaf {
+    transition-duration: 0.01ms;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --logo-hang: 3.75rem;
+  }
+
+  .site-header .header-main {
+    height: 3.25rem;
+  }
+
+  .page-hero,
+  .home-hero {
+    padding-block: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

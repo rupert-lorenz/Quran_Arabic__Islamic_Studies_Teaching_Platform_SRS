@@ -1,0 +1,45 @@
+{
+  "name": "education-platform-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "start:staging": "node scripts/start-env.mjs staging",
+    "start:production": "node scripts/start-env.mjs production",
+    "env:check": "tsx scripts/check-env.ts",
+    "env:check:staging": "tsx scripts/check-env.ts --env staging",
+    "env:check:production": "tsx scripts/check-env.ts --env production",
+    "lint": "eslint",
+    "db:setup": "tsx scripts/guard-db.ts setup",
+    "db:push": "tsx scripts/guard-db.ts push",
+    "db:seed": "tsx scripts/guard-db.ts seed",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "ioredis": "^6.0.0",
+    "next": "16.3.5",
+    "postgres": "^3.4.9",
+    "qrcode": "^1.5.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "^4.6.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dotenv": "^17.4.2",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.5",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.13",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@10.34.5"
+}

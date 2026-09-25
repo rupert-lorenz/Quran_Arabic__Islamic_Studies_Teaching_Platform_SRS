@@ -1,0 +1,189 @@
+import { bundledUiMessages } from "@/lib/i18n";
+
+export const seedCurrencies = [
+  { code: "GBP", name: "British Pound", symbol: "£", decimalPlaces: 2 },
+  { code: "USD", name: "US Dollar", symbol: "$", decimalPlaces: 2 },
+  { code: "EUR", name: "Euro", symbol: "€", decimalPlaces: 2 },
+  { code: "SAR", name: "Saudi Riyal", symbol: "﷼", decimalPlaces: 2 },
+  { code: "AED", name: "UAE Dirham", symbol: "د.إ", decimalPlaces: 2 },
+  { code: "PKR", name: "Pakistani Rupee", symbol: "₨", decimalPlaces: 2 },
+  { code: "INR", name: "Indian Rupee", symbol: "₹", decimalPlaces: 2 },
+  { code: "MYR", name: "Malaysian Ringgit", symbol: "RM", decimalPlaces: 2 },
+  { code: "IDR", name: "Indonesian Rupiah", symbol: "Rp", decimalPlaces: 0 },
+  { code: "TRY", name: "Turkish Lira", symbol: "₺", decimalPlaces: 2 },
+  { code: "CAD", name: "Canadian Dollar", symbol: "$", decimalPlaces: 2 },
+  { code: "AUD", name: "Australian Dollar", symbol: "$", decimalPlaces: 2 },
+  { code: "EGP", name: "Egyptian Pound", symbol: "E£", decimalPlaces: 2 },
+  { code: "NGN", name: "Nigerian Naira", symbol: "₦", decimalPlaces: 2 },
+] as const;
+
+export const seedLocales = [
+  { code: "en", name: "English", direction: "ltr" as const },
+  { code: "ar", name: "Arabic", direction: "rtl" as const },
+] as const;
+
+export const seedCountries = [
+  { iso2: "GB", iso3: "GBR", name: "United Kingdom", defaultTimezone: "Europe/London", defaultCurrencyCode: "GBP", sortOrder: 10 },
+  { iso2: "US", iso3: "USA", name: "United States", defaultTimezone: "America/New_York", defaultCurrencyCode: "USD", sortOrder: 20 },
+  { iso2: "CA", iso3: "CAN", name: "Canada", defaultTimezone: "America/Toronto", defaultCurrencyCode: "CAD", sortOrder: 30 },
+  { iso2: "AU", iso3: "AUS", name: "Australia", defaultTimezone: "Australia/Sydney", defaultCurrencyCode: "AUD", sortOrder: 40 },
+  { iso2: "SA", iso3: "SAU", name: "Saudi Arabia", defaultTimezone: "Asia/Riyadh", defaultCurrencyCode: "SAR", sortOrder: 50 },
+  { iso2: "AE", iso3: "ARE", name: "United Arab Emirates", defaultTimezone: "Asia/Dubai", defaultCurrencyCode: "AED", sortOrder: 60 },
+  { iso2: "EG", iso3: "EGY", name: "Egypt", defaultTimezone: "Africa/Cairo", defaultCurrencyCode: "EGP", sortOrder: 70 },
+  { iso2: "PK", iso3: "PAK", name: "Pakistan", defaultTimezone: "Asia/Karachi", defaultCurrencyCode: "PKR", sortOrder: 80 },
+  { iso2: "IN", iso3: "IND", name: "India", defaultTimezone: "Asia/Kolkata", defaultCurrencyCode: "INR", sortOrder: 90 },
+  { iso2: "MY", iso3: "MYS", name: "Malaysia", defaultTimezone: "Asia/Kuala_Lumpur", defaultCurrencyCode: "MYR", sortOrder: 100 },
+  { iso2: "ID", iso3: "IDN", name: "Indonesia", defaultTimezone: "Asia/Jakarta", defaultCurrencyCode: "IDR", sortOrder: 110 },
+  { iso2: "TR", iso3: "TUR", name: "Türkiye", defaultTimezone: "Europe/Istanbul", defaultCurrencyCode: "TRY", sortOrder: 120 },
+  { iso2: "NG", iso3: "NGA", name: "Nigeria", defaultTimezone: "Africa/Lagos", defaultCurrencyCode: "NGN", sortOrder: 130 },
+  { iso2: "JO", iso3: "JOR", name: "Jordan", defaultTimezone: "Asia/Amman", defaultCurrencyCode: "USD", sortOrder: 140 },
+  { iso2: "MA", iso3: "MAR", name: "Morocco", defaultTimezone: "Africa/Casablanca", defaultCurrencyCode: "EUR", sortOrder: 150 },
+  { iso2: "QA", iso3: "QAT", name: "Qatar", defaultTimezone: "Asia/Qatar", defaultCurrencyCode: "USD", sortOrder: 160 },
+  { iso2: "KW", iso3: "KWT", name: "Kuwait", defaultTimezone: "Asia/Kuwait", defaultCurrencyCode: "USD", sortOrder: 170 },
+  { iso2: "FR", iso3: "FRA", name: "France", defaultTimezone: "Europe/Paris", defaultCurrencyCode: "EUR", sortOrder: 180 },
+  { iso2: "DE", iso3: "DEU", name: "Germany", defaultTimezone: "Europe/Berlin", defaultCurrencyCode: "EUR", sortOrder: 190 },
+  { iso2: "NL", iso3: "NLD", name: "Netherlands", defaultTimezone: "Europe/Amsterdam", defaultCurrencyCode: "EUR", sortOrder: 200 },
+] as const;
+
+export const seedSubjects = [
+  { slug: "quran", name: "Qur'an", description: "Recitation and fluency", sortOrder: 10 },
+  { slug: "tajweed", name: "Tajweed", description: "Pronunciation rules", sortOrder: 20 },
+  { slug: "hifdh", name: "Hifdh", description: "Memorisation and revision", sortOrder: 30 },
+  { slug: "arabic", name: "Arabic", description: "Language skills", sortOrder: 40 },
+  { slug: "islamic-studies", name: "Islamic Studies", description: "Aqidah, seerah, and adab", sortOrder: 50 },
+] as const;
+
+export const seedPermissions = [
+  { key: "users.read", name: "Read users", group: "users" },
+  { key: "users.write", name: "Write users", group: "users" },
+  { key: "users.suspend", name: "Suspend users", group: "users" },
+  { key: "teachers.approve", name: "Approve teachers", group: "teachers" },
+  { key: "teachers.documents.review", name: "Review teacher documents", group: "teachers" },
+  { key: "reviews.moderate", name: "Moderate teacher reviews", group: "teachers" },
+  { key: "students.manage", name: "Manage students", group: "students" },
+  { key: "parents.manage", name: "Manage parents", group: "parents" },
+  { key: "classes.manage", name: "Manage classes", group: "classes" },
+  { key: "payments.read", name: "Read payments", group: "finance" },
+  { key: "payments.refund", name: "Issue refunds", group: "finance" },
+  { key: "payouts.manage", name: "Manage payouts", group: "finance" },
+  { key: "marketing.campaigns", name: "Manage campaigns", group: "marketing" },
+  { key: "academic.curriculum", name: "Manage curriculum", group: "academic" },
+  { key: "academic.certificates", name: "Manage certificates", group: "academic" },
+  { key: "safeguarding.incidents", name: "Safeguarding incidents", group: "safeguarding" },
+  { key: "safeguarding.recordings", name: "Review recordings", group: "safeguarding" },
+  { key: "cms.write", name: "Write CMS content", group: "cms" },
+  { key: "settings.write", name: "Change platform settings", group: "settings" },
+  { key: "audit.read", name: "Read audit logs", group: "security" },
+  { key: "reports.finance", name: "Financial reports", group: "reports" },
+  { key: "reports.academic", name: "Academic reports", group: "reports" },
+  { key: "reports.marketing", name: "Marketing reports", group: "reports" },
+  { key: "rbac.read", name: "Read roles and permissions", group: "security" },
+  { key: "rbac.write", name: "Change roles and account permissions", group: "security" },
+] as const;
+
+export const rolePermissionKeys: Record<string, string[] | "all"> = {
+  super_admin: "all",
+  admin: [
+    "users.read",
+    "users.write",
+    "teachers.approve",
+    "teachers.documents.review",
+    "reviews.moderate",
+    "students.manage",
+    "parents.manage",
+    "classes.manage",
+    "cms.write",
+    "settings.write",
+    "reports.academic",
+    "rbac.read",
+  ],
+  accounts: ["payments.read", "payments.refund", "payouts.manage", "reports.finance"],
+  marketing: ["marketing.campaigns", "cms.write", "reports.marketing"],
+  academic: [
+    "academic.curriculum",
+    "academic.certificates",
+    "classes.manage",
+    "reports.academic",
+  ],
+  safeguarding: [
+    "safeguarding.incidents",
+    "safeguarding.recordings",
+    "users.suspend",
+    "audit.read",
+  ],
+  teacher: [],
+  student: [],
+  parent: [],
+};
+
+export const seedTranslations = [
+  { entityType: "subject", entityKey: "quran", locale: "en", field: "name", value: "Qur'an" },
+  { entityType: "subject", entityKey: "quran", locale: "ar", field: "name", value: "القرآن" },
+  { entityType: "subject", entityKey: "quran", locale: "ar", field: "description", value: "تلاوة وطلاقة وحب الكتاب على وتيرة الطفل." },
+  { entityType: "subject", entityKey: "tajweed", locale: "en", field: "name", value: "Tajweed" },
+  { entityType: "subject", entityKey: "tajweed", locale: "ar", field: "name", value: "تجويد" },
+  { entityType: "subject", entityKey: "tajweed", locale: "ar", field: "description", value: "قواعد واضحة وتصحيح لطيف ونطق واثق." },
+  { entityType: "subject", entityKey: "hifdh", locale: "en", field: "name", value: "Hifdh" },
+  { entityType: "subject", entityKey: "hifdh", locale: "ar", field: "name", value: "حفظ" },
+  { entityType: "subject", entityKey: "hifdh", locale: "ar", field: "description", value: "حفظ ومراجعة مع مسار تقدم مرئي." },
+  { entityType: "subject", entityKey: "arabic", locale: "en", field: "name", value: "Arabic" },
+  { entityType: "subject", entityKey: "arabic", locale: "ar", field: "name", value: "العربية" },
+  { entityType: "subject", entityKey: "arabic", locale: "ar", field: "description", value: "قراءة وكلام ونحو للأطفال والكبار." },
+  { entityType: "subject", entityKey: "islamic-studies", locale: "en", field: "name", value: "Islamic Studies" },
+  { entityType: "subject", entityKey: "islamic-studies", locale: "ar", field: "name", value: "الدراسات الإسلامية" },
+  { entityType: "subject", entityKey: "islamic-studies", locale: "ar", field: "description", value: "عقيدة وسيرة وأدب وممارسة يومية مناسبة للعمر." },
+  ...Object.entries(bundledUiMessages.ar ?? {}).map(([key, value]) => ({
+    entityType: "ui",
+    entityKey: key,
+    locale: "ar",
+    field: "text",
+    value,
+  })),
+];
+
+export const seedBrand = {
+  name: "Al Haramain Schools",
+  shortName: "AH",
+  legalName: "Al Haramain Schools",
+  nameAr: "مدارس الحرمين",
+  tagline: "Qur'an, Arabic & Islamic Studies",
+  taglineAr: "القرآن والعربية والدراسات الإسلامية",
+  description:
+    "A premium, child-friendly marketplace for Qur'an, Arabic, and Islamic Studies — with live lessons, parent oversight, and trusted teachers.",
+  supportEmail: "support@localhost",
+} as const;
+
+export const seedSettings = [
+  { key: "commission.default_percent", value: 20 },
+  { key: "teacher.rate.min_minor", value: 500 },
+  { key: "teacher.rate.max_minor", value: 20000 },
+  { key: "booking.min_notice_minutes", value: 120 },
+  { key: "booking.cancel_notice_minutes", value: 1440 },
+  { key: "booking.min_commitment_lessons", value: 1 },
+  { key: "lesson.default_duration_minutes", value: 30 },
+  { key: "recording.retention_days", value: 365 },
+  { key: "platform.default_locale", value: "en" },
+  { key: "platform.default_currency", value: "GBP" },
+  { key: "brand.profile", value: seedBrand },
+  {
+    key: "brand.classroom",
+    value: {
+      showMark: true,
+      showName: true,
+      showNameAr: true,
+      showTagline: true,
+      watermark: "both",
+      caption: "",
+      primaryColor: "#294634",
+      accentColor: "#CB9F64",
+    },
+  },
+  {
+    key: "seo.site",
+    value: {
+      defaultTitle: "",
+      defaultDescription: "",
+      robotsIndex: true,
+    },
+  },
+] as const;
