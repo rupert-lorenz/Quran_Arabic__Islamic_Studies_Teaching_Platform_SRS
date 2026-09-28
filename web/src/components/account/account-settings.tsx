@@ -226,6 +226,10 @@ export function AccountSettings({
             <Link href="/family/ai" className="underline">
               AI Systems
             </Link>
+            {" · "}
+            <Link href="/family/wallet" className="underline">
+              Wallet
+            </Link>
           </p>
         ) : null}
         {roleKey === "student" ? (

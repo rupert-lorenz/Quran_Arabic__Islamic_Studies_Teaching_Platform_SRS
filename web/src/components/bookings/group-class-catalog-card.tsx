@@ -45,6 +45,11 @@ export function GroupClassCatalogCard({
           <dd className="font-extrabold text-brand">
             {t("group.price_per_session", { price: item.studentPriceFormatted })}
           </dd>
+          {item.listedPriceFormatted ? (
+            <dd className="mt-1 text-xs font-semibold text-muted">
+              {t("card.listed_as", { price: item.listedPriceFormatted })}
+            </dd>
+          ) : null}
           {item.sessionCount > 1 ? (
             <dd className="mt-1 text-xs font-semibold text-muted">
               {t("group.series_total", {

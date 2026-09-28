@@ -1,32 +1,35 @@
-import { AccountsWorkspace } from "@/components/staff/accounts-workspace";
+import { PaymentsFinanceDeskView } from "@/components/finance/payments-finance-desk";
 import { Container } from "@/components/ui/container";
-import { hasAnyPermission } from "@/lib/rbac";
+import { PageHero } from "@/components/ui/page-hero";
+import { getI18n } from "@/server/i18n/locale";
+import { getPaymentsFinanceDesk } from "@/server/finance/service";
 import { requireStaffPage } from "@/server/rbac/guard";
-import { listFinanceWorkspace } from "@/server/staff/finance";
 
 export const metadata = {
-  title: "Accounts",
+  title: "Payments & Marketplace Finance",
 };
 
 export default async function StaffAccountsPage() {
   const access = await requireStaffPage("payments.read");
-  const workspace = await listFinanceWorkspace();
+  const [{ t }, desk] = await Promise.all([
+    getI18n(),
+    getPaymentsFinanceDesk({
+      userId: access.user.id,
+      roleKey: access.user.roleKey,
+      permissions: access.permissions,
+    }),
+  ]);
 
   return (
-    <Container className="py-10">
-      <h1 className="text-3xl font-extrabold text-brand">Accounts</h1>
-      <p className="mt-2 max-w-2xl text-muted">
-        Dedicated finance workspace. Refunds and payouts stay behind their own
-        permission keys.
-      </p>
-      <div className="mt-8">
-        <AccountsWorkspace
-          initial={workspace}
-          canRefund={hasAnyPermission(access, "payments.refund")}
-          canPayout={hasAnyPermission(access, "payouts.manage")}
-          canReport={hasAnyPermission(access, "reports.finance")}
-        />
-      </div>
-    </Container>
+    <>
+      <PageHero
+        eyebrow={t("pay.eyebrow")}
+        title={t("pay.title")}
+        description={t("pay.help")}
+      />
+      <Container className="py-10">
+        <PaymentsFinanceDeskView desk={desk} />
+      </Container>
+    </>
   );
 }

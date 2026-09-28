@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
 import { AdminGroupClassCreator } from "@/components/bookings/admin-group-class-creator";
+import { GroupClassPaymentsFacultyView } from "@/components/finance/group-class-payments-faculty";
 import { AdminGroupOpportunityBoard } from "@/components/bookings/admin-group-opportunity-board";
 import { AdminGroupOpportunityForm } from "@/components/bookings/admin-group-opportunity-form";
 import { Container } from "@/components/ui/container";
@@ -8,6 +9,7 @@ import { currencies, subjects } from "@/db/schema";
 import { DEFAULT_CURRENCY } from "@/lib/currency";
 import { listAdminGroupClassOpportunities } from "@/server/booking/group-class-opportunities";
 import { listAdminGroupTeachingTeachers } from "@/server/booking/group-lessons";
+import { getGroupClassPaymentsFaculty } from "@/server/finance/group-class-payments";
 import { getTeacherRateLimits } from "@/server/teacher/profile";
 import { requireStaffPage } from "@/server/rbac/guard";
 
@@ -22,7 +24,7 @@ export default async function StaffGroupClassesPage() {
     roleKey: access.user.roleKey,
     permissions: access.permissions,
   };
-  const [groupTeachers, rateLimits, enabledSubjects, enabledCurrencies, opportunities] =
+  const [groupTeachers, rateLimits, enabledSubjects, enabledCurrencies, opportunities, groupPayments] =
     await Promise.all([
       listAdminGroupTeachingTeachers(actor),
       getTeacherRateLimits(),
@@ -37,6 +39,7 @@ export default async function StaffGroupClassesPage() {
         .where(eq(currencies.isEnabled, true))
         .orderBy(currencies.code),
       listAdminGroupClassOpportunities(actor),
+      getGroupClassPaymentsFaculty(actor),
     ]);
 
   return (
@@ -52,6 +55,7 @@ export default async function StaffGroupClassesPage() {
           classes without a staff posting.
         </p>
       </div>
+      <GroupClassPaymentsFacultyView faculty={groupPayments} manageHref="/group-lessons" />
       <AdminGroupOpportunityForm
         subjects={enabledSubjects}
         currencies={enabledCurrencies}

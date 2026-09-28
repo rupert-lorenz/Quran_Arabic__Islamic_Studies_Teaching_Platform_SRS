@@ -15,6 +15,10 @@ export const seedCurrencies = [
   { code: "AUD", name: "Australian Dollar", symbol: "$", decimalPlaces: 2 },
   { code: "EGP", name: "Egyptian Pound", symbol: "E£", decimalPlaces: 2 },
   { code: "NGN", name: "Nigerian Naira", symbol: "₦", decimalPlaces: 2 },
+  { code: "QAR", name: "Qatari Riyal", symbol: "ر.ق", decimalPlaces: 2 },
+  { code: "KWD", name: "Kuwaiti Dinar", symbol: "د.ك", decimalPlaces: 3 },
+  { code: "JOD", name: "Jordanian Dinar", symbol: "د.ا", decimalPlaces: 3 },
+  { code: "MAD", name: "Moroccan Dirham", symbol: "د.م.", decimalPlaces: 2 },
 ] as const;
 
 export const seedLocales = [
@@ -36,10 +40,10 @@ export const seedCountries = [
   { iso2: "ID", iso3: "IDN", name: "Indonesia", defaultTimezone: "Asia/Jakarta", defaultCurrencyCode: "IDR", sortOrder: 110 },
   { iso2: "TR", iso3: "TUR", name: "Türkiye", defaultTimezone: "Europe/Istanbul", defaultCurrencyCode: "TRY", sortOrder: 120 },
   { iso2: "NG", iso3: "NGA", name: "Nigeria", defaultTimezone: "Africa/Lagos", defaultCurrencyCode: "NGN", sortOrder: 130 },
-  { iso2: "JO", iso3: "JOR", name: "Jordan", defaultTimezone: "Asia/Amman", defaultCurrencyCode: "USD", sortOrder: 140 },
-  { iso2: "MA", iso3: "MAR", name: "Morocco", defaultTimezone: "Africa/Casablanca", defaultCurrencyCode: "EUR", sortOrder: 150 },
-  { iso2: "QA", iso3: "QAT", name: "Qatar", defaultTimezone: "Asia/Qatar", defaultCurrencyCode: "USD", sortOrder: 160 },
-  { iso2: "KW", iso3: "KWT", name: "Kuwait", defaultTimezone: "Asia/Kuwait", defaultCurrencyCode: "USD", sortOrder: 170 },
+  { iso2: "JO", iso3: "JOR", name: "Jordan", defaultTimezone: "Asia/Amman", defaultCurrencyCode: "JOD", sortOrder: 140 },
+  { iso2: "MA", iso3: "MAR", name: "Morocco", defaultTimezone: "Africa/Casablanca", defaultCurrencyCode: "MAD", sortOrder: 150 },
+  { iso2: "QA", iso3: "QAT", name: "Qatar", defaultTimezone: "Asia/Qatar", defaultCurrencyCode: "QAR", sortOrder: 160 },
+  { iso2: "KW", iso3: "KWT", name: "Kuwait", defaultTimezone: "Asia/Kuwait", defaultCurrencyCode: "KWD", sortOrder: 170 },
   { iso2: "FR", iso3: "FRA", name: "France", defaultTimezone: "Europe/Paris", defaultCurrencyCode: "EUR", sortOrder: 180 },
   { iso2: "DE", iso3: "DEU", name: "Germany", defaultTimezone: "Europe/Berlin", defaultCurrencyCode: "EUR", sortOrder: 190 },
   { iso2: "NL", iso3: "NLD", name: "Netherlands", defaultTimezone: "Europe/Amsterdam", defaultCurrencyCode: "EUR", sortOrder: 200 },
@@ -155,6 +159,7 @@ export const seedBrand = {
 
 export const seedSettings = [
   { key: "commission.default_percent", value: 20 },
+  { key: "commission.default_fixed_minor", value: 0 },
   { key: "teacher.rate.min_minor", value: 500 },
   { key: "teacher.rate.max_minor", value: 20000 },
   { key: "booking.min_notice_minutes", value: 120 },

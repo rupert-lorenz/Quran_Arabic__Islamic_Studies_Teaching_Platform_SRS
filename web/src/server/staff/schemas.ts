@@ -146,6 +146,7 @@ export const updateTeacherRatePolicySchema = z.object({
   minAmount: z.string().trim().min(1).max(20),
   maxAmount: z.string().trim().min(1).max(20),
   commissionPercent: z.coerce.number().min(0).max(80),
+  commissionFixedAmount: z.string().trim().max(20).optional(),
   defaultCurrencyCode: z.string().trim().length(3),
   lessonDurationMinutes: z.coerce.number().int().min(15).max(180),
   minNoticeMinutes: z.coerce.number().int().min(0).max(10080).optional(),

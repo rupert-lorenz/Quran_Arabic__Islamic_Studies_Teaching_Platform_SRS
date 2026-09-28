@@ -56,9 +56,9 @@ export function AccountsWorkspace({
   const [message, setMessage] = useState("");
   const [pending, setPending] = useState(false);
   const kinds = [
-    { key: "payment", label: "Payment", allowed: true },
+    { key: "payment", label: "One-off payment", allowed: true },
     { key: "refund", label: "Refund", allowed: canRefund },
-    { key: "credit", label: "Credit", allowed: canRefund },
+    { key: "credit", label: "Platform credit", allowed: canRefund },
     { key: "payout", label: "Payout", allowed: canPayout },
   ].filter((item) => item.allowed);
 
@@ -69,9 +69,9 @@ export function AccountsWorkspace({
   return (
     <div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <StaffStat label="Payments" value={data.summary.payments} />
+        <StaffStat label="One-off payments" value={data.summary.payments} />
         <StaffStat label="Refunds" value={data.summary.refunds} />
-        <StaffStat label="Credits" value={data.summary.credits} />
+        <StaffStat label="Platform credit" value={data.summary.credits} />
         <StaffStat label="Payouts" value={data.summary.payouts} />
         <StaffStat label="Open items" value={data.summary.open} />
       </div>
@@ -81,8 +81,8 @@ export function AccountsWorkspace({
           <a href="/staff/rates" className="underline">
             Edit teacher rate limits
           </a>
-          . Stripe settlement arrives later; this register is the Accounts
-          working queue.
+          . Stripe settlement stays reserved; this register is the live
+          marketplace finance queue.
         </p>
       ) : null}
 
@@ -114,6 +114,11 @@ export function AccountsWorkspace({
         }}
       >
         <h2 className="text-xl font-extrabold text-brand">Record an item</h2>
+        <p className="mt-2 text-sm text-muted">
+          A one-off payment is a staff-recorded charge. Platform credit becomes
+          available wallet spend when the item is completed. Credit and refund
+          rows appear in Credit transaction history.
+        </p>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <label className="block">
             <span className="mb-1 block text-sm font-bold text-brand">Type</span>

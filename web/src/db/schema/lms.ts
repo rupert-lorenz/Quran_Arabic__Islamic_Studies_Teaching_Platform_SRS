@@ -1,6 +1,8 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   boolean,
+  char,
+  check,
   index,
   integer,
   jsonb,
@@ -30,6 +32,7 @@ import {
   teachingMaterialStatusEnum,
 } from "./enums";
 import { files } from "./files";
+import { currencies } from "./geo";
 import { users } from "./identity";
 import { studentProfiles } from "./profiles";
 
@@ -151,16 +154,27 @@ export const teachingMaterialGrants = pgTable(
   ],
 );
 
-export const librarySubscriptionPlans = pgTable("library_subscription_plans", {
-  key: varchar("key", { length: 40 }).primaryKey(),
-  name: varchar("name", { length: 160 }).notNull(),
-  description: varchar("description", { length: 400 }),
-  defaultDays: integer("default_days"),
-  isEnabled: boolean("is_enabled").notNull().default(true),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-});
+export const librarySubscriptionPlans = pgTable(
+  "library_subscription_plans",
+  {
+    key: varchar("key", { length: 40 }).primaryKey(),
+    name: varchar("name", { length: 160 }).notNull(),
+    description: varchar("description", { length: 400 }),
+    defaultDays: integer("default_days"),
+    amountMinor: integer("amount_minor").notNull().default(0),
+    currencyCode: char("currency_code", { length: 3 }).references(
+      () => currencies.code,
+      { onDelete: "restrict" },
+    ),
+    isEnabled: boolean("is_enabled").notNull().default(true),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    check("library_subscription_plans_amount_check", sql`${table.amountMinor} >= 0`),
+  ],
+);
 
 export const librarySubscriptionPlanItems = pgTable(
   "library_subscription_plan_items",
@@ -199,6 +213,11 @@ export const librarySubscriptions = pgTable(
       .defaultNow()
       .notNull(),
     expiresAt: timestamp("expires_at", { withTimezone: true }),
+    amountMinor: integer("amount_minor").notNull().default(0),
+    currencyCode: char("currency_code", { length: 3 }).references(
+      () => currencies.code,
+      { onDelete: "restrict" },
+    ),
     grantedByUserId: uuid("granted_by_user_id").references(() => users.id, {
       onDelete: "set null",
     }),
@@ -209,6 +228,7 @@ export const librarySubscriptions = pgTable(
   (table) => [
     index("library_subscriptions_student_idx").on(table.studentUserId),
     index("library_subscriptions_plan_idx").on(table.planKey),
+    check("library_subscriptions_amount_check", sql`${table.amountMinor} >= 0`),
   ],
 );
 

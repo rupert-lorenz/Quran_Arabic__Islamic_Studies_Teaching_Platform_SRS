@@ -1,7 +1,9 @@
+import { MonthlySubscriptionsFacultyView } from "@/components/finance/monthly-subscriptions-faculty";
 import { TeachingMaterialLibrary } from "@/components/lms/teaching-material-library";
 import { TeacherWorkspaceShell } from "@/components/teachers/teacher-workspace-shell";
 import { Container } from "@/components/ui/container";
 import { PageHero } from "@/components/ui/page-hero";
+import { getMonthlySubscriptionsFaculty } from "@/server/finance/monthly-subscriptions";
 import { getI18n } from "@/server/i18n/locale";
 import { listTeachingLibrary } from "@/server/lms/library";
 import { requireApprovedTeacher } from "@/server/rbac/guard";
@@ -12,13 +14,15 @@ export const metadata = {
 
 export default async function TeacherLibraryPage() {
   const access = await requireApprovedTeacher();
-  const [{ t }, library] = await Promise.all([
+  const actor = {
+    userId: access.user.id,
+    roleKey: access.user.roleKey,
+    permissions: access.permissions,
+  };
+  const [{ t }, library, monthly] = await Promise.all([
     getI18n(),
-    listTeachingLibrary({
-      userId: access.user.id,
-      roleKey: access.user.roleKey,
-      permissions: access.permissions,
-    }),
+    listTeachingLibrary(actor),
+    getMonthlySubscriptionsFaculty(actor),
   ]);
 
   return (
@@ -28,7 +32,8 @@ export default async function TeacherLibraryPage() {
         title={t("library.title")}
         description={t("library.teacher_help")}
       />
-      <Container className="py-10">
+      <Container className="space-y-8 py-10">
+        <MonthlySubscriptionsFacultyView faculty={monthly} />
         <TeachingMaterialLibrary
           materials={library.materials}
           subjects={library.subjects}

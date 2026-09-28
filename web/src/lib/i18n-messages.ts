@@ -67,6 +67,319 @@ export const defaultUiMessages = {
   "news.read": "Read update",
   "language.label": "Language",
   "currency.label": "Currency",
+  "currency.faculty.eyebrow": "Payments",
+  "currency.faculty.title": "Multiple currencies",
+  "currency.faculty.help":
+    "Choose a display currency. Lesson, group, course, and wallet amounts stay in the listed settlement currency. The switcher converts the price you see when a staff FX rate exists.",
+  "currency.faculty.page_help":
+    "Enable ISO currencies and set display rates against the platform default. Settlement stays in the listed currency. Hidden codes remain on historic rows but cannot be chosen.",
+  "currency.faculty.display": "Display currency",
+  "currency.faculty.settlement": "Settlement",
+  "currency.faculty.listed": "Listed booking currency",
+  "currency.faculty.available": "Available",
+  "currency.faculty.catalogue": "Catalogue",
+  "currency.faculty.rates": "FX rates",
+  "currency.faculty.default": "Default",
+  "currency.faculty.hidden": "Hidden",
+  "currency.faculty.code": "Code",
+  "currency.faculty.name": "Name",
+  "currency.faculty.rate_for": "Rate / 1 {code}",
+  "currency.faculty.has_rate": "Display rate set",
+  "currency.faculty.missing_rate": "Needs a display rate",
+  "currency.faculty.missing_help":
+    "These available currencies have no FX rate yet: {codes}. Families will see the listed currency until staff save a rate.",
+  "currency.faculty.manage": "Manage currencies",
+  "currency.faculty.staff_help":
+    "Listed teacher prices stay in the teacher’s currency. Families see converted amounts using staff-set rates quoted per 1 {code}. Hidden currencies stay on existing rates but cannot be chosen.",
+  "price.faculty.eyebrow": "Payments",
+  "price.faculty.title": "Market and location prices",
+  "price.faculty.help":
+    "Families see prices in their display currency when a staff FX rate exists. Country, subject, and teacher bands change the listed hourly range only where staff configure them. Settlement stays in the listed currency.",
+  "price.faculty.page_help":
+    "Set country, subject, and teacher hourly bands. Public catalogues convert display amounts where FX is configured. Booked settlement stays in the listed currency.",
+  "price.faculty.market": "Market",
+  "price.faculty.no_country": "No country on this account",
+  "price.faculty.display": "Display currency",
+  "price.faculty.source.cookie": "From the currency switcher",
+  "price.faculty.source.account": "From the account preference",
+  "price.faculty.source.country": "From the country default",
+  "price.faculty.source.default": "Platform default",
+  "price.faculty.conversion": "Display conversion",
+  "price.faculty.conversion_on": "On when listed currency differs",
+  "price.faculty.conversion_off": "Listed currency shown",
+  "price.faculty.band": "Hourly band",
+  "price.faculty.band_market": "Country market rule applied",
+  "price.faculty.band_platform": "Platform range until a country rule is saved",
+  "price.faculty.counts":
+    "{country} country, {subject} subject, and {teacher} teacher rules",
+  "price.faculty.counts_public":
+    "{country} country and {subject} subject market rules",
+  "price.faculty.rules_empty":
+    "No location rules yet. Public prices follow the platform range and convert only when FX is set.",
+  "price.faculty.manage": "Manage location price bands",
+  "price.faculty.public_converted":
+    "Prices below are shown in {code} where a display rate is configured. Settlement stays in the listed currency.",
+  "price.faculty.public_band":
+    "Hourly ranges for {market} use the configured market band.",
+  "price.faculty.controls_eyebrow": "Location rules",
+  "price.faculty.controls_title": "Country, subject, and teacher ranges",
+  "price.faculty.controls_help":
+    "Country and subject rules tighten the platform band. A teacher rule replaces that teacher’s minimum or maximum when you set one.",
+  "price.faculty.scope": "Scope",
+  "price.faculty.scope.country": "Country",
+  "price.faculty.scope.subject": "Subject",
+  "price.faculty.scope.teacher": "Teacher",
+  "price.faculty.select_scope": "Select {scope}",
+  "price.faculty.min_optional": "Minimum (optional)",
+  "price.faculty.max_optional": "Maximum (optional)",
+  "price.faculty.inherit": "Inherit",
+  "price.faculty.save": "Save control",
+  "price.faculty.saving": "Saving…",
+  "price.faculty.remove": "Remove",
+  "price.faculty.save_failed": "Could not save pricing control",
+  "price.faculty.remove_failed": "Could not remove pricing control",
+  "price.faculty.controls_empty":
+    "No country, subject, or teacher controls yet. The platform range applies to everyone.",
+  "hourly.faculty.eyebrow": "Payments",
+  "hourly.faculty.title": "Hourly lessons",
+  "hourly.faculty.help":
+    "One-to-one sittings store the student amount from the teacher’s listed hourly rate, prorated for {minutes} minutes by default. A trial sitting uses {percent}% of that amount. Settlement stays in the listed currency. The price you see converts when a display rate exists.",
+  "hourly.faculty.page_help":
+    "Each booked one-to-one sitting keeps a student amount in minor units. The amount comes from the teacher’s hourly rate and the lesson length. Families see a converted figure when FX is configured.",
+  "hourly.faculty.sittings": "Sittings",
+  "hourly.faculty.open_completed": "{open} open · {completed} completed",
+  "hourly.faculty.single": "Hourly sittings",
+  "hourly.faculty.packaged_note": "{count} also sit inside a block booking",
+  "hourly.faculty.trial": "Trial sittings",
+  "hourly.faculty.trial_rate": "{percent}% of the hourly sitting",
+  "hourly.faculty.display": "Display currency",
+  "hourly.faculty.conversion_on": "Shown converted where FX exists",
+  "hourly.faculty.conversion_off": "Listed currency shown",
+  "hourly.faculty.in_block": "Block sitting",
+  "hourly.faculty.empty":
+    "No hourly sittings yet. Book a one-to-one lesson from a teacher profile.",
+  "hourly.faculty.manage": "Open lesson calendar",
+  "single.faculty.title": "Single payments",
+  "single.faculty.help":
+    "A sitting without a lesson package is one payment for that sitting. Recurring weeks still charge each week on its own. Settlement stays in the listed currency. The price you see converts when a display rate exists.",
+  "single.faculty.page_help":
+    "Choose Single booking on a teacher profile to pay for one sitting. Weekly repeats without a package stay single payments. Lesson packages belong to block bookings.",
+  "single.faculty.payments": "Single payments",
+  "single.faculty.open_completed": "{open} open · {completed} completed",
+  "single.faculty.one_off": "One sitting",
+  "single.faculty.one_off_help": "No weekly series and no package",
+  "single.faculty.recurring": "Weekly sittings",
+  "single.faculty.recurring_help": "Each week is still one payment",
+  "single.faculty.display": "Display currency",
+  "single.faculty.conversion_on": "Shown converted where FX exists",
+  "single.faculty.conversion_off": "Listed currency shown",
+  "single.faculty.trial_count": "{count} trial sittings among these payments",
+  "single.faculty.trial_tag": "Trial",
+  "single.faculty.series_tag": "Weekly sitting",
+  "single.faculty.empty":
+    "No single payments yet. Book a one-to-one sitting without a lesson package.",
+  "single.faculty.manage": "Open lesson calendar",
+  "blocks.faculty.title": "Block bookings",
+  "blocks.faculty.help":
+    "A lesson package is one prepaid block. The family pays the discounted package total once. Each week is a sitting inside that block, not a new payment. Settlement stays in the listed currency. The price you see converts when a display rate exists.",
+  "blocks.faculty.page_help":
+    "Choose Lesson package on a teacher profile to reserve 4, 8, or 12 weekly sittings at a package discount. Recurring weeks without a package stay single payments.",
+  "blocks.faculty.packages": "Block bookings",
+  "blocks.faculty.open_completed": "{active} active · {completed} completed",
+  "blocks.faculty.sittings": "Sittings in blocks",
+  "blocks.faculty.sittings_help": "{remaining} still open · {done} taken",
+  "blocks.faculty.sizes": "Package sizes",
+  "blocks.faculty.sizes_help": "{four} of 4 · {eight} of 8 · {twelve} of 12",
+  "blocks.faculty.display": "Display currency",
+  "blocks.faculty.conversion_on": "Shown converted where FX exists",
+  "blocks.faculty.conversion_off": "Listed currency shown",
+  "blocks.faculty.cancelled": "{count} cancelled blocks",
+  "blocks.faculty.discount": "{percent}% package discount",
+  "blocks.faculty.remaining": "{remaining} of {total} sittings left",
+  "blocks.faculty.empty":
+    "No block bookings yet. Book a lesson package from a teacher profile.",
+  "blocks.faculty.manage": "Open lesson calendar",
+  "subscriptions.faculty.title": "Monthly subscriptions",
+  "subscriptions.faculty.help":
+    "A library plan is one monthly content payment. The family pays the listed monthly price for 30 days of covered materials. Settlement stays in the listed currency. The price you see converts when a display rate exists. Students never see teacher payment.",
+  "subscriptions.faculty.page_help":
+    "Staff set a monthly price on Academic, then assign the plan to a student. Covered library items stay open while the subscription is active.",
+  "subscriptions.faculty.seats": "Subscriptions",
+  "subscriptions.faculty.ended": "{ended} ended",
+  "subscriptions.faculty.monthly": "Monthly seats",
+  "subscriptions.faculty.monthly_help": "30-day library access",
+  "subscriptions.faculty.plans": "Plans",
+  "subscriptions.faculty.plans_help": "{priced} priced · {monthly} monthly",
+  "subscriptions.faculty.display": "Display currency",
+  "subscriptions.faculty.conversion_on": "Shown converted where FX exists",
+  "subscriptions.faculty.conversion_off": "Listed currency shown",
+  "subscriptions.faculty.complimentary_count":
+    "{count} complimentary library subscriptions",
+  "subscriptions.faculty.complimentary": "Complimentary",
+  "subscriptions.faculty.monthly_tag": "Monthly",
+  "subscriptions.faculty.empty":
+    "No monthly subscriptions yet. Staff assign a priced library plan on Academic.",
+  "subscriptions.faculty.manage": "Open library subscriptions",
+  "one_off.faculty.title": "One-off payments",
+  "one_off.faculty.help":
+    "A register payment is one staff-recorded charge. It is not a lesson sitting, package, or monthly plan. Display converts when FX exists. Settlement stays listed.",
+  "one_off.faculty.payments": "Payments",
+  "one_off.faculty.open_completed": "{open} open · {completed} completed",
+  "one_off.faculty.completed": "Completed",
+  "one_off.faculty.completed_help": "Posted on the accounts register.",
+  "one_off.faculty.held": "On hold",
+  "one_off.faculty.held_help": "Held items are the live dispute queue.",
+  "one_off.faculty.display": "Display",
+  "one_off.faculty.conversion_on":
+    "Amounts convert to this currency when FX exists.",
+  "one_off.faculty.conversion_off": "Amounts stay in the listed currency.",
+  "one_off.faculty.empty":
+    "No one-off payments yet. Staff record them on the accounts register.",
+  "one_off.faculty.manage": "Open accounts register",
+  "one_off.faculty.unassigned": "No account",
+  "courses.faculty.title": "Course payments",
+  "courses.faculty.help":
+    "A live-course enrolment is one course payment. The family pays the listed course price once and every session is reserved. Session sit-ins stay at zero so they are not charged again. Display converts when FX exists. Settlement stays listed.",
+  "courses.faculty.payments": "Payments",
+  "courses.faculty.open_completed": "{open} open · {completed} completed",
+  "courses.faculty.courses": "Courses",
+  "courses.faculty.courses_help": "Published or enrolled live courses in this view.",
+  "courses.faculty.cancelled": "Cancelled",
+  "courses.faculty.cancelled_help": "Enrolments cancelled after they were recorded.",
+  "courses.faculty.display": "Display",
+  "courses.faculty.conversion_on":
+    "Amounts convert to this currency when FX exists.",
+  "courses.faculty.conversion_off": "Amounts stay in the listed currency.",
+  "courses.faculty.complimentary": "Complimentary",
+  "courses.faculty.complimentary_count": "{count} complimentary enrolments",
+  "courses.faculty.sessions": "{count} sessions",
+  "courses.faculty.empty":
+    "No course payments yet. Families join a live course from the catalogue.",
+  "courses.faculty.manage": "Open live courses",
+  "groups.faculty.title": "Group-class payments",
+  "groups.faculty.help":
+    "A standalone group enrolment is one student session payment. Recurring weeks still charge each week. Course sit-ins stay on Course payments. Listed teacher pay stays internal. Display converts when FX exists. Settlement stays listed.",
+  "groups.faculty.payments": "Payments",
+  "groups.faculty.open_completed": "{open} open · {completed} completed",
+  "groups.faculty.classes": "Classes",
+  "groups.faculty.classes_help": "{series} series session payments in this view.",
+  "groups.faculty.cancelled": "Cancelled",
+  "groups.faculty.cancelled_help": "{waitlisted} waitlisted.",
+  "groups.faculty.display": "Display",
+  "groups.faculty.conversion_on":
+    "Amounts convert to this currency when FX exists.",
+  "groups.faculty.conversion_off": "Amounts stay in the listed currency.",
+  "groups.faculty.complimentary": "Complimentary",
+  "groups.faculty.complimentary_count": "{count} complimentary enrolments",
+  "groups.faculty.series_tag": "Series",
+  "groups.faculty.empty":
+    "No group-class payments yet. Families join a standalone group class from the catalogue.",
+  "groups.faculty.manage": "Open group classes",
+  "wallet.faculty.title": "Customer wallet",
+  "wallet.faculty.help":
+    "Platform credit is spendable wallet balance. Staff awards and early family cancellations wait for Accounts review, then become available when the credit is completed. Refunds are not wallet spend. Display converts when FX exists. Settlement stays listed.",
+  "wallet.faculty.available": "Available",
+  "wallet.faculty.available_help": "{count} completed credits",
+  "wallet.faculty.pending": "Pending",
+  "wallet.faculty.pending_help": "{count} awaiting review",
+  "wallet.faculty.held": "On hold",
+  "wallet.faculty.held_help": "{count} held as disputes",
+  "wallet.faculty.display": "Display",
+  "wallet.faculty.conversion_on":
+    "Amounts convert to this currency when FX exists.",
+  "wallet.faculty.conversion_off": "Amounts stay in the listed currency.",
+  "wallet.faculty.cancellation": "Cancellation credit",
+  "wallet.faculty.award": "Platform credit",
+  "wallet.faculty.empty":
+    "No platform credit yet. Staff record it on the accounts register, or a family cancellation can raise a credit for review.",
+  "wallet.faculty.manage": "Open wallet",
+  "wallet.faculty.unassigned": "No account",
+  "credit_history.faculty.title": "Credit transaction history",
+  "credit_history.faculty.help":
+    "Every platform credit and refund is listed with its review status. Credits include staff awards and early family cancellations. Refunds are listed here but are not wallet spend. Display converts when FX exists. Settlement stays listed.",
+  "credit_history.faculty.credits": "Credits",
+  "credit_history.faculty.credits_help": "{count} credit rows",
+  "credit_history.faculty.refunds": "Refunds",
+  "credit_history.faculty.refunds_help": "{count} refund rows",
+  "credit_history.faculty.pending": "Pending",
+  "credit_history.faculty.pending_help": "{count} awaiting review",
+  "credit_history.faculty.display": "Display",
+  "credit_history.faculty.conversion_on":
+    "Amounts convert to this currency when FX exists.",
+  "credit_history.faculty.conversion_off": "Amounts stay in the listed currency.",
+  "credit_history.faculty.cancellation": "Cancellation credit",
+  "credit_history.faculty.award": "Platform credit",
+  "credit_history.faculty.refund": "Refund",
+  "credit_history.faculty.empty":
+    "No credit or refund rows yet. Staff record them on the accounts register, or a family cancellation can raise a credit for review.",
+  "credit_history.faculty.manage": "Open history",
+  "credit_history.faculty.unassigned": "No account",
+  "commission_auto.faculty.title": "Automatic commission",
+  "commission_auto.faculty.help":
+    "Each student amount is split automatically: {percent}% to the platform, the rest to the teacher. Hourly sittings, block sittings, standalone group classes, and course enrolments all use the same cut. Families never see this split. Display converts when FX exists. Settlement stays listed.",
+  "commission_auto.faculty.help_fixed":
+    "Each student amount is split automatically: {percent}% plus {fixed} fixed to the platform, the rest to the teacher. Hourly sittings, block sittings, standalone group classes, and course enrolments all use the same cut. Families never see this split. Display converts when FX exists. Settlement stays listed.",
+  "commission_auto.faculty.gross": "Gross",
+  "commission_auto.faculty.gross_help": "{count} automatic splits",
+  "commission_auto.faculty.commission": "Commission",
+  "commission_auto.faculty.commission_help": "{percent}% platform cut",
+  "commission_auto.faculty.commission_help_fixed":
+    "{percent}% plus {fixed} fixed",
+  "commission_auto.faculty.net": "Teacher net",
+  "commission_auto.faculty.net_help": "After the automatic platform cut",
+  "commission_auto.faculty.display": "Display",
+  "commission_auto.faculty.conversion_on":
+    "Amounts convert to this currency when FX exists.",
+  "commission_auto.faculty.conversion_off":
+    "Amounts stay in the listed currency.",
+  "commission_auto.faculty.hourly": "Hourly sitting",
+  "commission_auto.faculty.block": "Block sitting",
+  "commission_auto.faculty.group": "Group class",
+  "commission_auto.faculty.course": "Course enrolment",
+  "commission_auto.faculty.split_line":
+    "{gross} gross · {commission} commission · {net} net",
+  "commission_auto.faculty.empty":
+    "No automatic splits yet. They appear when a family pays for a sitting, standalone group class, or live course.",
+  "commission_auto.faculty.manage": "Open commission",
+  "commission_auto.faculty.unassigned": "No teacher",
+  "commission_rules.faculty.title": "Percentage and fixed commission",
+  "commission_rules.faculty.help":
+    "Staff set one platform percentage (0–{max}) and an optional fixed amount on Rates. The percent is taken first, then the fixed amount is added, without exceeding the student amount. Families never see this cut. Display converts when FX exists. Settlement stays listed.",
+  "commission_rules.faculty.percent": "Percentage",
+  "commission_rules.faculty.percent_help": "0–{max}% of each student amount",
+  "commission_rules.faculty.fixed": "Fixed",
+  "commission_rules.faculty.fixed_help_off": "No fixed add-on. Percent only.",
+  "commission_rules.faculty.fixed_help_on":
+    "Added after the percent cut, in the listed currency.",
+  "commission_rules.faculty.fixed_help_listed": "Listed as {amount}. Added after the percent cut.",
+  "commission_rules.faculty.example": "Example cut",
+  "commission_rules.faculty.split_line":
+    "{gross} gross · {commission} commission · {net} net",
+  "commission_rules.faculty.display": "Display",
+  "commission_rules.faculty.conversion_on":
+    "Amounts convert to this currency when FX exists.",
+  "commission_rules.faculty.conversion_off":
+    "Amounts stay in the listed currency.",
+  "commission_rules.faculty.manage": "Open rates",
+  "commission_scoped.faculty.title":
+    "Teacher, country, course and class commission",
+  "commission_scoped.faculty.help":
+    "Teacher and country hourly bands, plus each live-course and standalone group-class listed price, take the same {percent}% platform cut. Families never see this split. Display converts when FX exists. Settlement stays listed.",
+  "commission_scoped.faculty.help_fixed":
+    "Teacher and country hourly bands, plus each live-course and standalone group-class listed price, take {percent}% then {fixed}. Families never see this split. Display converts when FX exists. Settlement stays listed.",
+  "commission_scoped.faculty.teacher": "Teacher",
+  "commission_scoped.faculty.teacher_help": "Hourly band for a named teacher",
+  "commission_scoped.faculty.country": "Country",
+  "commission_scoped.faculty.country_help": "Hourly band for a country",
+  "commission_scoped.faculty.course": "Course",
+  "commission_scoped.faculty.course_help": "Listed live-course price",
+  "commission_scoped.faculty.class": "Class",
+  "commission_scoped.faculty.class_help": "Listed standalone group-class price",
+  "commission_scoped.faculty.split_line":
+    "{gross} gross · {commission} commission · {net} net",
+  "commission_scoped.faculty.empty":
+    "No teacher, country, course, or class amounts yet. Add a teacher or country band on Rates, or publish a live course or standalone group class.",
+  "commission_scoped.faculty.manage": "Open rates",
   "timezone.label": "Time zone",
   "timezone.help": "Lesson times convert automatically to this zone.",
   "subjects.eyebrow": "Curriculum",
@@ -457,6 +770,7 @@ export const defaultUiMessages = {
   "teach_nav.arabic": "Arabic",
   "teach_nav.islamic": "Islamic Studies",
   "teach_nav.ai": "AI Systems",
+  "teach_nav.earnings": "Earnings",
   "homework.eyebrow": "LMS",
   "homework.title": "Homework",
   "homework.help":
@@ -1089,11 +1403,11 @@ export const defaultUiMessages = {
   "ai.eyebrow": "AI Systems",
   "ai.title": "AI Systems",
   "ai.help":
-    "English and Arabic transcription are live. British English is the default. Arabic speech-to-text runs where the browser can hear Arabic; otherwise type or use lesson chat. Search transcripts, keep speakers separate where possible, write lesson summaries, key learning points, vocabulary, improvement areas, and next-lesson recommendations from those transcripts, and approve AI work before it is published. Students can keep private notes during a lesson or from an approved transcript. Teachers can generate homework, quiz drafts, and learning recommendations from a lesson, book, topic, uploaded document, or previous lesson, then approve them before learners see them. Academically important AI work stays unpublished until a teacher reviews it. Speech transcripts and extractive drafts are labelled as AI generated, and stay labelled as AI-assisted if a teacher edits them. Safety controls block contact details, teacher payment, marks, certificates, and safeguarding decisions. AI cannot take those academic or safeguarding decisions on its own. Students never see teacher payment.",
+    "AI is modular: transcription, summaries, notes, homework, quizzes, recommendations, review, identification, safety, decisions, and AI-assisted search/support are separate faculties. Each one can stay live without the others. Generation runs through a server adapter only — the browser never receives provider keys. The on-platform extractive module is the active runner; OpenAI and Deepgram are reserved slots. Ask a how-to or lesson question and the support module quotes help topics, published FAQs, and approved lesson text you are allowed to see. It does not invent answers, award marks, or take a safeguarding decision. English and Arabic transcription are live. British English is the default. Arabic speech-to-text runs where the browser can hear Arabic; otherwise type or use lesson chat. Search transcripts, keep speakers separate where possible, write lesson summaries, key learning points, vocabulary, improvement areas, and next-lesson recommendations from those transcripts, and approve AI work before it is published. Students can keep private notes during a lesson or from an approved transcript. Teachers can generate homework, quiz drafts, and learning recommendations from a lesson, book, topic, uploaded document, or previous lesson, then approve them before learners see them. Academically important AI work stays unpublished until a teacher reviews it. Speech transcripts and extractive drafts are labelled as AI generated, and stay labelled as AI-assisted if a teacher edits them. Safety controls block contact details, teacher payment, marks, certificates, and safeguarding decisions. AI cannot take those academic or safeguarding decisions on its own. Students never see teacher payment.",
   "ai.student_help":
-    "Search and read published lesson transcripts, summaries, key learning points, vocabulary, improvement areas, next-lesson recommendations, homework drafts, quiz drafts, and learning recommendations. A teacher must approve academically important AI work before it is published. Write private notes in the lesson or from those transcripts. Speakers stay separate where the classroom can tell them apart. AI-generated text is labelled, safety controls stay on, and official marks stay with a teacher.",
+    "Ask a how-to or lesson question. AI-assisted search quotes help pages, FAQs, and published lesson text you are allowed to see. Search and read published lesson transcripts, summaries, key learning points, vocabulary, improvement areas, next-lesson recommendations, homework drafts, quiz drafts, and learning recommendations. A teacher must approve academically important AI work before it is published. Write private notes in the lesson or from those transcripts. Speakers stay separate where the classroom can tell them apart. AI-generated text is labelled, safety controls stay on, and official marks stay with a teacher. Each AI faculty is a separate module; learners only see approved academic work.",
   "ai.family_help":
-    "Search and read each child's published lesson transcripts, summaries, key learning points, vocabulary, improvement areas, next-lesson recommendations, homework drafts, quiz drafts, and learning recommendations. Families only see AI work after a teacher has approved and published it. Private student notes stay with the learner. Speakers stay separate where the classroom can tell them apart. AI-generated text is labelled, safety controls stay on, and official marks stay with a teacher.",
+    "Ask a how-to or lesson question for a child. AI-assisted search quotes help pages, FAQs, and published lesson text the family is allowed to see. Search and read each child's published lesson transcripts, summaries, key learning points, vocabulary, improvement areas, next-lesson recommendations, homework drafts, quiz drafts, and learning recommendations. Families only see AI work after a teacher has approved and published it. Private student notes stay with the learner. Speakers stay separate where the classroom can tell them apart. AI-generated text is labelled, safety controls stay on, and official marks stay with a teacher. Each AI faculty is a separate module; families only see approved academic work.",
   "ai.saved": "AI Systems updated.",
   "ai.failed": "AI Systems could not be updated.",
   "ai.safety.title": "AI safety controls",
@@ -1127,6 +1441,61 @@ export const defaultUiMessages = {
   "ai.decisions.suspend": "AI cannot suspend or restrict an account.",
   "ai.decisions.human":
     "A teacher or safeguarding staff member must take those decisions in the academic and safeguarding screens.",
+  "ai.architecture.title": "Modular AI architecture",
+  "ai.architecture.help":
+    "AI faculties are registered as independent modules. A new faculty can be added or paused without rewriting the others. Generation goes through a server adapter. Shared safety, review, identification, and no-autonomous-decision hooks stay on for every live module.",
+  "ai.architecture.independent":
+    "Transcription, summaries, notes, homework, quizzes, recommendations, and transcript search are separate modules. Turning one off does not take the others down.",
+  "ai.architecture.adapters":
+    "OpenAI and Deepgram are reserved provider slots. They stay unconfigured until you add server secrets. The browser never receives those keys.",
+  "ai.architecture.server":
+    "AI is a server adapter only. Desks call /api/v1/ai. Provider keys never enter the page.",
+  "ai.architecture.hooks":
+    "Safety, teacher review, AI-content labels, and the no-autonomous-decision rule are shared hooks. Every generating module uses them.",
+  "ai.architecture.active": "Active runner: {provider}.",
+  "ai.architecture.builtin": "On-platform extractive",
+  "ai.architecture.openai": "OpenAI",
+  "ai.architecture.deepgram": "Deepgram",
+  "ai.architecture.reserved": "Reserved",
+  "ai.architecture.configured": "Configured",
+  "ai.architecture.unconfigured": "Not configured",
+  "ai.architecture.builtin_help":
+    "Lesson text is summarised and drafted on the platform. No third-party model call is required.",
+  "ai.architecture.vendor_help":
+    "This vendor slot is ready when the matching server secret is set. Generation stays on the platform until that transport is wired.",
+  "ai.architecture.independent_badge": "Independent module",
+  "ai.architecture.provider_bound": "Uses the AI adapter",
+  "ai.architecture.review_hook": "Teacher review",
+  "ai.module.support": "AI-assisted search and support",
+  "ai.module.help.architecture":
+    "The registry, server adapters, and shared hooks that keep AI faculties independent.",
+  "ai.module.help.review":
+    "A teacher or academic staff member must approve academically important AI work before learners see it.",
+  "ai.module.help.identification":
+    "AI-generated and AI-assisted text is labelled so it is not mistaken for writing a person typed from scratch.",
+  "ai.module.help.safety":
+    "Contact details, teacher payment, marks, certificates, and safeguarding decisions stay out of AI text.",
+  "ai.module.help.decisions":
+    "AI cannot take a sensitive academic or safeguarding decision on its own.",
+  "ai.module.help.support":
+    "Ask a how-to or lesson question. The answer is extractive: it quotes help topics, published FAQs, and approved lesson text you are allowed to see. It does not invent an answer, award a mark, or take a safeguarding decision.",
+  "ai.support.title": "AI-assisted search and support",
+  "ai.support.help":
+    "Ask how to book, join, cancel, or use a faculty. The answer quotes platform help, published FAQs, and approved lesson text you can see. Private notes stay out. AI cannot award a mark or decide a safeguarding case.",
+  "ai.support.label": "Question",
+  "ai.support.placeholder": "How do I join the classroom?",
+  "ai.support.submit": "Ask AI support",
+  "ai.support.empty": "Ask a question to search help and approved lesson text.",
+  "ai.support.none": "No matching help was found. Try the FAQs, or ask a teacher.",
+  "ai.support.recent": "Earlier questions",
+  "ai.support.source.help": "Platform help",
+  "ai.support.source.faq": "FAQ",
+  "ai.support.source.page": "Help page",
+  "ai.support.source.transcript": "Approved transcript",
+  "ai.support.source.summary": "Approved summary",
+  "ai.support.source.homework": "Approved homework",
+  "ai.support.source.quiz": "Approved quiz",
+  "ai.support.source.recommendation": "Approved recommendation",
   "ai.review.title": "Teacher review",
   "ai.review.help":
     "Transcripts, summaries, homework, quizzes, and learning recommendations stay unpublished until a teacher or academic staff member approves them. AI cannot publish this work. Private student notes do not need this review.",
@@ -1444,7 +1813,7 @@ export const defaultUiMessages = {
   "live.eyebrow": "Weekly cohort learning",
   "live.title": "Live courses",
   "live.description":
-    "Join a teacher-led course with the same small cohort each week. One enrollment reserves every scheduled session.",
+    "Join a teacher-led course with the same small cohort each week. One enrolment is one course payment and reserves every scheduled session.",
   "live.badge": "Live course",
   "live.sessions": "Sessions",
   "live.first_session": "First session",
@@ -1460,7 +1829,7 @@ export const defaultUiMessages = {
   "group.description":
     "Join a scheduled small-group class with an approved teacher. Times are converted automatically to your timezone.",
   "group.catalog_description":
-    "Browse each class by name, length, schedule, and rate. Open a class to see every session date.",
+    "Browse each class by name, length, schedule, and student session price. One enrolment is one group-class payment. Open a class to see every session date.",
   "group.schedule_description": "Daily sessions for {title}.",
   "group.view_schedule": "View daily schedule",
   "group.daily_schedule": "Daily schedule",
@@ -1538,7 +1907,7 @@ export const defaultUiMessages = {
   "group.empty": "No upcoming group lessons are published yet.",
   "group.opportunities": "Class opportunities",
   "group.opportunities_help":
-    "Optional. Staff may post a class that still needs a teacher. Apply if the schedule fits your hours. You can also publish your own classes below without a staff posting. Students never see these listings or teacher payment.",
+    "Optional. Staff may post a class that still needs a teacher. Apply if you can teach that schedule. You can also publish your own classes below without a staff posting. Students never see these listings or teacher payment.",
   "group.opportunity_badge": "Open opportunity",
   "group.apply_opportunity": "Apply for this class",
   "group.applying": "Applying…",
@@ -1825,6 +2194,18 @@ export const defaultUiMessages = {
   "classroom.no_phone":
     "Stay in this classroom. Do not share phone numbers or personal accounts.",
   "classroom.not_open": "The classroom opens 15 minutes before the lesson starts.",
+  "classroom.teacher_not_open":
+    "The classroom opens 60 minutes before the lesson starts so you can prepare.",
+  "classroom.opens_at": "Join classroom from {time}.",
+  "classroom.opens_local": "On this device that is {time}.",
+  "classroom.opens_label": "Classroom opens in",
+  "classroom.begins_label": "Class begins in",
+  "classroom.opens_clock": "Opens at {time}",
+  "classroom.begins_clock": "Begins at {time}",
+  "classroom.unit_day": "{count} day",
+  "classroom.unit_days": "{count} days",
+  "classroom.unit_hour": "{count} hour",
+  "classroom.unit_hours": "{count} hours",
   "classroom.ended": "This classroom has closed.",
   "classroom.closed": "This lesson is not available in the classroom.",
   "classroom.forbidden": "You do not have access to this classroom.",
@@ -2019,7 +2400,12 @@ export const defaultUiMessages = {
   "library.rental.saved": "Rental access updated.",
   "library.subscription.title": "Subscription access",
   "library.subscription.help":
-    "Create a subscription plan, cover learner materials, set an optional period, then assign it to students. Covered items switch to Requires access and stay open while the plan is active. Teacher guides stay with teachers and staff. Students never see teacher payment.",
+    "Create a monthly library plan, set a price, cover learner materials, then assign it to students. A new plan defaults to 30 days. Covered items switch to Requires access and stay open while the plan is active. Teacher guides stay with teachers and staff. Students never see teacher payment.",
+  "library.subscription.amount": "Monthly price",
+  "library.subscription.set_price": "Save monthly price",
+  "library.subscription.price": "{price} / month",
+  "library.subscription.monthly": "Monthly",
+  "library.subscription.complimentary": "Complimentary",
   "library.subscription.yours": "Your subscriptions",
   "library.subscription.create": "Create plan",
   "library.subscription.key": "Plan key",
@@ -2121,11 +2507,11 @@ export const defaultUiMessages = {
   "booking.staff_view": "Staff manage bookings from the staff calendar.",
   "booking.format_note": "This is a private one-to-one lesson: one teacher and one student.",
   "booking.single_note":
-    "Single booking: this reserves only the selected lesson. It does not create a weekly series.",
+    "Single booking: one payment for this sitting only. It does not create a weekly series or a lesson package.",
   "booking.recurring_note":
-    "Recurring booking: the selected time repeats weekly in the teacher’s timezone.",
+    "Recurring booking: the selected time repeats weekly in the teacher’s timezone. Each week is still a single payment.",
   "booking.package_note":
-    "Lesson package: reserve a discounted block of weekly lessons in one booking.",
+    "Lesson package: one prepaid block booking. The family pays the discounted total once. Each reserved week is a sitting inside that block, not a new payment.",
   "booking.mode": "Booking schedule",
   "booking.mode_single": "Single booking",
   "booking.mode_recurring": "Recurring booking",
@@ -2247,6 +2633,138 @@ export const defaultUiMessages = {
   "booking.finance_action_refund": "Refund awaiting review",
   "booking.finance_action_forfeit": "Lesson payment retained",
   "booking.finance_action_none": "No payment action required",
+  "pay.eyebrow": "Payments",
+  "pay.title": "Payments & Marketplace Finance",
+  "pay.help":
+    "Marketplace money is modular: currencies, location prices, hourly and single lessons, block bookings, monthly library subscriptions, one-off payments, course and group-class payments, family wallet credit, commission, teacher earnings, payouts, refunds, account credit, and disputes. Stripe checkout and automated payouts stay reserved until their server secrets are set. Promo codes and the referral programme stay planned. Students never see teacher payment.",
+  "pay.teacher_help":
+    "See gross lesson value, platform commission, net, pending, available, and paid earnings. Request a payout when a balance is available. Staff review payouts on the payments desk. Students never see these figures.",
+  "pay.family_help":
+    "See platform credit, pending credit from cancellations, refunds, and the lesson, group, course, block, subscription, and one-off charges for your children. Teacher payment stays hidden.",
+  "pay.architecture.title": "Marketplace finance architecture",
+  "pay.architecture.help":
+    "Payments sit on the existing finance register, currencies, rate limits, and booking amounts. Card checkout and connected-account payouts are server adapters only. The browser never receives provider keys.",
+  "pay.adapter.payments": "Payments adapter",
+  "pay.adapter.payouts": "Payouts adapter",
+  "pay.adapter.configured": "Configured",
+  "pay.adapter.manual": "Manual register",
+  "pay.commission.summary":
+    "Automatic commission is {percent}% plus {fixed} fixed, then teacher and country or subject price bands where configured.",
+  "pay.hidden_from_students":
+    "Teacher earnings, commission, and payouts stay on teacher and staff desks only.",
+  "pay.modules.title": "Finance faculties",
+  "pay.live": "Live",
+  "pay.planned": "Planned",
+  "pay.open": "Open",
+  "pay.register.title": "Accounts register",
+  "pay.register.help":
+    "Record a one-off payment, full or partial refund, account credit, or payout. Completing a credit posts it to the family wallet. Completing a payout marks teacher earnings as paid. Hold an item to treat it as a dispute.",
+  "pay.disputes.title": "Dispute management",
+  "pay.disputes.help":
+    "Items on hold are the live dispute queue. Change the status when the case is resolved. Card-network chargebacks wait for the payments adapter.",
+  "pay.disputes.empty": "No finance items are on hold.",
+  "pay.wallet.title": "Wallet",
+  "pay.wallet.help":
+    "Platform credit from staff awards and early family cancellations. Pending credit waits for Accounts review. Completed credit is available wallet spend. Refunds are listed separately and are not wallet spend.",
+  "pay.wallet.available": "Available credit",
+  "pay.wallet.pending": "Pending credit",
+  "pay.wallet.refunded": "Refunded",
+  "pay.wallet.empty": "None",
+  "pay.wallet.history": "Credit transaction history",
+  "pay.wallet.history_empty": "No credit or refund rows yet.",
+  "pay.family.charges": "Lesson and course payments",
+  "pay.family.charges_help":
+    "Hourly lessons, block bookings, group classes, live courses, library subscriptions, and staff-recorded one-off payments for your children.",
+  "pay.family.charges_empty": "No family charges yet.",
+  "pay.earnings.title": "Teacher earnings",
+  "pay.earnings.help":
+    "Gross is the listed student amount. Commission is the automatic platform cut. Net is what you earn. Pending is not yet completed. Available can be requested. Paid is a completed payout.",
+  "pay.earnings.gross": "Gross",
+  "pay.earnings.commission": "Commission",
+  "pay.earnings.net": "Net",
+  "pay.earnings.pending": "Pending",
+  "pay.earnings.available": "Available",
+  "pay.earnings.paid": "Paid",
+  "pay.earnings.lines": "Earning lines",
+  "pay.earnings.empty": "No earning lines yet.",
+  "pay.payout.title": "Request a payout",
+  "pay.payout.amount": "Amount",
+  "pay.payout.currency": "Currency",
+  "pay.payout.notes": "Notes",
+  "pay.payout.submit": "Request payout",
+  "pay.payout.saving": "Sending…",
+  "pay.payout.requested": "Payout request sent for review.",
+  "pay.payout.failed": "Could not request that payout.",
+  "pay.module.currencies": "Multiple currencies",
+  "pay.module.location_prices": "Market and location prices",
+  "pay.module.hourly": "Hourly lessons",
+  "pay.module.single": "Single payments",
+  "pay.module.blocks": "Block bookings",
+  "pay.module.subscriptions": "Monthly subscriptions",
+  "pay.module.one_off": "One-off payments",
+  "pay.module.courses": "Course payments",
+  "pay.module.groups": "Group-class payments",
+  "pay.module.wallet": "Customer wallet",
+  "pay.module.credit_history": "Credit transaction history",
+  "pay.module.commission_auto": "Automatic commission",
+  "pay.module.commission_rules": "Percentage and fixed commission",
+  "pay.module.commission_scoped":
+    "Teacher, country, course and class commission",
+  "pay.module.earnings": "Teacher earnings dashboard",
+  "pay.module.earnings_split": "Gross, commission, net, pending, available, paid",
+  "pay.module.payouts": "Teacher payout management",
+  "pay.module.payouts_auto": "Automated marketplace payouts",
+  "pay.module.refunds": "Full and partial refunds",
+  "pay.module.account_credit": "Account credit",
+  "pay.module.disputes": "Dispute management",
+  "pay.module.promo": "Promo and discount codes",
+  "pay.module.referral": "Referral programme",
+  "pay.module.help.currencies":
+    "Enabled ISO currencies and display FX stay on Currencies. Lesson amounts keep their booked settlement currency. The header switcher converts the price you see.",
+  "pay.module.help.location_prices":
+    "Country, subject, and teacher bands change the listed hourly range where configured. Catalogues convert the price families see when FX exists. Settlement stays in the listed currency.",
+  "pay.module.help.hourly":
+    "One-to-one sittings store a student amount from the teacher’s hourly rate, prorated by length. Trial sittings use the trial percent. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.single":
+    "A sitting without a lesson package is one payment for that sitting. Recurring weeks still charge each week. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.blocks":
+    "A lesson package is one prepaid block. The family pays the discounted package total once. Each week is a sitting inside that block. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.subscriptions":
+    "A library plan is one monthly content payment. The family pays the listed monthly price for 30 days of covered materials. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.one_off":
+    "A register payment is one staff-recorded charge. It is not a lesson sitting, package, or monthly plan. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.courses":
+    "A live-course enrolment is one course payment. The family pays the listed course price once and every session is reserved. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.groups":
+    "A standalone group enrolment is one student session payment. Recurring weeks still charge each week. Course sit-ins stay on Course payments. Listed teacher pay stays internal. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.wallet":
+    "Platform credit is spendable wallet balance. Staff awards and early family cancellations wait for Accounts review, then become available when the credit is completed. Refunds are not wallet spend. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.credit_history":
+    "Every platform credit and refund is listed with its review status. Credits include staff awards and early family cancellations. Refunds are listed here but are not wallet spend. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.commission_auto":
+    "Each student amount is split automatically into platform commission and teacher net. Hourly sittings, block sittings, standalone group classes, and course enrolments all use the same cut. Families never see this split. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.commission_rules":
+    "Staff set one platform percentage (0–80) and an optional fixed amount on Rates. The percent is taken first, then the fixed amount is added, without exceeding the student amount. Families never see this cut. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.commission_scoped":
+    "Teacher and country hourly bands, plus each live-course and standalone group-class listed price, take the same platform cut. Families never see this split. Display converts when FX exists. Settlement stays listed.",
+  "pay.module.help.earnings":
+    "Teachers open Earnings to see totals and request a payout.",
+  "pay.module.help.earnings_split":
+    "Gross, commission, net, pending, available, and paid are calculated from lessons, groups, courses, and payout rows.",
+  "pay.module.help.payouts":
+    "Teachers request a payout. Staff complete, hold, or reject it on the register.",
+  "pay.module.help.payouts_auto":
+    "Connected-account payouts wait until the payouts adapter is configured.",
+  "pay.module.help.refunds":
+    "Staff record a full or partial refund. Teacher or staff cancellations create a refund review automatically.",
+  "pay.module.help.account_credit":
+    "Staff record credit, and early family cancellations create a credit review. Completing the row funds the wallet.",
+  "pay.module.help.disputes":
+    "Put a finance item on hold to open a dispute. Resolve it by changing the status.",
+  "pay.module.help.promo":
+    "Discount codes stay planned. Marketing campaigns can already carry a referral channel.",
+  "pay.module.help.referral":
+    "The referral programme stays planned. Staff can already draft referral-channel campaigns.",
   "staff.nav": "Staff",
   "staff.dashboard": "Dashboard",
   "staff.search": "Search",
@@ -2327,6 +2845,317 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "news.read": "اقرأ التحديث",
     "language.label": "اللغة",
     "currency.label": "العملة",
+    "currency.faculty.eyebrow": "المدفوعات",
+    "currency.faculty.title": "عملات متعددة",
+    "currency.faculty.help":
+      "اختر عملة العرض. تبقى مبالغ الدروس والمجموعات والدورات والمحفظة بعملة التسوية المدرجة. يحوّل المبدّل السعر الذي تراه عند وجود سعر صرف يضبطه الموظفون.",
+    "currency.faculty.page_help":
+      "فعّل عملات ISO واضبط أسعار العرض مقابل العملة الافتراضية للمنصة. تبقى التسوية بعملة المبلغ المدرج. تبقى الرموز المخفية على الصفوف السابقة ولا يمكن اختيارها.",
+    "currency.faculty.display": "عملة العرض",
+    "currency.faculty.settlement": "التسوية",
+    "currency.faculty.listed": "عملة الحجز المدرجة",
+    "currency.faculty.available": "متاحة",
+    "currency.faculty.catalogue": "الكتالوج",
+    "currency.faculty.rates": "أسعار الصرف",
+    "currency.faculty.default": "افتراضي",
+    "currency.faculty.hidden": "مخفية",
+    "currency.faculty.code": "الرمز",
+    "currency.faculty.name": "الاسم",
+    "currency.faculty.rate_for": "السعر / 1 {code}",
+    "currency.faculty.has_rate": "سعر العرض مضبوط",
+    "currency.faculty.missing_rate": "يحتاج سعر عرض",
+    "currency.faculty.missing_help":
+      "هذه العملات المتاحة بلا سعر صرف بعد: {codes}. سترى الأسرة العملة المدرجة حتى يحفظ الموظفون سعراً.",
+    "currency.faculty.manage": "إدارة العملات",
+    "currency.faculty.staff_help":
+      "تبقى أسعار المعلم المدرجة بعملته. ترى الأسر المبالغ المحوّلة بأسعار يضبطها الموظفون لكل 1 {code}. تبقى العملات المخفية على الأسعار الحالية ولا يمكن اختيارها.",
+    "price.faculty.eyebrow": "المدفوعات",
+    "price.faculty.title": "أسعار السوق والموقع",
+    "price.faculty.help":
+      "ترى الأسر الأسعار بعملة العرض عند وجود سعر صرف يضبطه الموظفون. تغيّر نطاقات الدولة والمادة والمعلم نطاق الساعة المدرج فقط حيث تُضبط. تبقى التسوية بالعملة المدرجة.",
+    "price.faculty.page_help":
+      "اضبط نطاقات الساعة حسب الدولة والمادة والمعلم. تحوّل الكتالوجات العامة مبالغ العرض حيث يُضبط سعر الصرف. تبقى تسوية الحجز بالعملة المدرجة.",
+    "price.faculty.market": "السوق",
+    "price.faculty.no_country": "لا توجد دولة على هذا الحساب",
+    "price.faculty.display": "عملة العرض",
+    "price.faculty.source.cookie": "من مبدّل العملة",
+    "price.faculty.source.account": "من تفضيل الحساب",
+    "price.faculty.source.country": "من افتراضي الدولة",
+    "price.faculty.source.default": "افتراضي المنصة",
+    "price.faculty.conversion": "تحويل العرض",
+    "price.faculty.conversion_on": "يعمل عندما تختلف العملة المدرجة",
+    "price.faculty.conversion_off": "تُعرض العملة المدرجة",
+    "price.faculty.band": "نطاق الساعة",
+    "price.faculty.band_market": "تُطبَّق قاعدة سوق الدولة",
+    "price.faculty.band_platform": "نطاق المنصة حتى تُحفظ قاعدة دولة",
+    "price.faculty.counts":
+      "{country} قواعد دولة و{subject} مادة و{teacher} معلم",
+    "price.faculty.counts_public":
+      "{country} قواعد دولة و{subject} مادة",
+    "price.faculty.rules_empty":
+      "لا توجد قواعد موقع بعد. تتبع الأسعار العامة نطاق المنصة وتُحوَّل فقط عند ضبط سعر الصرف.",
+    "price.faculty.manage": "إدارة نطاقات أسعار الموقع",
+    "price.faculty.public_converted":
+      "تُعرض الأسعار أدناه بـ {code} حيث يُضبط سعر العرض. تبقى التسوية بالعملة المدرجة.",
+    "price.faculty.public_band":
+      "تستخدم نطاقات الساعة لـ {market} نطاق السوق المضبوط.",
+    "price.faculty.controls_eyebrow": "قواعد الموقع",
+    "price.faculty.controls_title": "نطاقات الدولة والمادة والمعلم",
+    "price.faculty.controls_help":
+      "تضيّق قواعد الدولة والمادة نطاق المنصة. تستبدل قاعدة المعلم الحد الأدنى أو الأقصى لذلك المعلم عند ضبطها.",
+    "price.faculty.scope": "النطاق",
+    "price.faculty.scope.country": "دولة",
+    "price.faculty.scope.subject": "مادة",
+    "price.faculty.scope.teacher": "معلم",
+    "price.faculty.select_scope": "اختر {scope}",
+    "price.faculty.min_optional": "الحد الأدنى (اختياري)",
+    "price.faculty.max_optional": "الحد الأقصى (اختياري)",
+    "price.faculty.inherit": "وراثة",
+    "price.faculty.save": "حفظ القاعدة",
+    "price.faculty.saving": "جارٍ الحفظ…",
+    "price.faculty.remove": "إزالة",
+    "price.faculty.save_failed": "تعذّر حفظ قاعدة التسعير",
+    "price.faculty.remove_failed": "تعذّر إزالة قاعدة التسعير",
+    "price.faculty.controls_empty":
+      "لا توجد قواعد دولة أو مادة أو معلم بعد. ينطبق نطاق المنصة على الجميع.",
+    "hourly.faculty.eyebrow": "المدفوعات",
+    "hourly.faculty.title": "دروس بالساعة",
+    "hourly.faculty.help":
+      "تخزّن الجلسات الفردية مبلغ الطالب من سعر المعلم بالساعة، ويُحسب بالنسبة لمدة {minutes} دقيقة افتراضياً. تستخدم جلسة التجربة {percent}% من ذلك المبلغ. تبقى التسوية بالعملة المدرجة. يُحوَّل السعر الذي تراه عند وجود سعر عرض.",
+    "hourly.faculty.page_help":
+      "تحتفظ كل جلسة فردية محجوزة بمبلغ الطالب بوحدات صغرى. يأتي المبلغ من سعر المعلم بالساعة وطول الدرس. ترى الأسر رقماً محوّلاً عند ضبط سعر الصرف.",
+    "hourly.faculty.sittings": "الجلسات",
+    "hourly.faculty.open_completed": "{open} مفتوحة · {completed} مكتملة",
+    "hourly.faculty.single": "جلسات بالساعة",
+    "hourly.faculty.packaged_note": "{count} أيضاً داخل حجز حزمة",
+    "hourly.faculty.trial": "جلسات تجريبية",
+    "hourly.faculty.trial_rate": "{percent}% من جلسة الساعة",
+    "hourly.faculty.display": "عملة العرض",
+    "hourly.faculty.conversion_on": "تُعرض محوّلة عند وجود سعر صرف",
+    "hourly.faculty.conversion_off": "تُعرض العملة المدرجة",
+    "hourly.faculty.in_block": "جلسة حزمة",
+    "hourly.faculty.empty":
+      "لا توجد جلسات بالساعة بعد. احجز درساً فردياً من ملف معلم.",
+    "hourly.faculty.manage": "افتح تقويم الدروس",
+    "single.faculty.title": "دفعات مفردة",
+    "single.faculty.help":
+      "الجلسة بلا باقة دروس هي دفعة واحدة لتلك الجلسة. الأسابيع المتكررة تُحسب كل أسبوع على حدة. تبقى التسوية بالعملة المدرجة. يُحوَّل السعر الذي تراه عند وجود سعر عرض.",
+    "single.faculty.page_help":
+      "اختر حجزاً واحداً من ملف المعلم لدفع جلسة واحدة. التكرار الأسبوعي بلا باقة يبقى دفعات مفردة. باقات الدروس تتبع حجوزات الحزم.",
+    "single.faculty.payments": "دفعات مفردة",
+    "single.faculty.open_completed": "{open} مفتوحة · {completed} مكتملة",
+    "single.faculty.one_off": "جلسة واحدة",
+    "single.faculty.one_off_help": "بلا سلسلة أسبوعية وبلا باقة",
+    "single.faculty.recurring": "جلسات أسبوعية",
+    "single.faculty.recurring_help": "كل أسبوع ما زال دفعة واحدة",
+    "single.faculty.display": "عملة العرض",
+    "single.faculty.conversion_on": "تُعرض محوّلة عند وجود سعر صرف",
+    "single.faculty.conversion_off": "تُعرض العملة المدرجة",
+    "single.faculty.trial_count": "{count} جلسات تجريبية ضمن هذه الدفعات",
+    "single.faculty.trial_tag": "تجربة",
+    "single.faculty.series_tag": "جلسة أسبوعية",
+    "single.faculty.empty":
+      "لا توجد دفعات مفردة بعد. احجز جلسة فردية بلا باقة دروس.",
+    "single.faculty.manage": "افتح تقويم الدروس",
+    "blocks.faculty.title": "حجوزات الحزم",
+    "blocks.faculty.help":
+      "باقة الدروس حزمة مدفوعة مسبقاً واحدة. تدفع الأسرة إجمالي الباقة المخفّض مرة واحدة. كل أسبوع جلسة داخل تلك الحزمة وليست دفعة جديدة. تبقى التسوية بالعملة المدرجة. يُحوَّل السعر الذي تراه عند وجود سعر عرض.",
+    "blocks.faculty.page_help":
+      "اختر باقة دروس من ملف المعلم لحجز 4 أو 8 أو 12 جلسة أسبوعية بخصم الباقة. التكرار الأسبوعي بلا باقة يبقى دفعات مفردة.",
+    "blocks.faculty.packages": "حجوزات الحزم",
+    "blocks.faculty.open_completed": "{active} نشطة · {completed} مكتملة",
+    "blocks.faculty.sittings": "جلسات داخل الحزم",
+    "blocks.faculty.sittings_help": "{remaining} ما زالت مفتوحة · {done} أُخذت",
+    "blocks.faculty.sizes": "أحجام الباقات",
+    "blocks.faculty.sizes_help": "{four} من 4 · {eight} من 8 · {twelve} من 12",
+    "blocks.faculty.display": "عملة العرض",
+    "blocks.faculty.conversion_on": "تُعرض محوّلة عند وجود سعر صرف",
+    "blocks.faculty.conversion_off": "تُعرض العملة المدرجة",
+    "blocks.faculty.cancelled": "{count} حزم ملغاة",
+    "blocks.faculty.discount": "خصم الباقة {percent}%",
+    "blocks.faculty.remaining": "{remaining} من {total} جلسات متبقية",
+    "blocks.faculty.empty":
+      "لا توجد حجوزات حزم بعد. احجز باقة دروس من ملف معلم.",
+    "blocks.faculty.manage": "افتح تقويم الدروس",
+    "subscriptions.faculty.title": "اشتراكات شهرية",
+    "subscriptions.faculty.help":
+      "خطة المكتبة دفعة محتوى شهرية واحدة. تدفع الأسرة السعر الشهري المدرج مقابل 30 يوماً من المواد المغطاة. تبقى التسوية بالعملة المدرجة. يُحوَّل السعر الذي تراه عند وجود سعر عرض. لا يرى الطلاب أجر المعلم.",
+    "subscriptions.faculty.page_help":
+      "يضبط الموظفون سعراً شهرياً من الأكاديمي ثم يعينون الخطة لطالب. تبقى مواد المكتبة المغطاة مفتوحة أثناء سريان الاشتراك.",
+    "subscriptions.faculty.seats": "الاشتراكات",
+    "subscriptions.faculty.ended": "{ended} منتهية",
+    "subscriptions.faculty.monthly": "مقاعد شهرية",
+    "subscriptions.faculty.monthly_help": "وصول مكتبة لثلاثين يوماً",
+    "subscriptions.faculty.plans": "الخطط",
+    "subscriptions.faculty.plans_help": "{priced} مسعّرة · {monthly} شهرية",
+    "subscriptions.faculty.display": "عملة العرض",
+    "subscriptions.faculty.conversion_on": "تُعرض محوّلة عند وجود سعر صرف",
+    "subscriptions.faculty.conversion_off": "تُعرض العملة المدرجة",
+    "subscriptions.faculty.complimentary_count":
+      "{count} اشتراكات مكتبة مجانية",
+    "subscriptions.faculty.complimentary": "مجاني",
+    "subscriptions.faculty.monthly_tag": "شهري",
+    "subscriptions.faculty.empty":
+      "لا توجد اشتراكات شهرية بعد. يعين الموظفون خطة مكتبة مسعّرة من الأكاديمي.",
+    "subscriptions.faculty.manage": "افتح اشتراكات المكتبة",
+    "one_off.faculty.title": "دفعات لمرة واحدة",
+    "one_off.faculty.help":
+      "دفعة السجل رسم واحد يسجّله الموظفون. ليست حصة درس ولا حزمة ولا خطة شهرية. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "one_off.faculty.payments": "الدفعات",
+    "one_off.faculty.open_completed": "{open} مفتوحة · {completed} مكتملة",
+    "one_off.faculty.completed": "مكتملة",
+    "one_off.faculty.completed_help": "مُدرجة في سجل الحسابات.",
+    "one_off.faculty.held": "معلّقة",
+    "one_off.faculty.held_help": "البنود المعلّقة هي طابور النزاعات الحي.",
+    "one_off.faculty.display": "العرض",
+    "one_off.faculty.conversion_on":
+      "تُحوَّل المبالغ إلى هذه العملة عند وجود سعر صرف.",
+    "one_off.faculty.conversion_off": "تبقى المبالغ بعملة الإدراج.",
+    "one_off.faculty.empty":
+      "لا توجد دفعات لمرة واحدة بعد. يسجّلها الموظفون في سجل الحسابات.",
+    "one_off.faculty.manage": "افتح سجل الحسابات",
+    "one_off.faculty.unassigned": "لا يوجد حساب",
+    "courses.faculty.title": "مدفوعات الدورات",
+    "courses.faculty.help":
+      "تسجيل الدورة المباشرة دفعة دورة واحدة. تدفع الأسرة سعر الدورة المدرج مرة واحدة وتُحجز كل الجلسات. تبقى حصص الجلسات صفراً حتى لا تُحسب مرة أخرى. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "courses.faculty.payments": "الدفعات",
+    "courses.faculty.open_completed": "{open} مفتوحة · {completed} مكتملة",
+    "courses.faculty.courses": "الدورات",
+    "courses.faculty.courses_help": "الدورات المباشرة المنشورة أو المسجّلة في هذا العرض.",
+    "courses.faculty.cancelled": "ملغاة",
+    "courses.faculty.cancelled_help": "تسجيلات أُلغيت بعد تسجيلها.",
+    "courses.faculty.display": "العرض",
+    "courses.faculty.conversion_on":
+      "تُحوَّل المبالغ إلى هذه العملة عند وجود سعر صرف.",
+    "courses.faculty.conversion_off": "تبقى المبالغ بعملة الإدراج.",
+    "courses.faculty.complimentary": "مجاني",
+    "courses.faculty.complimentary_count": "{count} تسجيلات مجانية",
+    "courses.faculty.sessions": "{count} جلسات",
+    "courses.faculty.empty":
+      "لا توجد مدفوعات دورات بعد. تنضم الأسر إلى دورة مباشرة من الكتالوج.",
+    "courses.faculty.manage": "افتح الدورات المباشرة",
+    "groups.faculty.title": "مدفوعات الحصص الجماعية",
+    "groups.faculty.help":
+      "تسجيل الحصة الجماعية المستقلة دفعة جلسة طالب واحدة. الأسابيع المتكررة تُحسب كل أسبوع. تبقى حصص الدورة على مدفوعات الدورات. يبقى أجر المعلم المدرج داخلياً. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "groups.faculty.payments": "الدفعات",
+    "groups.faculty.open_completed": "{open} مفتوحة · {completed} مكتملة",
+    "groups.faculty.classes": "الحصص",
+    "groups.faculty.classes_help": "{series} دفعات جلسات السلسلة في هذا العرض.",
+    "groups.faculty.cancelled": "ملغاة",
+    "groups.faculty.cancelled_help": "{waitlisted} في قائمة الانتظار.",
+    "groups.faculty.display": "العرض",
+    "groups.faculty.conversion_on":
+      "تُحوَّل المبالغ إلى هذه العملة عند وجود سعر صرف.",
+    "groups.faculty.conversion_off": "تبقى المبالغ بعملة الإدراج.",
+    "groups.faculty.complimentary": "مجاني",
+    "groups.faculty.complimentary_count": "{count} تسجيلات مجانية",
+    "groups.faculty.series_tag": "سلسلة",
+    "groups.faculty.empty":
+      "لا توجد مدفوعات حصص جماعية بعد. تنضم الأسر إلى حصة جماعية مستقلة من الكتالوج.",
+    "groups.faculty.manage": "افتح الحصص الجماعية",
+    "wallet.faculty.title": "محفظة العميل",
+    "wallet.faculty.help":
+      "رصيد المنصة رصيد محفظة قابل للإنفاق. جوائز الموظفين وإلغاءات الأسرة المبكرة تنتظر مراجعة الحسابات، ثم تصبح متاحة عند إكمال الرصيد. الاسترداد ليس إنفاقاً من المحفظة. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "wallet.faculty.available": "المتاح",
+    "wallet.faculty.available_help": "{count} أرصدة مكتملة",
+    "wallet.faculty.pending": "معلق",
+    "wallet.faculty.pending_help": "{count} بانتظار المراجعة",
+    "wallet.faculty.held": "معلّق",
+    "wallet.faculty.held_help": "{count} محتجزة كنزاعات",
+    "wallet.faculty.display": "العرض",
+    "wallet.faculty.conversion_on":
+      "تُحوَّل المبالغ إلى هذه العملة عند وجود سعر صرف.",
+    "wallet.faculty.conversion_off": "تبقى المبالغ بعملة الإدراج.",
+    "wallet.faculty.cancellation": "رصيد إلغاء",
+    "wallet.faculty.award": "رصيد المنصة",
+    "wallet.faculty.empty":
+      "لا يوجد رصيد منصة بعد. يسجّله الموظفون في سجل الحسابات، أو قد يرفع إلغاء أسري رصيداً للمراجعة.",
+    "wallet.faculty.manage": "افتح المحفظة",
+    "wallet.faculty.unassigned": "لا يوجد حساب",
+    "credit_history.faculty.title": "سجل حركات الرصيد",
+    "credit_history.faculty.help":
+      "يُعرض كل رصيد منصة واسترداد مع حالة مراجعته. تشمل الأرصدة منح الموظفين وإلغاءات الأسرة المبكرة. تُدرج الاستردادات هنا وليست صرفاً من المحفظة. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "credit_history.faculty.credits": "الأرصدة",
+    "credit_history.faculty.credits_help": "{count} صفوف رصيد",
+    "credit_history.faculty.refunds": "الاستردادات",
+    "credit_history.faculty.refunds_help": "{count} صفوف استرداد",
+    "credit_history.faculty.pending": "معلق",
+    "credit_history.faculty.pending_help": "{count} بانتظار المراجعة",
+    "credit_history.faculty.display": "العرض",
+    "credit_history.faculty.conversion_on":
+      "تُحوَّل المبالغ إلى هذه العملة عند وجود سعر صرف.",
+    "credit_history.faculty.conversion_off": "تبقى المبالغ بعملة الإدراج.",
+    "credit_history.faculty.cancellation": "رصيد إلغاء",
+    "credit_history.faculty.award": "رصيد المنصة",
+    "credit_history.faculty.refund": "استرداد",
+    "credit_history.faculty.empty":
+      "لا توجد صفوف رصيد أو استرداد بعد. يسجّلها الموظفون في سجل الحسابات، أو قد يرفع إلغاء أسري رصيداً للمراجعة.",
+    "credit_history.faculty.manage": "افتح السجل",
+    "credit_history.faculty.unassigned": "لا يوجد حساب",
+    "commission_auto.faculty.title": "عمولة تلقائية",
+    "commission_auto.faculty.help":
+      "يُقسَم كل مبلغ طالب تلقائياً: {percent}% للمنصة والباقي للمعلم. دروس الساعة، وحصص الحزمة، والحصص الجماعية المستقلة، وتسجيلات الدورات تستخدم القطع نفسه. لا ترى الأسر هذا التقسيم. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "commission_auto.faculty.help_fixed":
+      "يُقسَم كل مبلغ طالب تلقائياً: {percent}% إضافة إلى {fixed} ثابت للمنصة والباقي للمعلم. دروس الساعة، وحصص الحزمة، والحصص الجماعية المستقلة، وتسجيلات الدورات تستخدم القطع نفسه. لا ترى الأسر هذا التقسيم. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "commission_auto.faculty.gross": "الإجمالي",
+    "commission_auto.faculty.gross_help": "{count} تقسيمات تلقائية",
+    "commission_auto.faculty.commission": "العمولة",
+    "commission_auto.faculty.commission_help": "قطع المنصة {percent}%",
+    "commission_auto.faculty.commission_help_fixed":
+      "{percent}% إضافة إلى {fixed} ثابت",
+    "commission_auto.faculty.net": "صافي المعلم",
+    "commission_auto.faculty.net_help": "بعد القطع التلقائي للمنصة",
+    "commission_auto.faculty.display": "العرض",
+    "commission_auto.faculty.conversion_on":
+      "تُحوَّل المبالغ إلى هذه العملة عند وجود سعر صرف.",
+    "commission_auto.faculty.conversion_off": "تبقى المبالغ بعملة الإدراج.",
+    "commission_auto.faculty.hourly": "حصة بالساعة",
+    "commission_auto.faculty.block": "حصة حزمة",
+    "commission_auto.faculty.group": "حصة جماعية",
+    "commission_auto.faculty.course": "تسجيل دورة",
+    "commission_auto.faculty.split_line":
+      "{gross} إجمالي · {commission} عمولة · {net} صافٍ",
+    "commission_auto.faculty.empty":
+      "لا توجد تقسيمات تلقائية بعد. تظهر عندما تدفع أسرة حصة أو حصة جماعية مستقلة أو دورة مباشرة.",
+    "commission_auto.faculty.manage": "افتح العمولة",
+    "commission_auto.faculty.unassigned": "لا يوجد معلم",
+    "commission_rules.faculty.title": "عمولة نسبية وثابتة",
+    "commission_rules.faculty.help":
+      "يضبط الموظفون نسبة منصة واحدة (0–{max}) ومبلغاً ثابتاً اختيارياً في الأسعار. تُؤخذ النسبة أولاً ثم يُضاف المبلغ الثابت دون تجاوز مبلغ الطالب. لا ترى الأسر هذا القطع. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "commission_rules.faculty.percent": "النسبة",
+    "commission_rules.faculty.percent_help": "0–{max}% من كل مبلغ طالب",
+    "commission_rules.faculty.fixed": "الثابت",
+    "commission_rules.faculty.fixed_help_off": "لا إضافة ثابتة. النسبة فقط.",
+    "commission_rules.faculty.fixed_help_on":
+      "تُضاف بعد قطع النسبة بعملة الإدراج.",
+    "commission_rules.faculty.fixed_help_listed":
+      "مدرج كـ {amount}. يُضاف بعد قطع النسبة.",
+    "commission_rules.faculty.example": "مثال القطع",
+    "commission_rules.faculty.split_line":
+      "{gross} إجمالي · {commission} عمولة · {net} صافٍ",
+    "commission_rules.faculty.display": "العرض",
+    "commission_rules.faculty.conversion_on":
+      "تُحوَّل المبالغ إلى هذه العملة عند وجود سعر صرف.",
+    "commission_rules.faculty.conversion_off": "تبقى المبالغ بعملة الإدراج.",
+    "commission_rules.faculty.manage": "افتح الأسعار",
+    "commission_scoped.faculty.title": "عمولة المعلم والدولة والدورة والحصة",
+    "commission_scoped.faculty.help":
+      "نطاقات ساعة المعلم والدولة، إضافة إلى سعر كل دورة مباشرة وحصة جماعية مستقلة مدرجة، تأخذ قطع المنصة نفسه بنسبة {percent}%. لا ترى الأسر هذا التقسيم. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "commission_scoped.faculty.help_fixed":
+      "نطاقات ساعة المعلم والدولة، إضافة إلى سعر كل دورة مباشرة وحصة جماعية مستقلة مدرجة، تأخذ {percent}% ثم {fixed}. لا ترى الأسر هذا التقسيم. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "commission_scoped.faculty.teacher": "المعلم",
+    "commission_scoped.faculty.teacher_help": "نطاق الساعة لمعلم محدد",
+    "commission_scoped.faculty.country": "الدولة",
+    "commission_scoped.faculty.country_help": "نطاق الساعة لدولة",
+    "commission_scoped.faculty.course": "الدورة",
+    "commission_scoped.faculty.course_help": "سعر الدورة المباشرة المدرج",
+    "commission_scoped.faculty.class": "الحصة",
+    "commission_scoped.faculty.class_help": "سعر الحصة الجماعية المستقلة المدرج",
+    "commission_scoped.faculty.split_line":
+      "{gross} إجمالي · {commission} عمولة · {net} صافٍ",
+    "commission_scoped.faculty.empty":
+      "لا توجد مبالغ للمعلم أو الدولة أو الدورة أو الحصة بعد. أضف نطاقاً للمعلم أو الدولة في الأسعار، أو انشر دورة مباشرة أو حصة جماعية مستقلة.",
+    "commission_scoped.faculty.manage": "افتح الأسعار",
     "timezone.label": "المنطقة الزمنية",
     "timezone.help": "تُحوَّل أوقات الدروس تلقائياً إلى هذه المنطقة.",
     "subjects.eyebrow": "المنهج",
@@ -2713,6 +3542,7 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "teach_nav.arabic": "العربية",
     "teach_nav.islamic": "الدراسات الإسلامية",
     "teach_nav.ai": "أنظمة الذكاء الاصطناعي",
+    "teach_nav.earnings": "الأرباح",
     "homework.eyebrow": "نظام التعلّم",
     "homework.title": "الواجبات",
     "homework.help":
@@ -3345,11 +4175,11 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "ai.eyebrow": "أنظمة الذكاء الاصطناعي",
     "ai.title": "أنظمة الذكاء الاصطناعي",
     "ai.help":
-      "التفريغ الإنجليزي والعربي متاحان. الإنجليزية البريطانية هي الافتراضية. يعمل التفريغ الصوتي العربي حيث يستطيع المتصفح سماع العربية، وإلا فاكتب النص أو استخدم محادثة الدرس. ابحث في النصوص، وميّز المتحدثين حيث أمكن، واكتب ملخصات الدروس ونقاط التعلّم والمفردات ومجالات التحسين وتوصيات الدرس التالي من تلك النصوص، ووافق على عمل الذكاء الاصطناعي قبل نشره. يمكن للطلاب حفظ ملاحظات خاصة أثناء الدرس أو من تفريغ معتمد. يمكن للمعلمين إنشاء مسودات واجبات واختبارات وتوصيات تعلّم من درس أو كتاب أو موضوع أو مستند مرفوع أو درس سابق ثم اعتمادها قبل أن يراها المتعلمون. يبقى العمل الأكاديمي المهم غير منشور حتى يراجعه معلم. يُوسم التفريغ الصوتي والمسودات الاستخراجية بأنها من الذكاء الاصطناعي، وتبقى موسومة كمساعدة بالذكاء الاصطناعي إذا حرّرها المعلم. تمنع ضوابط السلامة بيانات الاتصال وأجر المعلم والعلامات والشهادات وقرارات الحماية. لا يتخذ الذكاء الاصطناعي تلك القرارات من تلقاء نفسه. لا يرى الطلاب أجر المعلم.",
+      "الذكاء الاصطناعي معياري: التفريغ والملخصات والملاحظات والواجبات والاختبارات والتوصيات والمراجعة والوسم والسلامة والقرارات وبحث/دعم الذكاء الاصطناعي كليات منفصلة. يمكن أن تبقى كل كلية متاحة دون الأخرى. يجري الإنشاء عبر محوّل خادم فقط — لا تصل مفاتيح المزوّد إلى المتصفح. الوحدة الاستخراجية على المنصة هي المشغّل النشط؛ وOpenAI وDeepgram فتحات محجوزة. اسأل سؤالاً عن الاستخدام أو الدرس فتنقل وحدة الدعم موضوعات المساعدة والأسئلة المنشورة ونص الدرس المعتمد المسموح لك برؤيته. لا تخترع إجابة ولا تمنح علامة ولا تتخذ قرار حماية. التفريغ الإنجليزي والعربي متاحان. الإنجليزية البريطانية هي الافتراضية. يعمل التفريغ الصوتي العربي حيث يستطيع المتصفح سماع العربية، وإلا فاكتب النص أو استخدم محادثة الدرس. ابحث في النصوص، وميّز المتحدثين حيث أمكن، واكتب ملخصات الدروس ونقاط التعلّم والمفردات ومجالات التحسين وتوصيات الدرس التالي من تلك النصوص، ووافق على عمل الذكاء الاصطناعي قبل نشره. يمكن للطلاب حفظ ملاحظات خاصة أثناء الدرس أو من تفريغ معتمد. يمكن للمعلمين إنشاء مسودات واجبات واختبارات وتوصيات تعلّم من درس أو كتاب أو موضوع أو مستند مرفوع أو درس سابق ثم اعتمادها قبل أن يراها المتعلمون. يبقى العمل الأكاديمي المهم غير منشور حتى يراجعه معلم. يُوسم التفريغ الصوتي والمسودات الاستخراجية بأنها من الذكاء الاصطناعي، وتبقى موسومة كمساعدة بالذكاء الاصطناعي إذا حرّرها المعلم. تمنع ضوابط السلامة بيانات الاتصال وأجر المعلم والعلامات والشهادات وقرارات الحماية. لا يتخذ الذكاء الاصطناعي تلك القرارات من تلقاء نفسه. لا يرى الطلاب أجر المعلم.",
     "ai.student_help":
-      "ابحث في نصوص الدروس المنشورة وملخصاتها ونقاط التعلّم والمفردات ومجالات التحسين وتوصيات الدرس التالي ومسودات الواجبات والاختبارات وتوصيات التعلّم واقرأها. يجب أن يوافق معلم على العمل الأكاديمي المهم قبل نشره. اكتب ملاحظات خاصة في الدرس أو من تلك النصوص. يبقى المتحدثون منفصلين حيث يستطيع الصف تمييزهم. يُوسم نص الذكاء الاصطناعي، وتبقى ضوابط السلامة مفعّلة، وتبقى العلامات الرسمية عند المعلم.",
+      "اسأل سؤالاً عن الاستخدام أو الدرس. يقتبس بحث الذكاء الاصطناعي صفحات المساعدة والأسئلة ونص الدرس المنشور المسموح لك برؤيته. ابحث في نصوص الدروس المنشورة وملخصاتها ونقاط التعلّم والمفردات ومجالات التحسين وتوصيات الدرس التالي ومسودات الواجبات والاختبارات وتوصيات التعلّم واقرأها. يجب أن يوافق معلم على العمل الأكاديمي المهم قبل نشره. اكتب ملاحظات خاصة في الدرس أو من تلك النصوص. يبقى المتحدثون منفصلين حيث يستطيع الصف تمييزهم. يُوسم نص الذكاء الاصطناعي، وتبقى ضوابط السلامة مفعّلة، وتبقى العلامات الرسمية عند المعلم. كل كلية ذكاء اصطناعي وحدة منفصلة؛ لا يرى المتعلمون إلا العمل الأكاديمي المعتمد.",
     "ai.family_help":
-      "ابحث في نصوص دروس كل طفل المنشورة وملخصاتها ونقاط التعلّم والمفردات ومجالات التحسين وتوصيات الدرس التالي ومسودات الواجبات والاختبارات وتوصيات التعلّم واقرأها. لا ترى العائلات عمل الذكاء الاصطناعي إلا بعد أن يوافق عليه المعلم وينشره. تبقى ملاحظات الطالب الخاصة معه. يبقى المتحدثون منفصلين حيث يستطيع الصف تمييزهم. يُوسم نص الذكاء الاصطناعي، وتبقى ضوابط السلامة مفعّلة، وتبقى العلامات الرسمية عند المعلم.",
+      "اسأل سؤالاً عن الاستخدام أو درس الطفل. يقتبس بحث الذكاء الاصطناعي صفحات المساعدة والأسئلة ونص الدرس المنشور المسموح للعائلة برؤيته. ابحث في نصوص دروس كل طفل المنشورة وملخصاتها ونقاط التعلّم والمفردات ومجالات التحسين وتوصيات الدرس التالي ومسودات الواجبات والاختبارات وتوصيات التعلّم واقرأها. لا ترى العائلات عمل الذكاء الاصطناعي إلا بعد أن يوافق عليه المعلم وينشره. تبقى ملاحظات الطالب الخاصة معه. يبقى المتحدثون منفصلين حيث يستطيع الصف تمييزهم. يُوسم نص الذكاء الاصطناعي، وتبقى ضوابط السلامة مفعّلة، وتبقى العلامات الرسمية عند المعلم. كل كلية ذكاء اصطناعي وحدة منفصلة؛ لا ترى العائلات إلا العمل الأكاديمي المعتمد.",
     "ai.saved": "تم تحديث أنظمة الذكاء الاصطناعي.",
     "ai.failed": "تعذّر تحديث أنظمة الذكاء الاصطناعي.",
     "ai.safety.title": "ضوابط سلامة الذكاء الاصطناعي",
@@ -3383,6 +4213,61 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "ai.decisions.suspend": "لا يستطيع الذكاء الاصطناعي إيقاف حساب أو تقييده.",
     "ai.decisions.human":
       "يجب أن يتخذ معلم أو موظف حماية تلك القرارات من شاشات الشؤون الأكاديمية والحماية.",
+    "ai.architecture.title": "هندسة ذكاء اصطناعي معيارية",
+    "ai.architecture.help":
+      "تُسجَّل كليات الذكاء الاصطناعي وحدات مستقلة. يمكن إضافة كلية أو إيقافها دون إعادة كتابة الأخريات. يجري الإنشاء عبر محوّل خادم. تبقى خطافات السلامة ومراجعة المعلم ووسم المحتوى ومنع القرارات المستقلة مفعّلة في كل وحدة متاحة.",
+    "ai.architecture.independent":
+      "التفريغ والملخصات والملاحظات والواجبات والاختبارات والتوصيات وبحث النصوص وحدات منفصلة. إيقاف واحدة لا يوقف الأخريات.",
+    "ai.architecture.adapters":
+      "OpenAI وDeepgram فتحات مزوّد محجوزة. تبقى غير مُعدّة حتى تضيف أسرار الخادم. لا تصل تلك المفاتيح إلى المتصفح.",
+    "ai.architecture.server":
+      "الذكاء الاصطناعي محوّل خادم فقط. تستدعي المكاتب /api/v1/ai. لا تدخل مفاتيح المزوّد الصفحة.",
+    "ai.architecture.hooks":
+      "السلامة ومراجعة المعلم ووسوم محتوى الذكاء الاصطناعي وقاعدة منع القرارات المستقلة خطافات مشتركة. تستخدمها كل وحدة تُنشئ نصاً.",
+    "ai.architecture.active": "المشغّل النشط: {provider}.",
+    "ai.architecture.builtin": "استخراجي على المنصة",
+    "ai.architecture.openai": "OpenAI",
+    "ai.architecture.deepgram": "Deepgram",
+    "ai.architecture.reserved": "محجوز",
+    "ai.architecture.configured": "مُعدّ",
+    "ai.architecture.unconfigured": "غير مُعدّ",
+    "ai.architecture.builtin_help":
+      "يُلخَّص نص الدرس وتُعد مسوداته على المنصة. لا يلزم استدعاء نموذج طرف ثالث.",
+    "ai.architecture.vendor_help":
+      "هذه الفتحة جاهزة عند ضبط سر الخادم المطابق. يبقى الإنشاء على المنصة حتى يُوصَل ذلك النقل.",
+    "ai.architecture.independent_badge": "وحدة مستقلة",
+    "ai.architecture.provider_bound": "تستخدم محوّل الذكاء الاصطناعي",
+    "ai.architecture.review_hook": "مراجعة المعلم",
+    "ai.module.support": "بحث ودعم بمساعدة الذكاء الاصطناعي",
+    "ai.module.help.architecture":
+      "السجل ومحوّلات الخادم والخطافات المشتركة التي تُبقي كليات الذكاء الاصطناعي مستقلة.",
+    "ai.module.help.review":
+      "يجب أن يوافق معلم أو موظف أكاديمي على العمل الأكاديمي المهم قبل أن يراه المتعلمون.",
+    "ai.module.help.identification":
+      "يُوسم النص الذي أنشأه الذكاء الاصطناعي أو ساعد فيه حتى لا يُظن أنه كتابة شخص من الصفر.",
+    "ai.module.help.safety":
+      "تبقى بيانات الاتصال وأجر المعلم والعلامات والشهادات وقرارات الحماية خارج نص الذكاء الاصطناعي.",
+    "ai.module.help.decisions":
+      "لا يستطيع الذكاء الاصطناعي اتخاذ قرار أكاديمي أو حمائي حسّاس من تلقاء نفسه.",
+    "ai.module.help.support":
+      "اسأل سؤالاً عن الاستخدام أو الدرس. الإجابة استخراجية: تقتبس موضوعات المساعدة والأسئلة المنشورة ونص الدرس المعتمد المسموح لك برؤيته. لا تخترع إجابة ولا تمنح علامة ولا تتخذ قرار حماية.",
+    "ai.support.title": "بحث ودعم بمساعدة الذكاء الاصطناعي",
+    "ai.support.help":
+      "اسأل كيف تحجز أو تنضم أو تلغي أو تستخدم كلية. تقتبس الإجابة مساعدة المنصة والأسئلة المنشورة ونص الدرس المعتمد الذي يمكنك رؤيته. تبقى الملاحظات الخاصة خارج البحث. لا يستطيع الذكاء الاصطناعي منح علامة أو البتّ في حالة حماية.",
+    "ai.support.label": "السؤال",
+    "ai.support.placeholder": "كيف أدخل الصف؟",
+    "ai.support.submit": "اسأل دعم الذكاء الاصطناعي",
+    "ai.support.empty": "اطرح سؤالاً للبحث في المساعدة ونص الدرس المعتمد.",
+    "ai.support.none": "لم يُوجد تطابق. جرّب الأسئلة الشائعة أو اسأل معلماً.",
+    "ai.support.recent": "أسئلة سابقة",
+    "ai.support.source.help": "مساعدة المنصة",
+    "ai.support.source.faq": "سؤال شائع",
+    "ai.support.source.page": "صفحة مساعدة",
+    "ai.support.source.transcript": "تفريغ معتمد",
+    "ai.support.source.summary": "ملخص معتمد",
+    "ai.support.source.homework": "واجب معتمد",
+    "ai.support.source.quiz": "اختبار معتمد",
+    "ai.support.source.recommendation": "توصية معتمدة",
     "ai.review.title": "مراجعة المعلم",
     "ai.review.help":
       "تبقى التفريغات والملخصات والواجبات والاختبارات وتوصيات التعلّم غير منشورة حتى يوافق عليها معلم أو موظف أكاديمي. لا يستطيع الذكاء الاصطناعي نشر هذا العمل. ملاحظات الطالب الخاصة لا تحتاج هذه المراجعة.",
@@ -3699,7 +4584,7 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "live.eyebrow": "تعلم جماعي أسبوعي",
     "live.title": "دورات مباشرة",
     "live.description":
-      "انضم إلى دورة يقودها معلم مع المجموعة الصغيرة نفسها كل أسبوع. تسجيل واحد يحجز جميع الجلسات المجدولة.",
+      "انضم إلى دورة يقودها معلم مع المجموعة الصغيرة نفسها كل أسبوع. التسجيل الواحد دفعة دورة واحدة ويحجز جميع الجلسات المجدولة.",
     "live.badge": "دورة مباشرة",
     "live.sessions": "الجلسات",
     "live.first_session": "الجلسة الأولى",
@@ -3715,7 +4600,7 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "group.description":
       "انضم إلى درس جماعي صغير مجدول مع معلم معتمد. تُحوَّل الأوقات تلقائياً إلى منطقتك الزمنية.",
     "group.catalog_description":
-      "تصفّح كل صف بالاسم والمدة والجدول والسعر. افتح الصف لترى مواعيد كل جلسة.",
+      "تصفّح كل صف بالاسم والمدة والجدول وسعر جلسة الطالب. التسجيل الواحد دفعة حصة جماعية واحدة. افتح الصف لترى مواعيد كل جلسة.",
     "group.schedule_description": "جلسات يومية لـ {title}.",
     "group.view_schedule": "عرض الجدول اليومي",
     "group.daily_schedule": "الجدول اليومي",
@@ -3793,7 +4678,7 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "group.empty": "لا توجد دروس جماعية قادمة منشورة بعد.",
     "group.opportunities": "فرص الصفوف",
     "group.opportunities_help":
-      "اختياري. قد ينشر الموظفون صفاً جماعياً ما زال يحتاج معلماً. قدّم إذا ناسب الجدول ساعاتك. يمكنك أيضاً نشر صفوفك أدناه دون إعلان من الموظفين. لا يرى الطلاب هذه القوائم ولا أجر المعلم.",
+      "اختياري. قد ينشر الموظفون صفاً جماعياً ما زال يحتاج معلماً. قدّم إذا كان بإمكانك تدريس ذلك الجدول. يمكنك أيضاً نشر صفوفك أدناه دون إعلان من الموظفين. لا يرى الطلاب هذه القوائم ولا أجر المعلم.",
     "group.opportunity_badge": "فرصة مفتوحة",
     "group.apply_opportunity": "قدّم لهذا الصف",
     "group.applying": "جارٍ التقديم…",
@@ -4079,6 +4964,18 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "classroom.no_phone":
       "ابقَ في هذا الفصل. لا تشارك أرقام الهواتف أو الحسابات الشخصية.",
     "classroom.not_open": "يُفتح الفصل قبل بدء الدرس بخمس عشرة دقيقة.",
+    "classroom.teacher_not_open":
+      "يُفتح الفصل قبل بدء الدرس بستين دقيقة حتى تستعد.",
+    "classroom.opens_at": "ادخل الفصل من {time}.",
+    "classroom.opens_local": "على هذا الجهاز يكون ذلك الساعة {time}.",
+    "classroom.opens_label": "يُفتح الفصل بعد",
+    "classroom.begins_label": "يبدأ الصف بعد",
+    "classroom.opens_clock": "يُفتح الساعة {time}",
+    "classroom.begins_clock": "يبدأ الساعة {time}",
+    "classroom.unit_day": "{count} يوم",
+    "classroom.unit_days": "{count} أيام",
+    "classroom.unit_hour": "{count} ساعة",
+    "classroom.unit_hours": "{count} ساعات",
     "classroom.ended": "أُغلق هذا الفصل.",
     "classroom.closed": "هذا الدرس غير متاح في الفصل.",
     "classroom.forbidden": "ليست لديك صلاحية دخول هذا الفصل.",
@@ -4273,7 +5170,12 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "library.rental.saved": "تم تحديث إعارة المحتوى.",
     "library.subscription.title": "اشتراك المحتوى",
     "library.subscription.help":
-      "أنشئ خطة اشتراك، وأضف مواد الطلاب، وحدّد مدة اختيارية، ثم عيّنها للطلاب. تتحول المواد المغطاة إلى «يحتاج إذناً» وتبقى مفتوحة أثناء سريان الخطة. تبقى أدلة المعلمين للمعلمين والموظفين. لا يرى الطلاب أجر المعلم.",
+      "أنشئ خطة مكتبة شهرية، وحدّد سعراً، وأضف مواد الطلاب، ثم عيّنها للطلاب. الخطة الجديدة تكون 30 يوماً افتراضياً. تتحول المواد المغطاة إلى «يحتاج إذناً» وتبقى مفتوحة أثناء سريان الخطة. تبقى أدلة المعلمين للمعلمين والموظفين. لا يرى الطلاب أجر المعلم.",
+    "library.subscription.amount": "السعر الشهري",
+    "library.subscription.set_price": "احفظ السعر الشهري",
+    "library.subscription.price": "{price} / شهر",
+    "library.subscription.monthly": "شهري",
+    "library.subscription.complimentary": "مجاني",
     "library.subscription.yours": "اشتراكاتك",
     "library.subscription.create": "أنشئ خطة",
     "library.subscription.key": "مفتاح الخطة",
@@ -4375,11 +5277,11 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "booking.staff_view": "يدير الموظفون الحجوزات من تقويم الموظفين.",
     "booking.format_note": "هذا درس فردي خاص: معلم واحد وطالب واحد.",
     "booking.single_note":
-      "حجز واحد: يحجز هذا الموعد المحدد فقط ولا ينشئ سلسلة أسبوعية.",
+      "حجز واحد: دفعة واحدة لهذه الجلسة فقط. لا ينشئ سلسلة أسبوعية ولا باقة دروس.",
     "booking.recurring_note":
-      "حجز متكرر: يتكرر الوقت المحدد أسبوعياً حسب المنطقة الزمنية للمعلم.",
+      "حجز متكرر: يتكرر الوقت المحدد أسبوعياً حسب المنطقة الزمنية للمعلم. كل أسبوع ما زال دفعة مفردة.",
     "booking.package_note":
-      "باقة دروس: احجز مجموعة مخفضة من الدروس الأسبوعية في حجز واحد.",
+      "باقة دروس: حجز حزمة مدفوع مسبقاً واحد. تدفع الأسرة الإجمالي المخفّض مرة واحدة. كل أسبوع محجوز جلسة داخل تلك الحزمة وليست دفعة جديدة.",
     "booking.mode": "جدول الحجز",
     "booking.mode_single": "حجز واحد",
     "booking.mode_recurring": "حجز متكرر",
@@ -4501,6 +5403,137 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "booking.finance_action_refund": "استرداد المبلغ بانتظار المراجعة",
     "booking.finance_action_forfeit": "تم الاحتفاظ بقيمة الدرس",
     "booking.finance_action_none": "لا يلزم إجراء مالي",
+    "pay.eyebrow": "المدفوعات",
+    "pay.title": "المدفوعات والمالية السوقية",
+    "pay.help":
+      "مال السوق وحدات مستقلة: العملات، أسعار الموقع، الدروس بالساعة والدفعات المفردة، الحجوزات الجماعية، الاشتراكات الشهرية، الدفعات الواحدة، دفعات الدورات والمجموعات، رصيد محفظة الأسرة، العمولة، أرباح المعلم، الصرف، الاسترداد، رصيد الحساب، والنزاعات. يبقى دفع Stripe والصرف الآلي محجوزين حتى تُضبط أسرار الخادم. تبقى أكواد الخصم وبرنامج الإحالة مخططين. لا يرى الطلاب أجر المعلم.",
+    "pay.teacher_help":
+      "اطلع على إجمالي قيمة الدرس، عمولة المنصة، الصافي، المعلّق، المتاح، والمدفوع. اطلب صرفاً عند توفر رصيد. يراجع الموظفون طلبات الصرف من مكتب المدفوعات. لا يرى الطلاب هذه الأرقام.",
+    "pay.family_help":
+      "اطلع على رصيد المنصة، والرصيد المعلق من الإلغاء، والاستردادات، ورسوم الدروس والمجموعات والدورات والحزم والاشتراكات والدفعات لمرة واحدة لأطفالك. يبقى أجر المعلم مخفياً.",
+    "pay.architecture.title": "بنية مالية السوق",
+    "pay.architecture.help":
+      "تستند المدفوعات إلى سجل المالية والعملات وحدود الأسعار ومبالغ الحجز. الدفع بالبطاقة وصرف الحسابات المتصلة محولات خادم فقط، ولا تصل مفاتيح المزود إلى المتصفح.",
+    "pay.adapter.payments": "محول المدفوعات",
+    "pay.adapter.payouts": "محول الصرف",
+    "pay.adapter.configured": "مهيأ",
+    "pay.adapter.manual": "سجل يدوي",
+    "pay.commission.summary":
+      "العمولة التلقائية {percent}% إضافة إلى {fixed} ثابتة، ثم نطاقات السعر حسب الدولة أو المادة حيث تُضبط.",
+    "pay.hidden_from_students":
+      "تبقى أرباح المعلم والعمولة والصرف على مكاتب المعلم والموظفين فقط.",
+    "pay.modules.title": "وحدات المالية",
+    "pay.live": "مباشر",
+    "pay.planned": "مخطط",
+    "pay.open": "فتح",
+    "pay.register.title": "سجل الحسابات",
+    "pay.register.help":
+      "سجّل دفعة لمرة واحدة أو استرداداً كاملاً أو جزئياً أو رصيد حساب أو صرفاً. إكمال الرصيد يضيفه إلى محفظة الأسرة. إكمال الصرف يعدّ أرباح المعلم مدفوعة. أوقف عنصراً لاعتباره نزاعاً.",
+    "pay.disputes.title": "إدارة النزاعات",
+    "pay.disputes.help":
+      "العناصر الموقوفة هي قائمة النزاعات المباشرة. غيّر الحالة عند الحل. تبقى اعتراضات الشبكات بانتظار محول المدفوعات.",
+    "pay.disputes.empty": "لا توجد عناصر مالية موقوفة.",
+    "pay.wallet.title": "المحفظة",
+    "pay.wallet.help":
+      "رصيد المنصة من منح الموظفين وإلغاء الأسرة المبكر. ينتظر الرصيد المعلق مراجعة الحسابات. الرصيد المكتمل إنفاق محفظة متاح. تُعرض الاستردادات منفصلة وليست صرفاً من المحفظة.",
+    "pay.wallet.available": "الرصيد المتاح",
+    "pay.wallet.pending": "الرصيد المعلق",
+    "pay.wallet.refunded": "المسترد",
+    "pay.wallet.empty": "لا شيء",
+    "pay.wallet.history": "سجل حركات الرصيد",
+    "pay.wallet.history_empty": "لا توجد صفوف رصيد أو استرداد بعد.",
+    "pay.family.charges": "مدفوعات الدروس والدورات",
+    "pay.family.charges_help":
+      "الدروس بالساعة، والحزم، والحصص الجماعية، والدورات المباشرة، واشتراكات المكتبة، والدفعات لمرة واحدة التي يسجّلها الموظفون لأطفالك.",
+    "pay.family.charges_empty": "لا توجد رسوم أسرية بعد.",
+    "pay.earnings.title": "أرباح المعلم",
+    "pay.earnings.help":
+      "الإجمالي هو مبلغ الطالب المدرج. العمولة هي اقتطاع المنصة. الصافي ما تربحه. المعلق لم يكتمل بعد. المتاح يمكن طلبه. المدفوع هو صرف مكتمل.",
+    "pay.earnings.gross": "الإجمالي",
+    "pay.earnings.commission": "العمولة",
+    "pay.earnings.net": "الصافي",
+    "pay.earnings.pending": "معلق",
+    "pay.earnings.available": "متاح",
+    "pay.earnings.paid": "مدفوع",
+    "pay.earnings.lines": "بنود الأرباح",
+    "pay.earnings.empty": "لا توجد بنود أرباح بعد.",
+    "pay.payout.title": "طلب صرف",
+    "pay.payout.amount": "المبلغ",
+    "pay.payout.currency": "العملة",
+    "pay.payout.notes": "ملاحظات",
+    "pay.payout.submit": "طلب الصرف",
+    "pay.payout.saving": "جارٍ الإرسال…",
+    "pay.payout.requested": "أُرسل طلب الصرف للمراجعة.",
+    "pay.payout.failed": "تعذّر طلب هذا الصرف.",
+    "pay.module.currencies": "عملات متعددة",
+    "pay.module.location_prices": "أسعار السوق والموقع",
+    "pay.module.hourly": "دروس بالساعة",
+    "pay.module.single": "دفعات مفردة",
+    "pay.module.blocks": "حجوزات الحزم",
+    "pay.module.subscriptions": "اشتراكات شهرية",
+    "pay.module.one_off": "دفعات لمرة واحدة",
+    "pay.module.courses": "مدفوعات الدورات",
+    "pay.module.groups": "مدفوعات الحصص الجماعية",
+    "pay.module.wallet": "محفظة العميل",
+    "pay.module.credit_history": "سجل حركات الرصيد",
+    "pay.module.commission_auto": "عمولة تلقائية",
+    "pay.module.commission_rules": "عمولة نسبية وثابتة",
+    "pay.module.commission_scoped": "عمولة المعلم والدولة والدورة والحصة",
+    "pay.module.earnings": "لوحة أرباح المعلم",
+    "pay.module.earnings_split": "الإجمالي والعمولة والصافي والمعلق والمتاح والمدفوع",
+    "pay.module.payouts": "إدارة صرف المعلم",
+    "pay.module.payouts_auto": "صرف سوقي آلي",
+    "pay.module.refunds": "استرداد كامل وجزئي",
+    "pay.module.account_credit": "رصيد الحساب",
+    "pay.module.disputes": "إدارة النزاعات",
+    "pay.module.promo": "أكواد الخصم",
+    "pay.module.referral": "برنامج الإحالة",
+    "pay.module.help.currencies":
+      "تبقى العملات المفعّلة وأسعار العرض في صفحة العملات. تحتفظ مبالغ الدروس بعملة التسوية المحجوزة. يحوّل مبدّل الرأس السعر الذي تراه.",
+    "pay.module.help.location_prices":
+      "تغيّر نطاقات الدولة والمادة والمعلم نطاق الساعة المدرج حيث تُضبط. تحوّل الكتالوجات السعر الذي تراه الأسرة عند وجود سعر صرف. تبقى التسوية بالعملة المدرجة.",
+    "pay.module.help.hourly":
+      "تخزّن الجلسات الفردية مبلغ الطالب من سعر المعلم بالساعة بحسب المدة. تستخدم الجلسات التجريبية نسبة التجربة. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.single":
+      "الجلسة بلا باقة دروس هي دفعة واحدة لتلك الجلسة. الأسابيع المتكررة تُحسب كل أسبوع. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.blocks":
+      "باقة الدروس حزمة مدفوعة مسبقاً واحدة. تدفع الأسرة إجمالي الباقة المخفّض مرة واحدة. كل أسبوع جلسة داخل تلك الحزمة. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.subscriptions":
+      "خطة المكتبة دفعة محتوى شهرية واحدة. تدفع الأسرة السعر الشهري المدرج مقابل 30 يوماً من المواد المغطاة. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.one_off":
+      "دفعة السجل رسم واحد يسجّله الموظفون. ليست حصة درس ولا حزمة ولا خطة شهرية. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.courses":
+      "تسجيل الدورة المباشرة دفعة دورة واحدة. تدفع الأسرة سعر الدورة المدرج مرة واحدة وتُحجز كل الجلسات. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.groups":
+      "تسجيل الحصة الجماعية المستقلة دفعة جلسة طالب واحدة. الأسابيع المتكررة تُحسب كل أسبوع. تبقى حصص الدورة على مدفوعات الدورات. يبقى أجر المعلم المدرج داخلياً. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.wallet":
+      "رصيد المنصة رصيد محفظة قابل للإنفاق. جوائز الموظفين وإلغاءات الأسرة المبكرة تنتظر مراجعة الحسابات، ثم تصبح متاحة عند إكمال الرصيد. الاسترداد ليس إنفاقاً من المحفظة. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.credit_history":
+      "يُعرض كل رصيد منصة واسترداد مع حالة مراجعته. تشمل الأرصدة منح الموظفين وإلغاءات الأسرة المبكرة. تُدرج الاستردادات هنا وليست صرفاً من المحفظة. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.commission_auto":
+      "يُقسَم كل مبلغ طالب تلقائياً إلى عمولة المنصة وصافٍ للمعلم. دروس الساعة، وحصص الحزمة، والحصص الجماعية المستقلة، وتسجيلات الدورات تستخدم القطع نفسه. لا ترى الأسر هذا التقسيم. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.commission_rules":
+      "يضبط الموظفون نسبة منصة واحدة (0–80) ومبلغاً ثابتاً اختيارياً في الأسعار. تُؤخذ النسبة أولاً ثم يُضاف المبلغ الثابت دون تجاوز مبلغ الطالب. لا ترى الأسر هذا القطع. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.commission_scoped":
+      "نطاقات ساعة المعلم والدولة، إضافة إلى سعر كل دورة مباشرة وحصة جماعية مستقلة مدرجة، تأخذ قطع المنصة نفسه. لا ترى الأسر هذا التقسيم. يُحوَّل العرض عند وجود سعر صرف. تبقى التسوية مدرجة.",
+    "pay.module.help.earnings":
+      "يفتح المعلمون الأرباح لرؤية المجاميع وطلب الصرف.",
+    "pay.module.help.earnings_split":
+      "يُحسب الإجمالي والعمولة والصافي والمعلق والمتاح والمدفوع من الدروس والمجموعات والدورات وصفوف الصرف.",
+    "pay.module.help.payouts":
+      "يطلب المعلم صرفاً، ويكمله الموظفون أو يوقفونه أو يرفضونه في السجل.",
+    "pay.module.help.payouts_auto":
+      "ينتظر صرف الحسابات المتصلة تهيئة محول الصرف.",
+    "pay.module.help.refunds":
+      "يسجّل الموظفون استرداداً كاملاً أو جزئياً. ويُنشئ إلغاء المعلم أو الموظف مراجعة استرداد تلقائياً.",
+    "pay.module.help.account_credit":
+      "يسجّل الموظفون رصيداً، ويُنشئ إلغاء الأسرة المبكر مراجعة رصيد. إكمال الصف يموّل المحفظة.",
+    "pay.module.help.disputes":
+      "أوقف عنصراً مالياً لفتح نزاع، ثم غيّر الحالة عند الحل.",
+    "pay.module.help.promo":
+      "تبقى أكواد الخصم مخططّة. يمكن لحملات التسويق أن تحمل قناة إحالة.",
+    "pay.module.help.referral":
+      "يبقى برنامج الإحالة مخططاً. يمكن للموظفين إعداد حملات بقناة إحالة.",
     "staff.nav": "الموظفون",
     "staff.dashboard": "لوحة التحكم",
     "staff.search": "بحث",

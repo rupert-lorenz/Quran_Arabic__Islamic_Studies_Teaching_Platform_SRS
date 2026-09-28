@@ -52,7 +52,7 @@ export function LibrarySubscriptionsPanel({
         {t("library.subscription.help")}
       </p>
 
-      <form className="mt-6 grid gap-3 md:grid-cols-2 lg:grid-cols-4" onSubmit={onCreate}>
+      <form className="mt-6 grid gap-3 md:grid-cols-2 lg:grid-cols-3" onSubmit={onCreate}>
         <input name="key" required placeholder={t("library.subscription.key")} className={fieldClass} />
         <input name="name" required placeholder={t("library.subscription.name")} className={fieldClass} />
         <input
@@ -62,6 +62,23 @@ export function LibrarySubscriptionsPanel({
           placeholder={t("library.subscription.default_days")}
           className={fieldClass}
         />
+        <input
+          name="amount"
+          inputMode="decimal"
+          placeholder={t("library.subscription.amount")}
+          className={fieldClass}
+        />
+        <select
+          name="currencyCode"
+          className={fieldClass}
+          defaultValue={desk.defaultCurrencyCode}
+        >
+          {desk.currencies.map((currency) => (
+            <option key={currency.code} value={currency.code}>
+              {currency.symbol} {currency.code}
+            </option>
+          ))}
+        </select>
         <Button type="submit" disabled={pending}>
           {t("library.subscription.create")}
         </Button>
@@ -78,8 +95,15 @@ export function LibrarySubscriptionsPanel({
                   </p>
                   <p className="mt-1 text-sm font-semibold text-muted">
                     {t("library.subscription.subscribers", { count: plan.subscriberCount })}
+                    {plan.monthly ? ` · ${t("library.subscription.monthly")}` : ""}
                     {plan.defaultDays
                       ? ` · ${t("library.subscription.days", { count: plan.defaultDays })}`
+                      : ` · ${t("library.subscription.open_ended")}`}
+                    {plan.amountFormatted
+                      ? ` · ${t("library.subscription.price", { price: plan.amountFormatted })}`
+                      : ` · ${t("library.subscription.complimentary")}`}
+                    {plan.listedPriceFormatted
+                      ? ` · ${t("card.listed_as", { price: plan.listedPriceFormatted })}`
                       : ""}
                     {` · ${plan.isEnabled ? t("library.subscription.enabled") : t("library.subscription.disabled")}`}
                   </p>
@@ -155,6 +179,44 @@ export function LibrarySubscriptionsPanel({
                   {t("library.subscription.no_materials")}
                 </p>
               )}
+
+              <form
+                className="mt-4 grid gap-3 md:grid-cols-3"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  const form = event.currentTarget;
+                  const body = Object.fromEntries(new FormData(form).entries());
+                  void run({
+                    action: "update_plan",
+                    key: plan.key,
+                    amount: body.amount || undefined,
+                    currencyCode: body.currencyCode,
+                    defaultDays: body.defaultDays || undefined,
+                  });
+                }}
+              >
+                <input
+                  name="amount"
+                  inputMode="decimal"
+                  defaultValue=""
+                  placeholder={t("library.subscription.amount")}
+                  className={fieldClass}
+                />
+                <select
+                  name="currencyCode"
+                  className={fieldClass}
+                  defaultValue={plan.currencyCode ?? desk.defaultCurrencyCode}
+                >
+                  {desk.currencies.map((currency) => (
+                    <option key={currency.code} value={currency.code}>
+                      {currency.symbol} {currency.code}
+                    </option>
+                  ))}
+                </select>
+                <Button type="submit" disabled={pending}>
+                  {t("library.subscription.set_price")}
+                </Button>
+              </form>
 
               <form
                 className="mt-4 grid gap-3 md:grid-cols-3"

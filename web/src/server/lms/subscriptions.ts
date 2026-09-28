@@ -1,6 +1,7 @@
 import { and, desc, eq, inArray, ne } from "drizzle-orm";
 import { db } from "@/db";
 import {
+  currencies,
   librarySubscriptionPlanItems,
   librarySubscriptionPlans,
   librarySubscriptions,
@@ -9,11 +10,16 @@ import {
   teachingMaterials,
   users,
 } from "@/db/schema";
+import { presentStudentAmount } from "@/lib/currency";
 import { hasAnyPermission } from "@/lib/rbac";
 import type { ApiActor } from "@/server/api/auth";
 import { writeAuditLog } from "@/server/api/audit";
 import { ApiError } from "@/server/api/errors";
+import { getRequestMoney } from "@/server/money/currency";
+import { parseNonNegativeMajorAmount } from "@/server/staff/money";
 import { findUserByEmail } from "@/server/staff/lookup";
+
+export const MONTHLY_SUBSCRIPTION_DAYS = 30;
 
 export type LibrarySubscriptionSeatView = {
   id: string;
@@ -29,6 +35,11 @@ export type LibrarySubscriptionPlanView = {
   name: string;
   description: string | null;
   defaultDays: number | null;
+  monthly: boolean;
+  amountMinor: number;
+  currencyCode: string | null;
+  amountFormatted: string | null;
+  listedPriceFormatted: string | null;
   isEnabled: boolean;
   subscriberCount: number;
   materials: Array<{ id: string; title: string }>;
@@ -38,6 +49,8 @@ export type LibrarySubscriptionPlanView = {
 export type LibrarySubscriptionDesk = {
   plans: LibrarySubscriptionPlanView[];
   materials: Array<{ id: string; title: string }>;
+  currencies: Array<{ code: string; symbol: string; decimalPlaces: number }>;
+  defaultCurrencyCode: string;
 };
 
 export type LearnerSubscriptionView = {
@@ -45,6 +58,9 @@ export type LearnerSubscriptionView = {
   planName: string;
   startsAt: string;
   expiresAt: string | null;
+  monthly: boolean;
+  amountFormatted: string | null;
+  listedPriceFormatted: string | null;
 };
 
 function requireManager(actor: ApiActor) {
@@ -96,6 +112,22 @@ function expiryFromPlan(defaultDays: number | null, expiresAt?: string) {
   return addDays(new Date(), defaultDays);
 }
 
+async function resolvePlanPrice(input: {
+  amount?: string;
+  currencyCode?: string;
+}) {
+  const money = await getRequestMoney();
+  const code = (input.currencyCode || money.defaultCode).toUpperCase();
+  const currency = money.currencies.find((item) => item.code === code);
+  if (!currency) {
+    throw new ApiError(404, "NOT_FOUND", "Currency is not available");
+  }
+  return {
+    amountMinor: parseNonNegativeMajorAmount(input.amount ?? "", currency.decimalPlaces),
+    currencyCode: currency.code,
+  };
+}
+
 async function requireStudentByEmail(email: string) {
   const user = await findUserByEmail(email);
   if (!user) {
@@ -139,10 +171,22 @@ export async function listLibrarySubscriptionDesk(
   actor: ApiActor,
 ): Promise<LibrarySubscriptionDesk> {
   requireManager(actor);
-  const [plans, items, seats, materials] = await Promise.all([
+  const [money, plans, items, seats, materials] = await Promise.all([
+    getRequestMoney(),
     db
-      .select()
+      .select({
+        key: librarySubscriptionPlans.key,
+        name: librarySubscriptionPlans.name,
+        description: librarySubscriptionPlans.description,
+        defaultDays: librarySubscriptionPlans.defaultDays,
+        amountMinor: librarySubscriptionPlans.amountMinor,
+        currencyCode: librarySubscriptionPlans.currencyCode,
+        isEnabled: librarySubscriptionPlans.isEnabled,
+        decimalPlaces: currencies.decimalPlaces,
+        symbol: currencies.symbol,
+      })
       .from(librarySubscriptionPlans)
+      .leftJoin(currencies, eq(librarySubscriptionPlans.currencyCode, currencies.code))
       .orderBy(librarySubscriptionPlans.name),
     db
       .select({
@@ -197,11 +241,30 @@ export async function listLibrarySubscriptionDesk(
           expiresAt: seat.expiresAt?.toISOString() ?? null,
           status: seat.status,
         }));
+      const listing =
+        plan.currencyCode && plan.symbol != null && plan.decimalPlaces != null
+          ? {
+              code: plan.currencyCode,
+              symbol: plan.symbol,
+              decimalPlaces: plan.decimalPlaces,
+            }
+          : null;
+      const price = presentStudentAmount({
+        amountMinor: plan.amountMinor,
+        listing,
+        display: money.currency,
+        convert: money.convert,
+      });
       return {
         key: plan.key,
         name: plan.name,
         description: plan.description,
         defaultDays: plan.defaultDays,
+        monthly: plan.defaultDays === MONTHLY_SUBSCRIPTION_DAYS,
+        amountMinor: plan.amountMinor,
+        currencyCode: plan.currencyCode,
+        amountFormatted: plan.amountMinor > 0 ? price.studentPriceFormatted : null,
+        listedPriceFormatted: plan.amountMinor > 0 ? price.listedPriceFormatted : null,
         isEnabled: plan.isEnabled,
         subscriberCount: planSeats.length,
         materials: items
@@ -211,6 +274,8 @@ export async function listLibrarySubscriptionDesk(
       };
     }),
     materials,
+    currencies: money.currencies,
+    defaultCurrencyCode: money.defaultCode,
   };
 }
 
@@ -233,26 +298,52 @@ export async function listLearnerSubscriptions(
     .select({
       planKey: librarySubscriptions.planKey,
       planName: librarySubscriptionPlans.name,
+      defaultDays: librarySubscriptionPlans.defaultDays,
       startsAt: librarySubscriptions.startsAt,
       expiresAt: librarySubscriptions.expiresAt,
       status: librarySubscriptions.status,
       isEnabled: librarySubscriptionPlans.isEnabled,
+      amountMinor: librarySubscriptions.amountMinor,
+      currencyCode: librarySubscriptions.currencyCode,
+      decimalPlaces: currencies.decimalPlaces,
+      symbol: currencies.symbol,
     })
     .from(librarySubscriptions)
     .innerJoin(
       librarySubscriptionPlans,
       eq(librarySubscriptionPlans.key, librarySubscriptions.planKey),
     )
+    .leftJoin(currencies, eq(librarySubscriptions.currencyCode, currencies.code))
     .where(inArray(librarySubscriptions.studentUserId, learnerIds))
     .orderBy(librarySubscriptionPlans.name);
+  const money = await getRequestMoney();
   return rows
     .filter((row) => row.isEnabled && stillValid(row.expiresAt, row.status))
-    .map((row) => ({
-      planKey: row.planKey,
-      planName: row.planName,
-      startsAt: row.startsAt.toISOString(),
-      expiresAt: row.expiresAt?.toISOString() ?? null,
-    }));
+    .map((row) => {
+      const listing =
+        row.currencyCode && row.symbol != null && row.decimalPlaces != null
+          ? {
+              code: row.currencyCode,
+              symbol: row.symbol,
+              decimalPlaces: row.decimalPlaces,
+            }
+          : null;
+      const price = presentStudentAmount({
+        amountMinor: row.amountMinor,
+        listing,
+        display: money.currency,
+        convert: money.convert,
+      });
+      return {
+        planKey: row.planKey,
+        planName: row.planName,
+        startsAt: row.startsAt.toISOString(),
+        expiresAt: row.expiresAt?.toISOString() ?? null,
+        monthly: row.defaultDays === MONTHLY_SUBSCRIPTION_DAYS,
+        amountFormatted: row.amountMinor > 0 ? price.studentPriceFormatted : null,
+        listedPriceFormatted: row.amountMinor > 0 ? price.listedPriceFormatted : null,
+      };
+    });
 }
 
 export async function loadSubscriptionCoverage(materialIds: string[]) {
@@ -282,6 +373,8 @@ export async function createSubscriptionPlan(
     name: string;
     description?: string;
     defaultDays?: number | string | null;
+    amount?: string;
+    currencyCode?: string;
   },
   ip: string,
 ) {
@@ -291,12 +384,15 @@ export async function createSubscriptionPlan(
   if (key.length < 2 || name.length < 2) {
     throw new ApiError(422, "VALIDATION", "Enter a plan key and name");
   }
+  const price = await resolvePlanPrice(input);
   try {
     await db.insert(librarySubscriptionPlans).values({
       key,
       name,
       description: input.description?.trim() || null,
-      defaultDays: parseOptionalCount(input.defaultDays),
+      defaultDays: parseOptionalCount(input.defaultDays) ?? MONTHLY_SUBSCRIPTION_DAYS,
+      amountMinor: price.amountMinor,
+      currencyCode: price.currencyCode,
     });
   } catch {
     throw new ApiError(409, "CONFLICT", "That subscription plan already exists");
@@ -319,6 +415,8 @@ export async function updateSubscriptionPlan(
     name?: string;
     description?: string;
     defaultDays?: number | string | null;
+    amount?: string;
+    currencyCode?: string;
     isEnabled?: boolean;
   },
   ip: string,
@@ -333,6 +431,10 @@ export async function updateSubscriptionPlan(
   if (!existing) {
     throw new ApiError(404, "NOT_FOUND", "Subscription plan not found");
   }
+  const price =
+    input.amount !== undefined || input.currencyCode !== undefined
+      ? await resolvePlanPrice(input)
+      : null;
   await db
     .update(librarySubscriptionPlans)
     .set({
@@ -342,6 +444,9 @@ export async function updateSubscriptionPlan(
         : {}),
       ...(input.defaultDays !== undefined
         ? { defaultDays: parseOptionalCount(input.defaultDays) }
+        : {}),
+      ...(price
+        ? { amountMinor: price.amountMinor, currencyCode: price.currencyCode }
         : {}),
       ...(input.isEnabled !== undefined ? { isEnabled: input.isEnabled } : {}),
     })
@@ -441,6 +546,8 @@ export async function assignLibrarySubscriptionSeat(
       key: librarySubscriptionPlans.key,
       defaultDays: librarySubscriptionPlans.defaultDays,
       isEnabled: librarySubscriptionPlans.isEnabled,
+      amountMinor: librarySubscriptionPlans.amountMinor,
+      currencyCode: librarySubscriptionPlans.currencyCode,
     })
     .from(librarySubscriptionPlans)
     .where(eq(librarySubscriptionPlans.key, input.planKey.trim()))
@@ -486,6 +593,8 @@ export async function assignLibrarySubscriptionSeat(
       planKey: plan.key,
       startsAt,
       expiresAt,
+      amountMinor: plan.amountMinor,
+      currencyCode: plan.currencyCode,
       grantedByUserId: actor.userId,
     })
     .returning({ id: librarySubscriptions.id });

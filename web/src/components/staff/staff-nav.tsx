@@ -3,6 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useT } from "@/components/i18n/i18n-provider";
+import {
+  WorkspacePillNav,
+  workspacePillClass,
+} from "@/components/ui/workspace-pill-nav";
 import { hasAnyPermission, staffModules } from "@/lib/rbac";
 
 export function StaffNav({
@@ -20,25 +24,16 @@ export function StaffNav({
   );
 
   return (
-    <nav
-      className="flex min-w-0 flex-wrap gap-2"
-      aria-label={t("staff.nav")}
-    >
+    <WorkspacePillNav label={t("staff.nav")}>
       <Link
         href="/staff"
-        className={`inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm font-bold ${
-          pathname === "/staff" ? "bg-brand text-white" : "bg-surface text-brand"
-        }`}
+        className={workspacePillClass(pathname === "/staff")}
       >
         {t("staff.dashboard")}
       </Link>
       <Link
         href="/staff/search"
-        className={`inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm font-bold ${
-          pathname.startsWith("/staff/search")
-            ? "bg-brand text-white"
-            : "bg-surface text-brand"
-        }`}
+        className={workspacePillClass(pathname.startsWith("/staff/search"))}
       >
         {t("staff.search")}
       </Link>
@@ -46,15 +41,11 @@ export function StaffNav({
         <Link
           key={item.href}
           href={item.href}
-          className={`inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm font-bold ${
-            pathname.startsWith(item.href)
-              ? "bg-brand text-white"
-              : "bg-surface text-brand"
-          }`}
+          className={workspacePillClass(pathname.startsWith(item.href))}
         >
           {item.label}
         </Link>
       ))}
-    </nav>
+    </WorkspacePillNav>
   );
 }

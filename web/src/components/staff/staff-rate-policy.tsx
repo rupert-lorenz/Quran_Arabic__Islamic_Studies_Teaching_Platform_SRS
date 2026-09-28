@@ -17,6 +17,8 @@ export type TeacherRatePolicy = {
   minFormatted: string;
   maxFormatted: string;
   commissionPercent: number;
+  commissionFixedMinor: number;
+  commissionFixedAmount: string;
   lessonDurationMinutes: number;
   defaultCurrencyCode: string;
   currencies: { code: string; name: string; symbol: string; decimalPlaces: number }[];
@@ -39,6 +41,9 @@ export function StaffRatePolicy({
   const [exampleCommission, setExampleCommission] = useState(
     initial.commissionPercent,
   );
+  const [exampleFixedMinor, setExampleFixedMinor] = useState(
+    initial.commissionFixedMinor,
+  );
   const [exampleCurrency, setExampleCurrency] = useState(
     initial.defaultCurrencyCode,
   );
@@ -54,10 +59,11 @@ export function StaffRatePolicy({
         ? previewTeacherRate({
             amount: exampleAmount,
             commissionPercent: exampleCommission,
+            commissionFixedMinor: exampleFixedMinor,
             currency: exampleCurrencyRow,
           })
         : null,
-    [exampleAmount, exampleCommission, exampleCurrencyRow],
+    [exampleAmount, exampleCommission, exampleCurrencyRow, exampleFixedMinor],
   );
 
   return (
@@ -67,11 +73,17 @@ export function StaffRatePolicy({
       </p>
       <h2 className="mt-1 text-xl font-extrabold text-brand">
         {policy.minFormatted}–{policy.maxFormatted} · {policy.commissionPercent}%
+        {policy.commissionFixedMinor
+          ? ` + ${policy.commissionFixedAmount} fixed`
+          : ""}{" "}
         commission
       </h2>
       <p className="mt-2 text-sm text-muted">
-        Teachers set their own hourly rate inside this range. The student
-        price, platform commission, and teacher earnings update automatically.
+        Teachers set their own hourly rate inside this range. Percentage
+        commission is 0–80. Fixed commission is optional and is added after
+        the percent cut, in the default currency. Automatic commission applies
+        this cut whenever earnings are calculated. The student price, platform
+        commission, and teacher earnings update automatically.
         Families must book at least {formatNoticeDuration(policy.minNoticeMinutes)}{" "}
         ahead, and cancel or reschedule at least{" "}
         {formatNoticeDuration(policy.cancelNoticeMinutes)} before the lesson.
@@ -110,6 +122,9 @@ export function StaffRatePolicy({
                   minAmount: String(form.get("minAmount") ?? ""),
                   maxAmount: String(form.get("maxAmount") ?? ""),
                   commissionPercent: Number(form.get("commissionPercent")),
+                  commissionFixedAmount: String(
+                    form.get("commissionFixedAmount") ?? "0",
+                  ),
                   defaultCurrencyCode: String(
                     form.get("defaultCurrencyCode") ?? "",
                   ),
@@ -126,6 +141,7 @@ export function StaffRatePolicy({
               setPolicy(next);
               setExampleAmount(next.minAmount);
               setExampleCommission(next.commissionPercent);
+              setExampleFixedMinor(next.commissionFixedMinor);
               setExampleCurrency(next.defaultCurrencyCode);
               onUpdated?.(next);
               setMessage("Rate policy saved.");
@@ -178,6 +194,33 @@ export function StaffRatePolicy({
               onChange={(event) =>
                 setExampleCommission(Number(event.target.value) || 0)
               }
+            />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-sm font-bold text-brand">
+              Fixed commission
+            </span>
+            <input
+              name="commissionFixedAmount"
+              defaultValue={policy.commissionFixedAmount}
+              className={fieldClass}
+              inputMode="decimal"
+              onChange={(event) => {
+                const decimals = exampleCurrencyRow?.decimalPlaces ?? 2;
+                const raw = event.target.value.trim();
+                if (!raw) {
+                  setExampleFixedMinor(0);
+                  return;
+                }
+                const [whole, fraction = ""] = raw.split(".");
+                if (!/^\d+$/.test(whole) || fraction.length > decimals) {
+                  return;
+                }
+                setExampleFixedMinor(
+                  Number(whole) * 10 ** decimals +
+                    Number(fraction.padEnd(decimals, "0") || "0"),
+                );
+              }}
             />
           </label>
           <label className="block">

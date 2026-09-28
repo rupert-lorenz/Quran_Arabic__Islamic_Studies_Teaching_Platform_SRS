@@ -126,6 +126,8 @@ export const librarySubscriptionActionSchema = z.discriminatedUnion("action", [
     name: z.string().trim().min(2).max(160),
     description: z.string().trim().max(400).optional(),
     defaultDays: z.union([z.string(), z.number()]).optional(),
+    amount: z.string().trim().max(20).optional(),
+    currencyCode: z.string().trim().length(3).optional(),
   }),
   z.object({
     action: z.literal("update_plan"),
@@ -133,6 +135,8 @@ export const librarySubscriptionActionSchema = z.discriminatedUnion("action", [
     name: z.string().trim().min(2).max(160).optional(),
     description: z.string().trim().max(400).optional(),
     defaultDays: z.union([z.string(), z.number()]).optional(),
+    amount: z.string().trim().max(20).optional(),
+    currencyCode: z.string().trim().length(3).optional(),
     isEnabled: z.boolean().optional(),
   }),
   z.object({

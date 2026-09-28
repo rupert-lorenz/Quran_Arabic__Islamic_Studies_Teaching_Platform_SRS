@@ -1,18 +1,25 @@
 import { eq } from "drizzle-orm";
 import { LiveCourseForm } from "@/components/bookings/live-course-form";
+import { CoursePaymentsFacultyView } from "@/components/finance/course-payments-faculty";
 import { TeacherWorkspaceShell } from "@/components/teachers/teacher-workspace-shell";
 import { Container } from "@/components/ui/container";
 import { PageHero } from "@/components/ui/page-hero";
 import { db } from "@/db";
 import { subjects, teacherProfiles, teacherSubjects } from "@/db/schema";
 import { listTeacherLiveCourses } from "@/server/booking/live-courses";
+import { getCoursePaymentsFaculty } from "@/server/finance/course-payments";
 import { requireApprovedTeacher } from "@/server/rbac/guard";
 
 export const metadata = { title: "Live courses" };
 
 export default async function TeacherLiveCoursesPage() {
   const access = await requireApprovedTeacher();
-  const [offered, [profile], courses] = await Promise.all([
+  const actor = {
+    userId: access.user.id,
+    roleKey: access.user.roleKey,
+    permissions: access.permissions,
+  };
+  const [offered, [profile], courses, coursePayments] = await Promise.all([
     db
       .select({ slug: subjects.slug, name: subjects.name })
       .from(teacherSubjects)
@@ -24,15 +31,17 @@ export default async function TeacherLiveCoursesPage() {
       .where(eq(teacherProfiles.userId, access.user.id))
       .limit(1),
     listTeacherLiveCourses(access.user.id),
+    getCoursePaymentsFaculty(actor),
   ]);
   return (
     <TeacherWorkspaceShell>
       <PageHero
         eyebrow="Cohort teaching"
         title="Live courses"
-        description="Publish a weekly multi-session course. One enrollment reserves every session."
+        description="Publish a weekly multi-session course. The listed course price is one payment and reserves every session."
       />
       <Container className="space-y-8 py-10">
+        <CoursePaymentsFacultyView faculty={coursePayments} />
         <LiveCourseForm
           teacherUserId={access.user.id}
           subjects={offered}

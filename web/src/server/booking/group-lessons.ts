@@ -63,10 +63,8 @@ import type {
   GroupTeachingSettingsInput,
 } from "./schemas";
 import {
-  assertBookingMinNotice,
   resolveDisplayTimeZone,
   resolveScheduleTimeZone,
-  resolveTeacherMinNotice,
 } from "./policy";
 import { listTeacherSlots } from "./slots";
 import {
@@ -581,9 +579,11 @@ async function hydrateGroupLessons(
   if (!rows.length) return [];
   const money = await getRequestMoney();
   const revealTeacherPayment = Boolean(options?.revealTeacherPayment);
-  const commissionPercent = revealTeacherPayment
-    ? (await getTeacherRateLimits()).commissionPercent
-    : 0;
+  const rateLimits = revealTeacherPayment
+    ? await getTeacherRateLimits()
+    : null;
+  const commissionPercent = rateLimits?.commissionPercent ?? 0;
+  const commissionFixedMinor = rateLimits?.commissionFixedMinor ?? 0;
   const teacherIds = [...new Set(rows.map((row) => row.teacherUserId))];
   const subjectSlugs = [...new Set(rows.map((row) => row.subjectSlug))];
   const currencyCodes = [...new Set(rows.map((row) => row.currencyCode))];
@@ -647,7 +647,11 @@ async function hydrateGroupLessons(
     });
     const teacherPaymentMinor = revealTeacherPayment
       ? (row.teacherPaymentMinor ??
-        splitLessonRate(row.amountMinor, commissionPercent).teacherEarnsMinor)
+        splitLessonRate(
+          row.amountMinor,
+          commissionPercent,
+          commissionFixedMinor,
+        ).teacherEarnsMinor)
       : null;
     const view = {
       id: row.id,
@@ -746,6 +750,7 @@ async function hydrateGroupLessons(
         row.status,
         row.startsAt,
         row.endsAt,
+        revealTeacherPayment ? "teacher" : undefined,
       ),
     };
     return revealTeacherPayment
@@ -858,6 +863,7 @@ export type GroupClassCatalogView = {
   scheduleLabel: string | null;
   nextWhenLabel: string;
   studentPriceFormatted: string;
+  listedPriceFormatted: string | null;
   seriesSessionCount: number;
   seriesTotalFormatted: string;
   sessionCount: number;
@@ -885,6 +891,7 @@ function catalogViewFromSessions(
     scheduleLabel: first.scheduleLabel,
     nextWhenLabel: first.whenLabel,
     studentPriceFormatted: first.studentPriceFormatted,
+    listedPriceFormatted: first.listedPriceFormatted,
     seriesSessionCount: first.seriesSessionCount || sessions.length,
     seriesTotalFormatted: first.seriesTotalFormatted,
     sessionCount: sessions.length,
@@ -1352,8 +1359,6 @@ async function createGroupLessonForTeacher(
       "The application deadline must be on or after the visibility date",
     );
   }
-  const notice = await resolveTeacherMinNotice(teacherUserId);
-  assertBookingMinNotice(starts[0]!, notice.effectiveMinutes);
   const ends = starts.map(
     (start) => new Date(start.getTime() + input.durationMinutes * 60_000),
   );
@@ -1365,6 +1370,7 @@ async function createGroupLessonForTeacher(
     durationMinutes: input.durationMinutes,
     timeZone: teacherTimeZone,
     viewerUserId: actor.userId,
+    ignoreMinNotice: true,
   });
   const openStarts = new Set(
     slots.slots.map((slot) => new Date(slot.startsAt).getTime()),
@@ -1379,10 +1385,12 @@ async function createGroupLessonForTeacher(
   const studentPriceMajor = input.studentPriceMajor ?? input.priceMajor ?? 0;
   const decimals = currency[0]?.decimalPlaces ?? 2;
   const amountMinor = Math.round(studentPriceMajor * 10 ** decimals);
-  const commissionPercent = (await getTeacherRateLimits()).commissionPercent;
+  const rateLimits = await getTeacherRateLimits();
+  const commissionPercent = rateLimits.commissionPercent;
   const computedTeacherPayment = splitLessonRate(
     amountMinor,
     commissionPercent,
+    rateLimits.commissionFixedMinor,
   ).teacherEarnsMinor;
   const teacherPaymentMinor =
     isStaffRole(actor.roleKey) && input.teacherPaymentMajor != null

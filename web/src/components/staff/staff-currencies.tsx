@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useT } from "@/components/i18n/i18n-provider";
 import { Button } from "@/components/ui/button";
 import { fieldClass, patchJson, putJson } from "@/lib/api";
 import { StaffFlash, StaffStat } from "./staff-stat";
@@ -12,6 +13,7 @@ type CurrencyRow = {
   decimalPlaces: number;
   isEnabled: boolean;
   isDefault: boolean;
+  hasRate?: boolean;
   rate: string;
   asOf: string | null;
 };
@@ -28,6 +30,7 @@ type Workspace = {
 };
 
 export function StaffCurrencies({ initial }: { initial: Workspace }) {
+  const t = useT();
   const [data, setData] = useState(initial);
   const [rates, setRates] = useState<Record<string, string>>(
     Object.fromEntries(initial.currencies.map((item) => [item.code, item.rate])),
@@ -55,14 +58,12 @@ export function StaffCurrencies({ initial }: { initial: Workspace }) {
   return (
     <div>
       <div className="grid gap-4 sm:grid-cols-3">
-        <StaffStat label="Currencies" value={data.summary.currencies} />
-        <StaffStat label="Available" value={data.summary.enabled} />
-        <StaffStat label="FX rates" value={data.summary.rates} />
+        <StaffStat label={t("currency.faculty.catalogue")} value={data.summary.currencies} />
+        <StaffStat label={t("currency.faculty.available")} value={data.summary.enabled} />
+        <StaffStat label={t("currency.faculty.rates")} value={data.summary.rates} />
       </div>
       <p className="mt-4 text-sm leading-6 text-muted">
-        Listed teacher prices stay in the teacher&apos;s currency. Families see
-        converted amounts using staff-set rates quoted per 1 {data.defaultCurrency}.
-        Hidden currencies stay on existing rates but cannot be chosen.
+        {t("currency.faculty.staff_help", { code: data.defaultCurrency })}
       </p>
       <StaffFlash error={error} message={message} />
 
@@ -70,10 +71,12 @@ export function StaffCurrencies({ initial }: { initial: Workspace }) {
         <table className="min-w-full text-start text-sm">
           <thead>
             <tr className="border-b border-line text-xs font-bold uppercase text-muted">
-              <th className="px-4 py-3">Code</th>
-              <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3">Rate / 1 {data.defaultCurrency}</th>
-              <th className="px-4 py-3">Available</th>
+              <th className="px-4 py-3">{t("currency.faculty.code")}</th>
+              <th className="px-4 py-3">{t("currency.faculty.name")}</th>
+              <th className="px-4 py-3">
+                {t("currency.faculty.rate_for", { code: data.defaultCurrency })}
+              </th>
+              <th className="px-4 py-3">{t("currency.faculty.available")}</th>
             </tr>
           </thead>
           <tbody>
@@ -83,7 +86,7 @@ export function StaffCurrencies({ initial }: { initial: Workspace }) {
                   {currency.symbol} {currency.code}
                   {currency.isDefault ? (
                     <span className="ms-2 text-xs uppercase text-brand-soft">
-                      Default
+                      {t("currency.faculty.default")}
                     </span>
                   ) : null}
                 </td>
@@ -150,7 +153,9 @@ export function StaffCurrencies({ initial }: { initial: Workspace }) {
                         );
                       }}
                     />
-                    {currency.isEnabled ? "Live" : "Hidden"}
+                    {currency.isEnabled
+                      ? t("pay.live")
+                      : t("currency.faculty.hidden")}
                   </label>
                 </td>
               </tr>

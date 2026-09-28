@@ -87,6 +87,7 @@ export async function listPublicTeachers(query: PublicTeacherQuery = {}) {
     countries: countryRows,
     currencies: currencyRows,
     commissionPercent: limits.commissionPercent,
+    commissionFixedMinor: limits.commissionFixedMinor,
     presentRate: money.presentRate,
   });
 
@@ -237,6 +238,7 @@ async function attachPublicTeacherMedia<
     countries: { iso2: string; name: string }[];
     currencies: { code: string; symbol: string; decimalPlaces: number }[];
     commissionPercent: number;
+    commissionFixedMinor: number;
     presentRate: Awaited<ReturnType<typeof getRequestMoney>>["presentRate"];
   },
 ) {
@@ -318,6 +320,7 @@ async function attachPublicTeacherMedia<
             hourlyRateMinor,
             currencyCode ? currencyByCode.get(currencyCode) : null,
             extras.commissionPercent,
+            extras.commissionFixedMinor,
           ),
           currencyCode ? currencyByCode.get(currencyCode) ?? null : null,
         ),

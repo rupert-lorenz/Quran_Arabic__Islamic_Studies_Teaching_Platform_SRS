@@ -1,3 +1,4 @@
+import { MarketPriceNote } from "@/components/finance/location-price-faculty";
 import { PublicShell } from "@/components/layout/public-shell";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { SeoJsonLd } from "@/components/seo/seo-json-ld";
@@ -25,6 +26,7 @@ import {
 } from "@/lib/teacher-search";
 import { pageMetadata } from "@/server/cms/seo";
 import { getI18n } from "@/server/i18n/locale";
+import { getLocationPriceFaculty } from "@/server/finance/location-prices";
 import { getRequestMoney } from "@/server/money/currency";
 import {
   getPublicTeacherFilterOptions,
@@ -46,11 +48,12 @@ export default async function TeachersPage({
   searchParams: Promise<TeacherSearchQuery>;
 }) {
   const filters = await searchParams;
-  const [teachers, options, { t }, money] = await Promise.all([
+  const [teachers, options, { t }, money, locationPrices] = await Promise.all([
     listPublicTeachers(filters),
     getPublicTeacherFilterOptions(),
     getI18n(),
     getRequestMoney(),
+    getLocationPriceFaculty({ includeRules: false }),
   ]);
   const samples = sampleTeachers.map((teacher) => ({
     ...teacher,
@@ -132,6 +135,9 @@ export default async function TeachersPage({
       </PageHero>
       <Container className="py-10">
         <TeacherSearchForm filters={filters} options={options} />
+        <div className="mt-4">
+          <MarketPriceNote faculty={locationPrices} />
+        </div>
         <TeacherSortBar filters={filters} countLabel={countLabel} />
 
         {teachers.length > 0 ? (

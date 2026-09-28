@@ -25,6 +25,7 @@ import {
   CLASSROOM_MAX_MESSAGES,
   classroomContainsContactDetails,
   classroomJoinWindow,
+  classroomOpenBeforeMs,
   classroomStatusAllowsJoin,
   sortClassroomParticipants,
   type ClassroomLessonKind,
@@ -345,12 +346,23 @@ function derivedClassroomStatus(
 }
 
 function assertJoinWindow(access: LessonAccess) {
-  const window = classroomJoinWindow(access.startsAt, access.endsAt);
+  const window = classroomJoinWindow(
+    access.startsAt,
+    access.endsAt,
+    Date.now(),
+    classroomOpenBeforeMs(access.role),
+  );
   if (window.upcoming) {
     throw new ApiError(
       409,
       "CLASSROOM_NOT_OPEN",
-      "The classroom opens 15 minutes before the lesson",
+      access.role === "teacher" || access.role === "staff"
+        ? "The classroom opens 60 minutes before the lesson"
+        : "The classroom opens 15 minutes before the lesson",
+      {
+        startsAt: access.startsAt.toISOString(),
+        endsAt: access.endsAt.toISOString(),
+      },
     );
   }
   if (window.ended) {
@@ -360,7 +372,12 @@ function assertJoinWindow(access: LessonAccess) {
 }
 
 async function ensureClassroom(access: LessonAccess) {
-  const window = classroomJoinWindow(access.startsAt, access.endsAt);
+  const window = classroomJoinWindow(
+    access.startsAt,
+    access.endsAt,
+    Date.now(),
+    classroomOpenBeforeMs(access.role),
+  );
   const existing = access.bookingId
     ? await db
         .select()
@@ -943,7 +960,12 @@ async function buildSession(
 }
 
 async function markClassroomLive(classroomId: string, live: boolean, access: LessonAccess) {
-  const window = classroomJoinWindow(access.startsAt, access.endsAt);
+  const window = classroomJoinWindow(
+    access.startsAt,
+    access.endsAt,
+    Date.now(),
+    classroomOpenBeforeMs(access.role),
+  );
   await db
     .update(classrooms)
     .set({ status: derivedClassroomStatus(window, live) })

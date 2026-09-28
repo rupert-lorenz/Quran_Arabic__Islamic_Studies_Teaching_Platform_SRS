@@ -7,6 +7,14 @@ export function parseOptionalMajorAmount(value: string, decimalPlaces: number) {
   return parseMajorAmount(value, decimalPlaces);
 }
 
+export function parseNonNegativeMajorAmount(value: string, decimalPlaces: number) {
+  const trimmed = value.trim();
+  if (!trimmed || /^0+(?:\.0+)?$/.test(trimmed)) {
+    return 0;
+  }
+  return parseMajorAmount(value, decimalPlaces);
+}
+
 export function parseMajorAmount(value: string, decimalPlaces: number) {
   const trimmed = value.trim();
   if (!/^\d+(\.\d+)?$/.test(trimmed)) {

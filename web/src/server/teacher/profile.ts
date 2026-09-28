@@ -179,7 +179,12 @@ export async function getManagedTeacherProfile(userId: string) {
       audienceSlugs: parseAudienceList(row.audiences),
       subjectSlugs: subjectRows.map((item) => item.slug),
     },
-    rate: publicTeacherRate(row.hourlyRateMinor, currency, limits.commissionPercent),
+    rate: publicTeacherRate(
+      row.hourlyRateMinor,
+      currency,
+      limits.commissionPercent,
+      limits.commissionFixedMinor,
+    ),
     rateLimits: await teacherRateLimitView(row.userId, limits, {
       country: row.country,
       subjectSlugs: subjectRows.map((item) => item.slug),
@@ -285,7 +290,12 @@ export async function writeTeacherHourlyRate(
   return {
     amountMinor,
     currencyCode: currency.code,
-    rate: publicTeacherRate(amountMinor, currency, platform.commissionPercent),
+    rate: publicTeacherRate(
+      amountMinor,
+      currency,
+      platform.commissionPercent,
+      platform.commissionFixedMinor,
+    ),
   };
 }
 
@@ -345,6 +355,7 @@ export function publicTeacherRate(
     | null
     | undefined,
   commissionPercent: number,
+  commissionFixedMinor = 0,
 ) {
   if (!amountMinor || !currency) {
     return null;
@@ -358,6 +369,7 @@ export function publicTeacherRate(
   const { teacherEarnsMinor, commissionMinor } = splitLessonRate(
     amountMinor,
     commissionPercent,
+    commissionFixedMinor,
   );
 
   return {
@@ -378,6 +390,7 @@ export function publicTeacherRate(
       currency.symbol,
     ),
     commissionPercent,
+    commissionFixedMinor,
   };
 }
 
@@ -391,6 +404,7 @@ export async function getTeacherRateLimits() {
           "teacher.rate.min_minor",
           "teacher.rate.max_minor",
           "commission.default_percent",
+          "commission.default_fixed_minor",
           "platform.default_currency",
           "lesson.default_duration_minutes",
         ]),
@@ -431,6 +445,14 @@ export async function getTeacherRateLimits() {
     commissionPercent: numberSetting(
       byKey.get("commission.default_percent"),
       DEFAULT_COMMISSION_PERCENT,
+    ),
+    commissionFixedMinor: Math.max(
+      0,
+      numberSetting(byKey.get("commission.default_fixed_minor"), 0),
+    ),
+    commissionFixedAmount: formatMajorAmount(
+      Math.max(0, numberSetting(byKey.get("commission.default_fixed_minor"), 0)),
+      decimals,
     ),
     lessonDurationMinutes: numberSetting(
       byKey.get("lesson.default_duration_minutes"),

@@ -168,7 +168,12 @@ export async function listTeacherApplications() {
       events: events
         .filter((item) => item.teacherUserId === row.userId)
         .slice(0, 12),
-      rate: publicTeacherRate(hourlyRateMinor, currency, limits.commissionPercent),
+      rate: publicTeacherRate(
+        hourlyRateMinor,
+        currency,
+        limits.commissionPercent,
+        limits.commissionFixedMinor,
+      ),
       rateLimits: formatRateLimitView(
         limits,
         await resolveTeacherRateBand(row.userId, limits, {

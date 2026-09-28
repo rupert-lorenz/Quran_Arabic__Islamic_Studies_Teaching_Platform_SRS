@@ -6,6 +6,7 @@ export const AI_JOB_KINDS = [
   "quiz",
   "recommendation",
   "search",
+  "support",
 ] as const;
 export type AiJobKind = (typeof AI_JOB_KINDS)[number];
 
@@ -49,6 +50,7 @@ export const AI_LIVE_KINDS = [
   "homework",
   "quiz",
   "recommendation",
+  "support",
 ] as const;
 export const AI_PLANNED_KINDS = [] as const;
 
@@ -124,7 +126,7 @@ export function isAcademicAiKind(kind: string): kind is AiAcademicKind {
 }
 
 export function aiKindRequiresReview(kind: AiJobKind) {
-  return kind !== "search" && kind !== "notes";
+  return kind !== "search" && kind !== "notes" && kind !== "support";
 }
 
 export function aiJobIsPendingReview(

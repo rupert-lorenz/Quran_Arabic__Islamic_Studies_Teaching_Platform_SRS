@@ -92,7 +92,7 @@ export default async function ChildProfilePage({
           <h2 className="font-heading text-xl font-bold tracking-tight text-brand">
             Lesson history
           </h2>
-          <ShortcutLinkGrid label="Child learning pages" className="mt-4">
+          <ShortcutLinkGrid label="Child learning pages" className="mt-4 xl:grid-cols-3">
             <ButtonLink
               href={`/family/children/${child.userId}/history`}
               className={shortcutLinkClass}

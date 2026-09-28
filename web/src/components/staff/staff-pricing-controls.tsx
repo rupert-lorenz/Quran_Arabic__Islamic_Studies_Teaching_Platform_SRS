@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useT } from "@/components/i18n/i18n-provider";
 import { Button } from "@/components/ui/button";
 import { deleteJson, fieldClass, postJson } from "@/lib/api";
 import type { TeacherRatePolicy } from "@/components/staff/staff-rate-policy";
@@ -23,10 +24,10 @@ export type StaffRatesWorkspaceData = TeacherRatePolicy & {
   teachers: { userId: string; displayName: string; email: string }[];
 };
 
-const scopeLabels = {
-  country: "Country",
-  subject: "Subject",
-  teacher: "Teacher",
+const scopeKeys = {
+  country: "price.faculty.scope.country",
+  subject: "price.faculty.scope.subject",
+  teacher: "price.faculty.scope.teacher",
 } as const;
 
 export function StaffPricingControls({
@@ -38,6 +39,7 @@ export function StaffPricingControls({
   canEdit: boolean;
   onUpdated: (next: StaffRatesWorkspaceData) => void;
 }) {
+  const t = useT();
   const [scope, setScope] = useState<"country" | "subject" | "teacher">("country");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
@@ -63,15 +65,12 @@ export function StaffPricingControls({
   return (
     <section className="mt-8 rounded-[2rem] border border-line bg-surface p-6 shadow-[var(--shadow-card)]">
       <p className="text-xs font-bold uppercase text-brand-soft">
-        Scoped pricing controls
+        {t("price.faculty.controls_eyebrow")}
       </p>
-      <h2 className="mt-1 text-xl font-extrabold text-brand">
-        Country, subject, and teacher ranges
+      <h2 className="mt-1 font-heading text-xl font-bold tracking-tight text-brand">
+        {t("price.faculty.controls_title")}
       </h2>
-      <p className="mt-2 text-sm text-muted">
-        Country and subject rules tighten the platform band. A teacher rule
-        replaces that teacher’s minimum or maximum when you set one.
-      </p>
+      <p className="mt-2 text-sm text-muted">{t("price.faculty.controls_help")}</p>
       {error ? (
         <p className="mt-4 rounded-2xl bg-rose px-4 py-3 text-sm font-semibold text-brand">
           {error}
@@ -100,7 +99,7 @@ export function StaffPricingControls({
               event.currentTarget.reset();
             } catch (err) {
               setError(
-                err instanceof Error ? err.message : "Could not save pricing control",
+                err instanceof Error ? err.message : t("price.faculty.save_failed"),
               );
             } finally {
               setPending(false);
@@ -108,7 +107,9 @@ export function StaffPricingControls({
           }}
         >
           <label className="block">
-            <span className="mb-1 block text-sm font-bold text-brand">Scope</span>
+            <span className="mb-1 block text-sm font-bold text-brand">
+              {t("price.faculty.scope")}
+            </span>
             <select
               className={fieldClass}
               value={scope}
@@ -116,17 +117,19 @@ export function StaffPricingControls({
                 setScope(event.target.value as "country" | "subject" | "teacher")
               }
             >
-              <option value="country">Country</option>
-              <option value="subject">Subject</option>
-              <option value="teacher">Teacher</option>
+              <option value="country">{t("price.faculty.scope.country")}</option>
+              <option value="subject">{t("price.faculty.scope.subject")}</option>
+              <option value="teacher">{t("price.faculty.scope.teacher")}</option>
             </select>
           </label>
           <label className="block">
             <span className="mb-1 block text-sm font-bold text-brand">
-              {scopeLabels[scope]}
+              {t(scopeKeys[scope])}
             </span>
             <select name="scopeKey" required className={fieldClass}>
-              <option value="">Select {scopeLabels[scope].toLowerCase()}</option>
+              <option value="">
+                {t("price.faculty.select_scope", { scope: t(scopeKeys[scope]) })}
+              </option>
               {keys.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
@@ -136,37 +139,36 @@ export function StaffPricingControls({
           </label>
           <label className="block">
             <span className="mb-1 block text-sm font-bold text-brand">
-              Minimum (optional)
+              {t("price.faculty.min_optional")}
             </span>
             <input
               name="minAmount"
               className={fieldClass}
               inputMode="decimal"
-              placeholder="Inherit"
+              placeholder={t("price.faculty.inherit")}
             />
           </label>
           <label className="block">
             <span className="mb-1 block text-sm font-bold text-brand">
-              Maximum (optional)
+              {t("price.faculty.max_optional")}
             </span>
             <input
               name="maxAmount"
               className={fieldClass}
               inputMode="decimal"
-              placeholder="Inherit"
+              placeholder={t("price.faculty.inherit")}
             />
           </label>
           <div className="sm:col-span-2">
             <Button type="submit" disabled={pending || keys.length === 0}>
-              {pending ? "Saving…" : "Save control"}
+              {pending ? t("price.faculty.saving") : t("price.faculty.save")}
             </Button>
           </div>
         </form>
       ) : null}
       {data.rules.length === 0 ? (
         <p className="mt-6 rounded-[2rem] bg-gold px-5 py-4 font-semibold text-brand">
-          No country, subject, or teacher controls yet. The platform range applies
-          to everyone.
+          {t("price.faculty.controls_empty")}
         </p>
       ) : (
         <ul className="mt-6 grid gap-3">
@@ -176,8 +178,8 @@ export function StaffPricingControls({
               className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-background px-4 py-3"
             >
               <div>
-                <p className="text-sm font-extrabold text-brand">
-                  {scopeLabels[rule.scope]} · {rule.label}
+                <p className="font-heading text-sm font-bold tracking-tight text-brand">
+                  {t(scopeKeys[rule.scope])} · {rule.label}
                 </p>
                 <p className="text-sm text-muted">
                   {rule.minFormatted}–{rule.maxFormatted}
@@ -201,14 +203,14 @@ export function StaffPricingControls({
                       setError(
                         err instanceof Error
                           ? err.message
-                          : "Could not remove pricing control",
+                          : t("price.faculty.remove_failed"),
                       );
                     } finally {
                       setPending(false);
                     }
                   }}
                 >
-                  Remove
+                  {t("price.faculty.remove")}
                 </Button>
               ) : null}
             </li>

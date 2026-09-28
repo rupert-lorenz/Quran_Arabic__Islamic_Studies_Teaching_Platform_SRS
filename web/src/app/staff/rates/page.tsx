@@ -1,11 +1,19 @@
+import { CommissionRulesFacultyView } from "@/components/finance/commission-rules-faculty";
+import { CommissionScopedFacultyView } from "@/components/finance/commission-scoped-faculty";
+import { LocationPriceFacultyView } from "@/components/finance/location-price-faculty";
 import { StaffRatesClient } from "@/components/staff/staff-rates-client";
 import { Container } from "@/components/ui/container";
+import { PageHero } from "@/components/ui/page-hero";
 import { hasAnyPermission } from "@/lib/rbac";
+import { getI18n } from "@/server/i18n/locale";
+import { getCommissionRulesFaculty } from "@/server/finance/commission-rules";
+import { getCommissionScopedFaculty } from "@/server/finance/commission-scoped";
+import { getLocationPriceFaculty } from "@/server/finance/location-prices";
 import { requireStaffPage } from "@/server/rbac/guard";
 import { getTeacherRatePolicy } from "@/server/staff/rates";
 
 export const metadata = {
-  title: "Rates",
+  title: "Market and location prices",
 };
 
 export default async function StaffRatesPage() {
@@ -14,23 +22,37 @@ export default async function StaffRatesPage() {
     "teachers.approve",
     "payments.read",
   ]);
-  const policy = await getTeacherRatePolicy();
+  const actor = {
+    userId: access.user.id,
+    roleKey: access.user.roleKey,
+    permissions: access.permissions,
+  };
+  const [{ t }, policy, faculty, commissionRules, commissionScoped] =
+    await Promise.all([
+      getI18n(),
+      getTeacherRatePolicy(),
+      getLocationPriceFaculty(),
+      getCommissionRulesFaculty(actor),
+      getCommissionScopedFaculty(actor),
+    ]);
   const canEdit = hasAnyPermission(access, [
     "settings.write",
     "teachers.approve",
   ]);
 
   return (
-    <Container className="py-10">
-      <h1 className="text-3xl font-extrabold text-brand">Teacher rates</h1>
-      <p className="mt-2 max-w-2xl text-muted">
-        Set the platform hourly range, then add country, subject, or
-        teacher-specific controls. Listed prices must sit inside the effective
-        band for that teacher.
-      </p>
-      <div className="mt-8">
+    <>
+      <PageHero
+        eyebrow={t("price.faculty.eyebrow")}
+        title={t("price.faculty.title")}
+        description={t("price.faculty.page_help")}
+      />
+      <Container className="space-y-8 py-10">
+        <LocationPriceFacultyView faculty={faculty} />
+        <CommissionRulesFacultyView faculty={commissionRules} />
+        <CommissionScopedFacultyView faculty={commissionScoped} />
         <StaffRatesClient initial={policy} canEdit={canEdit} />
-      </div>
-    </Container>
+      </Container>
+    </>
   );
 }

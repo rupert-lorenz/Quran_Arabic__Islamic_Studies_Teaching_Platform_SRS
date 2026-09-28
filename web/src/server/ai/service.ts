@@ -19,8 +19,6 @@ import {
   users,
 } from "@/db/schema";
 import {
-  AI_LIVE_KINDS,
-  AI_PLANNED_KINDS,
   aiContentIsIdentified,
   aiJobIsPendingReview,
   aiKindRequiresReview,
@@ -33,14 +31,6 @@ import {
   countTranscriptQueryMatches,
   detectAiLocale,
   distinctTranscriptSpeakers,
-  extractImprovementAreas,
-  extractKeyLearningPoints,
-  extractLessonVocabulary,
-  extractNextLessonRecommendations,
-  extractHomeworkDraft,
-  extractLearningRecommendationDraft,
-  extractQuizDraft,
-  extractStudentNotes,
   genericSpeakerName,
   normaliseArabicTranscript,
   normaliseEnglishTranscript,
@@ -80,14 +70,12 @@ import {
   sameTranscriptSegment,
   segmentsFromTypedBody,
   speakerRoleFromActor,
-  summariseLessonTranscript,
   sortTranscriptSegments,
   transcriptSearchPattern,
   isAiJobStatus,
   isAiLocale,
   isAiSpeakerRole,
   isAiTranscriptSource,
-  type AiJobKind,
   type AiJobStatus,
   type AiLocale,
   type AiQuizQuestionDraft,
@@ -97,6 +85,24 @@ import {
   type AiTranscriptSegment,
   type AiTranscriptSource,
 } from "@/lib/ai-systems";
+import { runAiModule } from "@/server/ai/adapter";
+import {
+  assertAiActionModule,
+  assertAiModuleLive,
+  getAiArchitecture,
+  listLiveAiCapabilityModules,
+  listPlannedAiModules,
+  type AiArchitectureView,
+  type AiModuleView,
+} from "@/server/ai/registry";
+import {
+  payloadSupportBody,
+  payloadSupportHits,
+  payloadSupportQuery,
+  platformSupportSources,
+  type AiSupportHit,
+} from "@/lib/ai-support";
+import { listPublishedCmsForLocale } from "@/server/cms/public";
 import {
   AI_UPLOAD_MAX_BYTES,
   extractUploadedDocumentText,
@@ -126,10 +132,7 @@ import { ApiError } from "@/server/api/errors";
 import { actorCanViewClassroomRecordings } from "@/server/classroom/recording-access";
 import { assertParentOwnsChild } from "@/server/parent/children";
 
-export type AiModuleView = {
-  kind: AiJobKind;
-  live: boolean;
-};
+export type { AiArchitectureView, AiModuleView };
 
 export type AiClassroomOption = {
   id: string;
@@ -289,6 +292,18 @@ export type AiReviewItem = {
   createdAt: string;
 };
 
+export type AiSupportView = {
+  id: string;
+  query: string;
+  locale: AiLocale;
+  status: AiJobStatus;
+  generatedByAi: boolean;
+  origin: AiContentOrigin;
+  body: string;
+  hits: AiSupportHit[];
+  createdAt: string;
+};
+
 export type AiSystemsDesk = {
   href: string;
   canEdit: boolean;
@@ -312,6 +327,10 @@ export type AiSystemsDesk = {
   reviewLive: true;
   identificationLive: true;
   decisionsLive: true;
+  architectureLive: true;
+  architecture: AiArchitectureView;
+  supportLive: true;
+  supports: AiSupportView[];
   actorUserId: string;
   actorName: string;
   actorRole: AiSpeakerRole;
@@ -1129,19 +1148,19 @@ async function writeSummaryJob(
     transcriptJobId: input.transcriptJobId ?? null,
     engine: "extractive",
     sentenceCount: input.sentenceCount,
-    keyPoints: (takeSafeList(input.keyPoints) ?? extractKeyLearningPoints({
+    keyPoints: (takeSafeList(input.keyPoints) ?? runAiModule.keyPoints({
       fullText: safeBody,
       locale: input.locale,
     })).slice(0, 8),
-    vocabulary: (takeSafeList(input.vocabulary) ?? extractLessonVocabulary({
+    vocabulary: (takeSafeList(input.vocabulary) ?? runAiModule.vocabulary({
       fullText: safeBody,
       locale: input.locale,
     })).slice(0, 16),
-    improvementAreas: (takeSafeList(input.improvementAreas) ?? extractImprovementAreas({
+    improvementAreas: (takeSafeList(input.improvementAreas) ?? runAiModule.improvementAreas({
       fullText: safeBody,
       locale: input.locale,
     })).slice(0, 8),
-    nextLessonRecommendations: (takeSafeList(input.nextLessonRecommendations) ?? extractNextLessonRecommendations({
+    nextLessonRecommendations: (takeSafeList(input.nextLessonRecommendations) ?? runAiModule.nextLesson({
       fullText: safeBody,
       locale: input.locale,
     })).slice(0, 8),
@@ -1873,6 +1892,7 @@ export async function generateQuizFromUploadedDocument(
   },
   ip: string,
 ) {
+  assertAiModuleLive("quiz");
   if (!canEditAi(actor)) {
     throw new ApiError(403, "FORBIDDEN", "Only teachers and staff can generate quizzes");
   }
@@ -1957,7 +1977,7 @@ export async function generateQuizFromUploadedDocument(
   }
   const locale = input.locale ?? "en";
   const title = name.replace(/\.[^.]+$/, "").trim().slice(0, 160) || classroom.title;
-  const draft = extractQuizDraft({
+  const draft = runAiModule.quiz({
     fullText,
     locale,
     title,
@@ -2399,6 +2419,208 @@ async function writeRecommendationJob(
   return job.id;
 }
 
+function supportView(job: typeof aiJobs.$inferSelect): AiSupportView {
+  return {
+    id: job.id,
+    query: payloadSupportQuery(job.payload),
+    locale: asLocale(job.locale),
+    status: asStatus(job.status),
+    generatedByAi: aiContentIsIdentified(viewOrigin(job)) || job.generatedByAi,
+    origin: viewOrigin(job),
+    body: payloadSupportBody(job.payload),
+    hits: payloadSupportHits(job.payload),
+    createdAt: job.createdAt.toISOString(),
+  };
+}
+
+async function loadSupportJobs(actorUserId: string, locale?: AiLocale | "all") {
+  const rows = await db
+    .select()
+    .from(aiJobs)
+    .where(
+      and(
+        eq(aiJobs.kind, "support"),
+        eq(aiJobs.createdByUserId, actorUserId),
+        locale && locale !== "all" ? eq(aiJobs.locale, locale) : undefined,
+      ),
+    )
+    .orderBy(desc(aiJobs.createdAt))
+    .limit(8);
+  return rows.map(supportView);
+}
+
+async function collectSupportSources(
+  actor: ApiActor,
+  locale: AiLocale,
+  studentUserId?: string,
+) {
+  const deskHref = aiPath(actor, studentUserId);
+  const sources = platformSupportSources({
+    role: actorSpeakerRole(actor),
+    locale,
+  });
+  const docs = await listPublishedCmsForLocale(locale, ["faq", "page", "policy"]);
+  for (const doc of docs) {
+    const body = [doc.excerpt, doc.body].filter(Boolean).join(" ");
+    if (!body.trim()) continue;
+    sources.push({
+      kind: doc.type === "faq" ? "faq" : "page",
+      title: doc.title,
+      body,
+      href: doc.href,
+    });
+  }
+  const classroomIds = await visibleClassroomIds(actor, studentUserId);
+  if (!classroomIds.length) return sources;
+  const rooms = await db
+    .select({ id: classrooms.id, title: classrooms.title })
+    .from(classrooms)
+    .where(inArray(classrooms.id, classroomIds));
+  const titleByRoom = new Map(rooms.map((row) => [row.id, row.title]));
+  const transcriptRows = await db
+    .select({
+      job: aiJobs,
+      transcript: aiTranscripts,
+    })
+    .from(aiTranscripts)
+    .innerJoin(aiJobs, eq(aiTranscripts.jobId, aiJobs.id))
+    .where(
+      and(
+        inArray(aiTranscripts.classroomId, classroomIds),
+        eq(aiJobs.kind, "transcription"),
+        eq(aiJobs.status, "approved"),
+        eq(aiJobs.locale, locale),
+      ),
+    )
+    .orderBy(desc(aiJobs.createdAt))
+    .limit(20);
+  for (const row of transcriptRows) {
+    if (!row.transcript.fullText.trim()) continue;
+    sources.push({
+      kind: "transcript",
+      title: titleByRoom.get(row.transcript.classroomId) || row.job.title,
+      body: row.transcript.fullText,
+      href: deskHref,
+    });
+  }
+  const [summaries, homeworks, quizzes, recommendations] = await Promise.all([
+    loadSummaryJobs(classroomIds, true, ""),
+    loadHomeworkJobs(classroomIds, true, ""),
+    loadQuizJobs(classroomIds, true, ""),
+    loadRecommendationJobs(classroomIds, true, ""),
+  ]);
+  for (const job of summaries) {
+    if (asLocale(job.locale) !== locale) continue;
+    const body = [
+      payloadSummaryBody(job.payload),
+      ...payloadKeyPoints(job.payload),
+    ].join(" ");
+    if (!body.trim()) continue;
+    sources.push({
+      kind: "summary",
+      title: titleByRoom.get(job.classroomId ?? "") || job.title,
+      body,
+      href: deskHref,
+    });
+  }
+  for (const job of homeworks) {
+    if (asLocale(job.locale) !== locale) continue;
+    const body = [payloadHomeworkTitle(job.payload), payloadHomeworkBody(job.payload)].join(" ");
+    if (!body.trim()) continue;
+    sources.push({
+      kind: "homework",
+      title: payloadHomeworkTitle(job.payload) || job.title,
+      body,
+      href: deskHref,
+    });
+  }
+  for (const job of quizzes) {
+    if (asLocale(job.locale) !== locale) continue;
+    const body = [payloadQuizTitle(job.payload), payloadQuizBody(job.payload)].join(" ");
+    if (!body.trim()) continue;
+    sources.push({
+      kind: "quiz",
+      title: payloadQuizTitle(job.payload) || job.title,
+      body,
+      href: deskHref,
+    });
+  }
+  for (const job of recommendations) {
+    if (asLocale(job.locale) !== locale) continue;
+    const body = [
+      payloadRecommendationTitle(job.payload),
+      payloadRecommendationBody(job.payload),
+    ].join(" ");
+    if (!body.trim()) continue;
+    sources.push({
+      kind: "recommendation",
+      title: payloadRecommendationTitle(job.payload) || job.title,
+      body,
+      href: deskHref,
+    });
+  }
+  return sources;
+}
+
+async function writeSupportJob(
+  actor: ApiActor,
+  input: {
+    locale: AiLocale;
+    query: string;
+    body: string;
+    hits: AiSupportHit[];
+    ip: string;
+  },
+) {
+  const safe = requireAiSafeFields(
+    [input.query, input.body, ...input.hits.map((hit) => `${hit.title} ${hit.excerpt}`)],
+    "filter",
+  );
+  const query = safe.texts[0] ?? input.query;
+  const body = safe.texts[1] ?? input.body;
+  const hits = input.hits.map((hit, index) => {
+    const combined = safe.texts[2 + index] ?? `${hit.title} ${hit.excerpt}`;
+    const title = combined.slice(0, hit.title.length) || hit.title;
+    return { ...hit, title: title.slice(0, 160), excerpt: hit.excerpt };
+  });
+  const now = new Date();
+  const payload = {
+    query: query.slice(0, 240),
+    body: body.slice(0, 1200),
+    hits,
+    engine: "extractive",
+    language: input.locale,
+    safety: aiSafetyPayload(safe.filtered),
+  };
+  const identified = applyAiIdentification(payload, true);
+  const [job] = await db
+    .insert(aiJobs)
+    .values({
+      kind: "support",
+      status: "ready",
+      sourceType: "topic",
+      locale: input.locale,
+      title: query.slice(0, 180) || "Support search",
+      generatedByAi: identified.generatedByAi,
+      requiresReview: false,
+      payload: identified.payload,
+      createdByUserId: actor.userId,
+      publishedAt: now,
+      updatedAt: now,
+    })
+    .returning();
+  if (!job) throw new ApiError(500, "SERVER", "Support answer could not be created");
+  await writeAuditLog({
+    actor,
+    action: "ai.support.asked",
+    entityType: "ai_job",
+    entityId: job.id,
+    ipAddress: input.ip,
+    metadata: { locale: input.locale, hits: hits.length },
+  });
+  return job.id;
+}
+
 export async function getAiSystemsDesk(
   actor: ApiActor,
   options?: { studentUserId?: string; q?: string; locale?: AiLocale | "all" },
@@ -2636,6 +2858,9 @@ export async function getAiSystemsDesk(
     reviewLive: true,
     identificationLive: true,
     decisionsLive: true,
+    architectureLive: true,
+    architecture: getAiArchitecture(),
+    supportLive: true,
     actorUserId: actor.userId,
     actorName: actorSpeakerName(actor),
     actorRole: actorSpeakerRole(actor),
@@ -2660,8 +2885,8 @@ export async function getAiSystemsDesk(
       forbidden: [...AI_FORBIDDEN_AUTONOMOUS_DECISIONS],
     },
     modules: [
-      ...AI_LIVE_KINDS.map((kind) => ({ kind, live: true })),
-      ...AI_PLANNED_KINDS.map((kind) => ({ kind, live: false })),
+      ...listLiveAiCapabilityModules(),
+      ...listPlannedAiModules(),
     ],
     classrooms: rooms.map((row) => ({
       id: row.id,
@@ -2673,6 +2898,7 @@ export async function getAiSystemsDesk(
     transcripts: transcriptsForLanguage,
     summaries,
     notes,
+    supports: await loadSupportJobs(actor.userId, language),
     homeworks,
     quizzes,
     recommendations,
@@ -2947,9 +3173,37 @@ export async function saveAiSystemsDesk(
         title: string;
         body: string;
         items?: string;
+      }
+    | {
+        action: "ask_support";
+        query: string;
+        locale?: AiLocale;
       },
   ip: string,
 ) {
+  assertAiActionModule(input.action);
+  if (input.action === "ask_support") {
+    const locale = input.locale ?? "en";
+    const query = input.query.trim();
+    requireAiSafeText(query, "reject");
+    const refusal = refuseAutonomousSensitiveDecision(query);
+    if (refusal) {
+      throw new ApiError(422, "AI_SAFETY", refusal);
+    }
+    const draft = runAiModule.support({
+      query,
+      locale,
+      sources: await collectSupportSources(actor, locale),
+    });
+    await writeSupportJob(actor, {
+      locale,
+      query,
+      body: draft.body,
+      hits: draft.hits,
+      ip,
+    });
+    return getAiSystemsDesk(actor, { locale });
+  }
   if (input.action === "review") {
     if (!canEditAi(actor)) {
       throw new ApiError(403, "FORBIDDEN", "Only teachers and staff can review AI work");
@@ -3138,7 +3392,7 @@ export async function saveAiSystemsDesk(
       throw new ApiError(400, "VALIDATION", "This transcript has no text to summarise");
     }
     const locale = asLocale(transcript.locale || job.locale);
-    const draft = summariseLessonTranscript({
+    const draft = runAiModule.summarise({
       fullText: transcript.fullText,
       segments: transcript.segments ?? [],
       locale,
@@ -3169,16 +3423,16 @@ export async function saveAiSystemsDesk(
         : normaliseEnglishTranscript(input.body);
     const typedPoints = input.keyPoints
       ? parseTypedKeyPoints(input.keyPoints, locale)
-      : extractKeyLearningPoints({ fullText: prepared, locale });
+      : runAiModule.keyPoints({ fullText: prepared, locale });
     const typedVocabulary = input.vocabulary
       ? parseTypedVocabulary(input.vocabulary, locale)
-      : extractLessonVocabulary({ fullText: prepared, locale });
+      : runAiModule.vocabulary({ fullText: prepared, locale });
     const typedImprovements = input.improvementAreas
       ? parseTypedImprovementAreas(input.improvementAreas, locale)
-      : extractImprovementAreas({ fullText: prepared, locale });
+      : runAiModule.improvementAreas({ fullText: prepared, locale });
     const typedNext = input.nextLessonRecommendations
       ? parseTypedNextLessonRecommendations(input.nextLessonRecommendations, locale)
-      : extractNextLessonRecommendations({ fullText: prepared, locale });
+      : runAiModule.nextLesson({ fullText: prepared, locale });
     await writeSummaryJob(actor, {
       classroom,
       locale,
@@ -3424,7 +3678,7 @@ export async function saveAiSystemsDesk(
       throw new ApiError(400, "VALIDATION", "This transcript has no text for notes");
     }
     const locale = asLocale(transcript.locale || job.locale);
-    const draft = extractStudentNotes({
+    const draft = runAiModule.notes({
       fullText: transcript.fullText,
       segments: transcript.segments ?? [],
       locale,
@@ -3535,7 +3789,7 @@ export async function saveAiSystemsDesk(
       throw new ApiError(400, "VALIDATION", "This transcript has no text for homework");
     }
     const locale = asLocale(transcript.locale || job.locale);
-    const draft = extractHomeworkDraft({
+    const draft = runAiModule.homework({
       fullText: transcript.fullText,
       segments: transcript.segments ?? [],
       locale,
@@ -3667,7 +3921,7 @@ export async function saveAiSystemsDesk(
       throw new ApiError(400, "VALIDATION", "This transcript has no text for a quiz");
     }
     const locale = asLocale(transcript.locale || job.locale);
-    const draft = extractQuizDraft({
+    const draft = runAiModule.quiz({
       fullText: transcript.fullText,
       segments: transcript.segments ?? [],
       locale,
@@ -3723,7 +3977,7 @@ export async function saveAiSystemsDesk(
     if (fullText.trim().length < 20) {
       throw new ApiError(400, "VALIDATION", "This book has no readable text for a quiz");
     }
-    const draft = extractQuizDraft({
+    const draft = runAiModule.quiz({
       fullText,
       locale,
       title: book.title,
@@ -3833,7 +4087,7 @@ export async function saveAiSystemsDesk(
         "That previous lesson has no readable transcript or summary for a quiz",
       );
     }
-    const draft = extractQuizDraft({
+    const draft = runAiModule.quiz({
       fullText: source.fullText,
       locale,
       title: previous.title,
@@ -3986,7 +4240,7 @@ export async function saveAiSystemsDesk(
       throw new ApiError(400, "VALIDATION", "This transcript has no text for a recommendation");
     }
     const locale = asLocale(transcript.locale || job.locale);
-    const draft = extractLearningRecommendationDraft({
+    const draft = runAiModule.recommendation({
       fullText: transcript.fullText,
       segments: transcript.segments ?? [],
       locale,
@@ -4048,7 +4302,7 @@ export async function saveAiSystemsDesk(
         "That previous lesson has no readable transcript or summary for a recommendation",
       );
     }
-    const draft = extractLearningRecommendationDraft({
+    const draft = runAiModule.recommendation({
       fullText: source.fullText,
       locale,
       title: previous.title,

@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { cache } from "react";
 import { db } from "@/db";
+import { seedCurrencies } from "@/db/seed-data";
 import { countries, currencies, fxRates, platformSettings, users } from "@/db/schema";
 import {
   CURRENCY_COOKIE_NAME,
@@ -12,6 +13,7 @@ import {
   localizeTeacherRate,
   parseFxMajorRate,
   resolveCurrencyCode,
+  seedFxRatesAgainstGbp,
   type FxBook,
   type PublicCurrency,
 } from "@/lib/currency";
@@ -33,7 +35,41 @@ function settingString(value: unknown) {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
+const COUNTRY_CURRENCY_DEFAULTS: Record<string, string> = {
+  JO: "JOD",
+  MA: "MAD",
+  QA: "QAR",
+  KW: "KWD",
+};
+
+export const ensureSeedCurrencies = cache(async () => {
+  await db.insert(currencies).values([...seedCurrencies]).onConflictDoNothing();
+  const fxRows = seedFxRatesAgainstGbp.flatMap((row) => {
+    const rateInteger = parseFxMajorRate(row.rate);
+    return rateInteger == null
+      ? []
+      : [
+          {
+            baseCode: DEFAULT_CURRENCY,
+            quoteCode: row.quoteCode,
+            rateInteger,
+            rateScale: FX_RATE_SCALE,
+          },
+        ];
+  });
+  if (fxRows.length > 0) {
+    await db.insert(fxRates).values(fxRows).onConflictDoNothing();
+  }
+  for (const [iso2, defaultCurrencyCode] of Object.entries(COUNTRY_CURRENCY_DEFAULTS)) {
+    await db
+      .update(countries)
+      .set({ defaultCurrencyCode })
+      .where(eq(countries.iso2, iso2));
+  }
+});
+
 async function loadCurrencyRows() {
+  await ensureSeedCurrencies();
   return db
     .select({
       code: currencies.code,
@@ -92,13 +128,25 @@ export const getRequestMoney = cache(async () => {
     ]);
     const enabled = rows.filter((row) => row.isEnabled);
     const countryCurrency = await loadCountryCurrency(user?.country).catch(() => null);
+    const cookieCode = normalizeCurrencyCode(store.get(CURRENCY_COOKIE_NAME)?.value);
+    const accountCode = normalizeCurrencyCode(user?.currency);
+    const countryCode = normalizeCurrencyCode(countryCurrency);
+    const enabledCodes = enabled.map((row) => row.code);
     const code = resolveCurrencyCode({
-      cookie: store.get(CURRENCY_COOKIE_NAME)?.value,
-      userCurrency: user?.currency,
-      countryCurrency,
+      cookie: cookieCode,
+      userCurrency: accountCode,
+      countryCurrency: countryCode,
       defaultCode,
-      enabled: enabled.map((row) => row.code),
+      enabled: enabledCodes,
     });
+    const marketSource =
+      cookieCode && enabledCodes.includes(cookieCode)
+        ? ("cookie" as const)
+        : accountCode && enabledCodes.includes(accountCode)
+          ? ("account" as const)
+          : countryCode && enabledCodes.includes(countryCode)
+            ? ("country" as const)
+            : ("default" as const);
     const row = enabled.find((item) => item.code === code) ?? enabled[0];
     const currency: PublicCurrency = row
       ? {
@@ -122,6 +170,10 @@ export const getRequestMoney = cache(async () => {
       currency,
       currencies: currenciesList,
       defaultCode,
+      marketSource,
+      country: user?.country
+        ? { iso2: user.country, currencyCode: countryCode }
+        : null,
       book,
       convert: (
         amountMinor: number,
@@ -144,6 +196,8 @@ export const getRequestMoney = cache(async () => {
       currency: fallbackCurrency,
       currencies: [fallbackCurrency],
       defaultCode: DEFAULT_CURRENCY,
+      marketSource: "default" as const,
+      country: null,
       book: { baseCode: DEFAULT_CURRENCY, rates: new Map() },
       convert: (amountMinor: number, from: { code: string }, to?: { code: string }) =>
         from.code === (to?.code ?? fallbackCurrency.code) ? amountMinor : null,
@@ -228,6 +282,33 @@ export function fxRateRows(book: FxBook, quotes: PublicCurrency[]) {
       rate: rateInteger == null ? "" : formatFxMajorRate(rateInteger),
     };
   });
+}
+
+export async function getCurrenciesFaculty() {
+  const money = await getRequestMoney();
+  const rows = await loadCurrencyRows();
+  const missingRates = money.currencies.filter(
+    (item) =>
+      item.code !== money.defaultCode && !money.book.rates.has(item.code),
+  );
+  return {
+    display: money.currency,
+    defaultCode: money.defaultCode,
+    enabled: money.currencies,
+    catalogue: rows.map((row) => ({
+      code: row.code,
+      name: row.name,
+      symbol: row.symbol,
+      decimalPlaces: row.decimalPlaces,
+      isEnabled: row.isEnabled,
+      isDefault: row.code === money.defaultCode,
+      hasRate:
+        row.code === money.defaultCode || money.book.rates.has(row.code),
+    })),
+    missingRates,
+    enabledCount: money.currencies.length,
+    catalogueCount: rows.length,
+  };
 }
 
 export function parseStaffFxRate(value: string) {

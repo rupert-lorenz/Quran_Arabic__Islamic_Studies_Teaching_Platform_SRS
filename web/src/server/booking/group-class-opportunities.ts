@@ -43,12 +43,9 @@ import { writeAuditLog } from "@/server/api/audit";
 import { ApiError } from "@/server/api/errors";
 import { getRequestMoney } from "@/server/money/currency";
 import {
-  assertBookingMinNotice,
   resolveDisplayTimeZone,
   resolveScheduleTimeZone,
-  resolveTeacherMinNotice,
 } from "./policy";
-import { listTeacherSlots } from "./slots";
 import type {
   ApplyGroupClassOpportunityInput,
   CreateGroupClassOpportunityInput,
@@ -249,7 +246,6 @@ function requireClassManager(actor: ApiActor) {
 async function assertTeacherCanTakeOpportunity(
   teacherUserId: string,
   row: typeof groupClassOpportunities.$inferSelect,
-  viewerUserId: string,
 ) {
   await requireApprovedGroupTeacher(teacherUserId);
   const [offered] = await db
@@ -269,28 +265,6 @@ async function assertTeacherCanTakeOpportunity(
   const ends = starts.map(
     (start) => new Date(start.getTime() + row.durationMinutes * 60_000),
   );
-  const notice = await resolveTeacherMinNotice(teacherUserId);
-  assertBookingMinNotice(starts[0]!, notice.effectiveMinutes);
-  const teacherTimeZone = await resolveScheduleTimeZone(teacherUserId);
-  const from = zonedYmd(starts[0]!, teacherTimeZone).iso;
-  const to = zonedYmd(starts[starts.length - 1]!, teacherTimeZone).iso;
-  const slots = await listTeacherSlots(teacherUserId, {
-    from,
-    to,
-    durationMinutes: row.durationMinutes,
-    timeZone: teacherTimeZone,
-    viewerUserId,
-  });
-  const openStarts = new Set(
-    slots.slots.map((slot) => new Date(slot.startsAt).getTime()),
-  );
-  if (starts.some((start) => !openStarts.has(start.getTime()))) {
-    throw new ApiError(
-      409,
-      "SLOT_TAKEN",
-      "Every class session must be inside the teacher’s open hours",
-    );
-  }
   const [privateRows, groupRows] = await Promise.all([
     db
       .select({ startsAt: bookings.startsAt, endsAt: bookings.endsAt })
@@ -920,7 +894,6 @@ export async function selectGroupClassTeacher(
     const { starts, ends } = await assertTeacherCanTakeOpportunity(
       application.teacherUserId,
       row,
-      actor.userId,
     );
     const weekdays = parseWeekdays(row.weekdays);
     const startsOn = availabilityDate(row.startsOn) ?? zonedYmd(starts[0]!, row.timezone).iso;
@@ -1042,7 +1015,7 @@ export async function applyGroupClassOpportunity(
     if (!isOpportunityOpen(row)) {
       throw new ApiError(400, "LOCKED", "This class opportunity is not open for applications");
     }
-    await assertTeacherCanTakeOpportunity(actor.userId, row, actor.userId);
+    await assertTeacherCanTakeOpportunity(actor.userId, row);
     const teacherTimeZone = await resolveScheduleTimeZone(actor.userId);
     const [currency] = await db
       .select({ decimalPlaces: currencies.decimalPlaces })

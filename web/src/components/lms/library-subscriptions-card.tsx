@@ -24,6 +24,13 @@ export function LibrarySubscriptionsCard({
             className="text-sm font-semibold text-muted"
           >
             {item.planName}
+            {item.monthly ? ` · ${t("library.subscription.monthly")}` : ""}
+            {item.amountFormatted
+              ? ` · ${t("library.subscription.price", { price: item.amountFormatted })}`
+              : ""}
+            {item.listedPriceFormatted
+              ? ` · ${t("card.listed_as", { price: item.listedPriceFormatted })}`
+              : ""}
             {` · `}
             <LibraryExpiryLabel expiresAt={item.expiresAt} />
           </li>

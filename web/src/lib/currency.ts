@@ -257,4 +257,8 @@ export const seedFxRatesAgainstGbp: { quoteCode: string; rate: string }[] = [
   { quoteCode: "AUD", rate: "1.91" },
   { quoteCode: "EGP", rate: "62" },
   { quoteCode: "NGN", rate: "2050" },
+  { quoteCode: "QAR", rate: "4.62" },
+  { quoteCode: "KWD", rate: "0.39" },
+  { quoteCode: "JOD", rate: "0.9" },
+  { quoteCode: "MAD", rate: "11.5" },
 ];

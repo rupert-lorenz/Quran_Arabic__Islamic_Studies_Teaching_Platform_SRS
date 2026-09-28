@@ -218,15 +218,18 @@ export function GroupLessonCard({
         <ClassroomJoinButton
           className="mb-3 w-full"
           href={currentLesson.classroomHref}
-          joinable={
-            currentLesson.classroomJoinable &&
-            Boolean(
-              reserved ||
-                (viewer?.roleKey === "teacher" &&
-                  viewer.userId === lesson.teacherUserId) ||
-                viewer?.roleKey === "staff",
-            )
-          }
+          joinable={currentLesson.classroomJoinable}
+          startsAt={currentLesson.startsAt}
+          endsAt={currentLesson.endsAt}
+          status={currentLesson.status}
+          role={viewer?.roleKey}
+          timeZone={currentLesson.teacherTimezone}
+          allowed={Boolean(
+            reserved ||
+              (viewer?.roleKey === "teacher" &&
+                viewer.userId === lesson.teacherUserId) ||
+              viewer?.roleKey === "staff",
+          )}
         />
         {!viewer ? (
           <ButtonLink href="/login" className="w-full">

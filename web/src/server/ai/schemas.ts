@@ -203,4 +203,9 @@ export const saveAiDeskSchema = z.discriminatedUnion("action", [
     body: z.string().trim().min(20).max(4000),
     items: z.preprocess(emptyToUndefined, z.string().trim().max(2000).optional()),
   }),
+  z.object({
+    action: z.literal("ask_support"),
+    query: z.string().trim().min(3).max(240),
+    locale: z.preprocess(emptyToUndefined, z.enum(AI_LOCALES).optional()),
+  }),
 ]);

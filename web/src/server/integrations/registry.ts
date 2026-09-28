@@ -21,7 +21,7 @@ export type IntegrationDescriptor = {
 export const integrations: IntegrationDescriptor[] = [
   {
     key: "payments",
-    purpose: "Checkout, refunds, and payment confirmation",
+    purpose: "Checkout, refunds, and payment confirmation for marketplace finance",
     rules: [
       "Card numbers, CVC, and raw card PANs are never stored",
       "Provider tokens and payment IDs only",
@@ -66,10 +66,13 @@ export const integrations: IntegrationDescriptor[] = [
   },
   {
     key: "ai",
-    purpose: "Optional tutoring assistance",
+    purpose: "Modular tutoring assistance through a server adapter",
     rules: [
+      "AI faculties are independent modules behind one server adapter",
+      "The browser never receives provider keys",
       "Child-identifying data is minimised before any model call",
       "Prompts and outputs are not used to train public models",
+      "OpenAI and Deepgram stay reserved until their server secrets are set",
     ],
     envSecrets: ["AI_API_KEY"],
   },

@@ -118,7 +118,7 @@ export function SiteHeader({
         </div>
 
         <nav
-          className={`hidden flex-wrap items-center gap-1 border-t border-white/10 py-2 ${LOGO_GUTTER} lg:flex`}
+          className={`hidden w-full min-w-0 flex-wrap items-center gap-1 border-t border-white/10 py-2 ${LOGO_GUTTER} lg:flex lg:flex-wrap`}
           aria-label="Primary"
         >
           {nav.map((item) => (
@@ -297,7 +297,7 @@ function NavLink({
   return (
     <Link
       href={href}
-      className={`inline-flex min-h-11 shrink-0 items-center rounded-full px-3 py-2 text-sm font-bold whitespace-nowrap transition ${
+      className={`inline-flex min-h-11 shrink-0 items-center rounded-full px-3 py-2 text-sm font-bold tracking-normal whitespace-nowrap transition ${
         active
           ? "bg-brand-accent text-brand"
           : "text-brand-accent hover:bg-white/10 hover:text-white"

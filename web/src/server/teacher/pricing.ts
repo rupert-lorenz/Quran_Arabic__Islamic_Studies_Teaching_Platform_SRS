@@ -26,6 +26,7 @@ export type PlatformRateLimits = {
   minMinor: number;
   maxMinor: number;
   commissionPercent: number;
+  commissionFixedMinor: number;
   lessonDurationMinutes: number;
   defaultCurrencyCode: string;
   currency: {
@@ -125,6 +126,7 @@ export function formatRateLimitView(
       ? formatMinorAmount(band.maxMinor, decimals, symbol)
       : String(band.maxMinor),
     commissionPercent: platform.commissionPercent,
+    commissionFixedMinor: platform.commissionFixedMinor,
     lessonDurationMinutes: platform.lessonDurationMinutes,
     defaultCurrencyCode: platform.defaultCurrencyCode,
     currencies: platform.currencies,

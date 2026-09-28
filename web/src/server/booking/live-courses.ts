@@ -15,6 +15,7 @@ import {
   users,
 } from "@/db/schema";
 import { rangesOverlap } from "@/lib/booking";
+import { presentStudentAmount } from "@/lib/currency";
 import { formatMoneyMinor } from "@/lib/teacher-rate-display";
 import {
   addCalendarDays,
@@ -27,6 +28,7 @@ import { withLock } from "@/redis/locks";
 import type { ApiActor } from "@/server/api/auth";
 import { writeAuditLog } from "@/server/api/audit";
 import { ApiError } from "@/server/api/errors";
+import { getRequestMoney } from "@/server/money/currency";
 import {
   assertBookingMinNotice,
   resolveDisplayTimeZone,
@@ -60,6 +62,8 @@ export type LiveCourseView = {
   placesLeft: number;
   isFull: boolean;
   amountFormatted: string;
+  listedPriceFormatted: string | null;
+  priceConverted: boolean;
   sessions: {
     id: string;
     index: number;
@@ -106,8 +110,10 @@ async function requireCourseStudent(actor: ApiActor, studentUserId: string) {
 async function hydrateCourses(
   rows: (typeof liveCourses.$inferSelect)[],
   timeZone: string,
+  options?: { convertDisplay?: boolean },
 ): Promise<LiveCourseView[]> {
   if (!rows.length) return [];
+  const displayMoney = options?.convertDisplay ? await getRequestMoney() : null;
   const ids = rows.map((row) => row.id);
   const [teachers, subjectRows, currencyRows, enrollmentRows, sessionRows] =
     await Promise.all([
@@ -153,6 +159,31 @@ async function hydrateCourses(
       (item) => item.courseId === row.id && item.status === "confirmed",
     ).length;
     const currency = money.get(row.currencyCode);
+    const listing = currency
+      ? {
+          code: currency.code,
+          symbol: currency.symbol,
+          decimalPlaces: currency.decimalPlaces,
+        }
+      : null;
+    const price = displayMoney
+      ? presentStudentAmount({
+          amountMinor: row.amountMinor,
+          listing,
+          display: displayMoney.currency,
+          convert: displayMoney.convert,
+        })
+      : {
+          studentPriceFormatted: listing
+            ? formatMoneyMinor(
+                row.amountMinor,
+                listing.decimalPlaces,
+                listing.symbol,
+              )
+            : `${row.amountMinor} ${row.currencyCode}`,
+          listedPriceFormatted: null as string | null,
+          priceConverted: false,
+        };
     return {
       id: row.id,
       teacherUserId: row.teacherUserId,
@@ -173,9 +204,9 @@ async function hydrateCourses(
       enrolledCount,
       placesLeft: Math.max(0, row.capacity - enrolledCount),
       isFull: enrolledCount >= row.capacity,
-      amountFormatted: currency
-        ? formatMoneyMinor(row.amountMinor, currency.decimalPlaces, currency.symbol)
-        : `${row.amountMinor} ${row.currencyCode}`,
+      amountFormatted: price.studentPriceFormatted,
+      listedPriceFormatted: price.listedPriceFormatted,
+      priceConverted: price.priceConverted,
       sessions: sessionRows
         .filter((session) => session.courseId === row.id)
         .map((session, index) => ({
@@ -203,7 +234,7 @@ export async function listPublicLiveCourses(
       ),
     )
     .orderBy(asc(liveCourses.firstStartsAt));
-  return { timeZone, courses: await hydrateCourses(rows, timeZone) };
+  return { timeZone, courses: await hydrateCourses(rows, timeZone, { convertDisplay: true }) };
 }
 
 export async function listTeacherLiveCourses(teacherUserId: string) {

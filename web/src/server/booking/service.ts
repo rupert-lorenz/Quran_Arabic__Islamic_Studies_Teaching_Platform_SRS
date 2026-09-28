@@ -16,7 +16,7 @@ import {
   teacherSubjects,
   users,
 } from "@/db/schema";
-import { formatMoneyMinor } from "@/lib/teacher-rate-display";
+import { presentStudentAmount } from "@/lib/currency";
 import type { ApiActor } from "@/server/api/auth";
 import { writeAuditLog } from "@/server/api/audit";
 import { ApiError } from "@/server/api/errors";
@@ -51,6 +51,7 @@ import {
   zonedLocalToUtc,
   zonedYmd,
 } from "@/lib/timezone";
+import { getRequestMoney } from "@/server/money/currency";
 import { listParentChildren } from "@/server/parent/children";
 import { getBookingPolicy, resolveDisplayTimeZone, resolveScheduleTimeZone, resolveTeacherMinNotice, assertBookingMinNotice, resolveUserTimeZones } from "./policy";
 import { listTeacherSlots, listOpenBookings } from "./slots";
@@ -172,8 +173,11 @@ export async function publicBookingView(
     timeZone: string;
     teacherTimeZone?: string | null;
     amountFormatted: string | null;
+    listedPriceFormatted?: string | null;
+    priceConverted?: boolean;
     packageDiscountPercent?: number | null;
     packageTotalFormatted?: string | null;
+    packageListedTotalFormatted?: string | null;
     cancelFinancialStatus?: string | null;
   },
 ): Promise<BookingView> {
@@ -212,9 +216,12 @@ export async function publicBookingView(
     packageId: row.packageId,
     packageDiscountPercent: extras.packageDiscountPercent ?? null,
     packageTotalFormatted: extras.packageTotalFormatted ?? null,
+    packageListedTotalFormatted: extras.packageListedTotalFormatted ?? null,
     amountMinor: row.amountMinor,
     currencyCode: row.currencyCode,
     amountFormatted: extras.amountFormatted,
+    listedPriceFormatted: extras.listedPriceFormatted ?? null,
+    priceConverted: extras.priceConverted ?? false,
     cancelOutcome: row.cancelOutcome,
     cancelOutcomeLabel: cancelOutcomeLabel(row.cancelOutcome),
     cancelReason: row.cancelReason,
@@ -318,6 +325,7 @@ async function hydrateBookings(
   const financeOperationIds = rows
     .map((row) => row.cancelFinanceOperationId)
     .filter((id): id is string => Boolean(id));
+  const displayMoney = await getRequestMoney();
   const [teacherRows, studentRows, subjectRows, currencyRows, teacherZones, packageRows, financeRows] = await Promise.all([
     db
       .select({ id: users.id, displayName: users.displayName })
@@ -368,24 +376,40 @@ async function hydrateBookings(
     rows.map((row) => {
       const currency = money.get(row.currencyCode);
       const lessonPackage = row.packageId ? packages.get(row.packageId) : null;
+      const listing = currency
+        ? {
+            code: currency.code,
+            symbol: currency.symbol,
+            decimalPlaces: currency.decimalPlaces,
+          }
+        : null;
+      const price = presentStudentAmount({
+        amountMinor: row.amountMinor,
+        listing,
+        display: displayMoney.currency,
+        convert: displayMoney.convert,
+      });
+      const packagePrice =
+        lessonPackage && listing
+          ? presentStudentAmount({
+              amountMinor: lessonPackage.totalAmountMinor,
+              listing,
+              display: displayMoney.currency,
+              convert: displayMoney.convert,
+            })
+          : null;
       return publicBookingView(row, {
         teacherName: teachers.get(row.teacherUserId) ?? "Teacher",
         studentName: students.get(row.studentUserId) ?? "Student",
         subjectName: names.get(row.subjectSlug) ?? null,
         timeZone,
         teacherTimeZone: teacherZones.get(row.teacherUserId) ?? null,
-        amountFormatted: currency
-          ? formatMoneyMinor(row.amountMinor, currency.decimalPlaces, currency.symbol)
-          : `${row.amountMinor} ${row.currencyCode}`,
+        amountFormatted: price.studentPriceFormatted,
+        listedPriceFormatted: price.listedPriceFormatted,
+        priceConverted: price.priceConverted,
         packageDiscountPercent: lessonPackage?.discountPercent ?? null,
-        packageTotalFormatted:
-          lessonPackage && currency
-            ? formatMoneyMinor(
-                lessonPackage.totalAmountMinor,
-                currency.decimalPlaces,
-                currency.symbol,
-              )
-            : null,
+        packageTotalFormatted: packagePrice?.studentPriceFormatted ?? null,
+        packageListedTotalFormatted: packagePrice?.listedPriceFormatted ?? null,
         cancelFinancialStatus: row.cancelFinanceOperationId
           ? financeStatuses.get(row.cancelFinanceOperationId) ?? null
           : row.cancelFinancialAction

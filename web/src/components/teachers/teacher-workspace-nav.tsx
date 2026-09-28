@@ -3,6 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useT } from "@/components/i18n/i18n-provider";
+import {
+  WorkspacePillNav,
+  workspacePillClass,
+} from "@/components/ui/workspace-pill-nav";
 import type { UiMessageKey } from "@/lib/i18n";
 
 export function TeacherWorkspaceNav({
@@ -39,6 +43,7 @@ export function TeacherWorkspaceNav({
           { href: "/teach/arabic", labelKey: "teach_nav.arabic" },
           { href: "/teach/islamic-studies", labelKey: "teach_nav.islamic" },
           { href: "/teach/ai", labelKey: "teach_nav.ai" },
+          { href: "/teach/earnings", labelKey: "teach_nav.earnings" },
           { href: "/teach/questions", labelKey: "teach_nav.questions" },
           { href: "/teach/video", labelKey: "teach_nav.video" },
           { href: "/teach/status", labelKey: "teach_nav.status" },
@@ -58,10 +63,7 @@ export function TeacherWorkspaceNav({
         ];
 
   return (
-    <nav
-      className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      aria-label={t("teach_nav.label")}
-    >
+    <WorkspacePillNav label={t("teach_nav.label")}>
       {items.map((item) => {
         const active =
           item.match === "exact"
@@ -71,14 +73,12 @@ export function TeacherWorkspaceNav({
           <Link
             key={item.href}
             href={item.href}
-            className={`inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm font-bold ${
-              active ? "bg-brand text-white" : "bg-surface text-brand"
-            }`}
+            className={workspacePillClass(active)}
           >
             {t(item.labelKey)}
           </Link>
         );
       })}
-    </nav>
+    </WorkspacePillNav>
   );
 }

@@ -1,4 +1,5 @@
 export const CLASSROOM_OPEN_BEFORE_MS = 15 * 60 * 1000;
+export const CLASSROOM_TEACHER_OPEN_BEFORE_MS = 60 * 60 * 1000;
 export const CLASSROOM_OPEN_AFTER_MS = 30 * 60 * 1000;
 export const CLASSROOM_JOIN_TOKEN_TTL_SECONDS = 15 * 60;
 export const CLASSROOM_PRESENCE_TTL_MS = 45 * 1000;
@@ -131,16 +132,51 @@ export function formatClassroomCountdown(ms: number) {
   return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
-export function classroomJoinWindow(startsAt: Date, endsAt: Date) {
-  const opensAt = new Date(startsAt.getTime() - CLASSROOM_OPEN_BEFORE_MS);
-  const closesAt = new Date(endsAt.getTime() + CLASSROOM_OPEN_AFTER_MS);
-  const now = Date.now();
+export function classroomWaitParts(ms: number) {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+  return {
+    days: Math.floor(totalSeconds / 86_400),
+    hours: Math.floor((totalSeconds % 86_400) / 3600),
+    minutes: Math.floor((totalSeconds % 3600) / 60),
+    seconds: totalSeconds % 60,
+    totalSeconds,
+  };
+}
+
+export function classroomTimesFromDetails(details: unknown) {
+  if (!details || typeof details !== "object") return null;
+  const row = details as { startsAt?: unknown; endsAt?: unknown };
+  if (typeof row.startsAt !== "string" || typeof row.endsAt !== "string") {
+    return null;
+  }
+  if (Number.isNaN(new Date(row.startsAt).getTime())) return null;
+  return { startsAt: row.startsAt, endsAt: row.endsAt };
+}
+
+export function classroomOpenBeforeMs(role?: string | null) {
+  return role === "teacher" || role === "staff"
+    ? CLASSROOM_TEACHER_OPEN_BEFORE_MS
+    : CLASSROOM_OPEN_BEFORE_MS;
+}
+
+export function classroomJoinWindow(
+  startsAt: Date,
+  endsAt: Date,
+  now = Date.now(),
+  openBeforeMs = CLASSROOM_OPEN_BEFORE_MS,
+) {
+  const start = startsAt.getTime();
+  const end = Number.isNaN(endsAt.getTime()) || endsAt.getTime() <= start
+    ? start + 60 * 60 * 1000
+    : endsAt.getTime();
+  const opensAt = new Date(start - openBeforeMs);
+  const closesAt = new Date(end + CLASSROOM_OPEN_AFTER_MS);
   return {
     opensAt,
     closesAt,
     joinable: now >= opensAt.getTime() && now <= closesAt.getTime(),
     upcoming: now < opensAt.getTime(),
-    ended: now > closesAt.getTime(),
+    ended: now > closesAt.getTime() && now >= start,
   };
 }
 
@@ -160,8 +196,14 @@ export function classroomJoinFields(
   status: string,
   startsAt: Date,
   endsAt: Date,
+  role?: string | null,
 ): ClassroomJoinFields {
-  const window = classroomJoinWindow(startsAt, endsAt);
+  const window = classroomJoinWindow(
+    startsAt,
+    endsAt,
+    Date.now(),
+    classroomOpenBeforeMs(role),
+  );
   return {
     classroomJoinable:
       classroomStatusAllowsJoin(kind, status) && window.joinable,

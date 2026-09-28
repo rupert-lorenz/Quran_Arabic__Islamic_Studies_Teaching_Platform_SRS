@@ -118,7 +118,13 @@ export async function createFinanceOperation(
       amountMinor: parseMajorAmount(input.amount, currency.decimalPlaces),
       currencyCode: currency.code,
       counterpartyUserId: counterparty?.id,
-      reference: input.reference?.trim() || null,
+      reference:
+        input.reference?.trim() ||
+        (input.kind === "payment"
+          ? "one-off"
+          : input.kind === "credit"
+            ? "platform-credit"
+            : null),
       notes: input.notes?.trim() || null,
       createdByUserId: actor.userId,
     })

@@ -71,7 +71,7 @@ export function TeacherGroupOpportunityBoard({
         </p>
       </div>
       {error ? (
-        <p className="rounded-2xl bg-rose px-4 py-3 text-sm font-semibold text-brand">
+        <p className="rounded-2xl bg-rose px-4 py-3 text-sm font-semibold tracking-normal text-brand whitespace-normal">
           {error}
         </p>
       ) : null}

@@ -37,7 +37,7 @@ export const staffModules = [
   {
     href: "/staff/rates",
     label: "Rates",
-    description: "Lesson price limits, commission, and default currency",
+    description: "Market and location price bands, commission, and default currency",
     permission: ["settings.write", "teachers.approve", "payments.read"],
   },
   {
@@ -49,7 +49,7 @@ export const staffModules = [
   {
     href: "/staff/currencies",
     label: "Currencies",
-    description: "Enabled currencies and display FX rates",
+    description: "Multiple currencies, display FX, and settlement codes",
     permission: ["settings.write", "payments.read"],
   },
   {
@@ -78,8 +78,8 @@ export const staffModules = [
   },
   {
     href: "/staff/accounts",
-    label: "Accounts",
-    description: "Payments, refunds, payouts, and finance reports",
+    label: "Payments",
+    description: "Marketplace finance, wallets, refunds, payouts, and reports",
     permission: "payments.read",
   },
   {
@@ -97,7 +97,7 @@ export const staffModules = [
   {
     href: "/staff/bookings",
     label: "Bookings",
-    description: "Lesson calendar, cancellations, and reschedules",
+    description: "Hourly one-to-one sittings, calendar, cancellations, and reschedules",
     permission: ["classes.manage", "teachers.approve"],
   },
   {

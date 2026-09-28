@@ -146,6 +146,10 @@ export const platformModules = [
       "recordings",
     ],
   },
+  {
+    key: "ai",
+    tables: ["ai_jobs", "ai_transcripts"],
+  },
 ] as const;
 
 export const reservedModules = [

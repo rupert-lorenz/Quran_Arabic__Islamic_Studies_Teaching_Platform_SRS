@@ -36,12 +36,20 @@ export function omitInternalTeacherPayment<T>(
   return publicRate as T extends object ? Omit<T, InternalTeacherPaymentKey> : T;
 }
 
-export function splitLessonRate(amountMinor: number, commissionPercent: number) {
+export function splitLessonRate(
+  amountMinor: number,
+  commissionPercent: number,
+  commissionFixedMinor = 0,
+) {
   const safeCommission = Math.min(100, Math.max(0, commissionPercent));
-  const teacherEarnsMinor = Math.round(amountMinor * ((100 - safeCommission) / 100));
+  const percentCut = Math.round(amountMinor * (safeCommission / 100));
+  const commissionMinor = Math.min(
+    Math.max(0, amountMinor),
+    Math.max(0, percentCut + Math.max(0, Math.round(commissionFixedMinor))),
+  );
   return {
-    teacherEarnsMinor,
-    commissionMinor: amountMinor - teacherEarnsMinor,
+    teacherEarnsMinor: Math.max(0, amountMinor - commissionMinor),
+    commissionMinor,
   };
 }
 
@@ -76,6 +84,7 @@ export function parseMoneyMajor(value: string, decimalPlaces: number) {
 export function previewTeacherRate(input: {
   amount: string;
   commissionPercent: number;
+  commissionFixedMinor?: number;
   currency: { code: string; symbol: string; decimalPlaces: number };
 }): TeacherRateView | null {
   const amountMinor = parseMoneyMajor(input.amount, input.currency.decimalPlaces);
@@ -86,6 +95,7 @@ export function previewTeacherRate(input: {
   const { teacherEarnsMinor, commissionMinor } = splitLessonRate(
     amountMinor,
     input.commissionPercent,
+    input.commissionFixedMinor ?? 0,
   );
   const studentPays = formatMoneyMinor(
     amountMinor,

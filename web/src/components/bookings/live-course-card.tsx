@@ -67,7 +67,14 @@ export function LiveCourseCard({
         </div>
         <div className="col-span-2 rounded-2xl bg-gold/60 px-4 py-3">
           <dt className="font-bold text-muted">{t("live.course_price")}</dt>
-          <dd className="font-extrabold text-brand">{course.amountFormatted}</dd>
+          <dd className="font-heading font-bold tracking-tight text-brand">
+            {course.amountFormatted}
+          </dd>
+          {course.listedPriceFormatted ? (
+            <dd className="mt-1 text-xs font-semibold text-muted">
+              {t("card.listed_as", { price: course.listedPriceFormatted })}
+            </dd>
+          ) : null}
         </div>
       </dl>
       <details className="mt-4 rounded-2xl bg-background px-4 py-3">

@@ -307,7 +307,12 @@ async function loadTeacherRateSplit(
     currencyRows.find((item) => item.code === currencyCode) ??
     currencyRows.find((item) => item.code === limits.defaultCurrencyCode) ??
     currencyRows[0];
-  return publicTeacherRate(hourlyRateMinor, currency, limits.commissionPercent);
+  return publicTeacherRate(
+    hourlyRateMinor,
+    currency,
+    limits.commissionPercent,
+    limits.commissionFixedMinor,
+  );
 }
 
 export async function updateTeacherProfile(

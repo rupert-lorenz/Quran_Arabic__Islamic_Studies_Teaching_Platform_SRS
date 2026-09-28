@@ -19,7 +19,9 @@ export function GroupLessonManager({
   initial: GroupLessonView[];
 }) {
   const [lessons, setLessons] = useState(initial);
-  const initialKey = initial.map((row) => `${row.id}:${row.status}`).join("|");
+  const initialKey = initial
+    .map((row) => `${row.id}:${row.status}:${row.startsAt}:${row.classroomJoinable}`)
+    .join("|");
   const [seenKey, setSeenKey] = useState(initialKey);
   if (seenKey !== initialKey) {
     setSeenKey(initialKey);
@@ -65,56 +67,92 @@ export function GroupLessonManager({
 
   return (
     <section>
-      <h2 className="text-2xl font-extrabold text-brand">Your published classes</h2>
+      <h2 className="font-heading text-2xl font-bold tracking-tight text-brand">
+        Your published classes
+      </h2>
       {lessons.length ? (
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
+        <div className="mt-5 grid gap-5 xl:grid-cols-2">
           {lessons.map((lesson) => (
             <article
               key={lesson.id}
               id={`group-${lesson.id}`}
-              className="scroll-mt-24 rounded-[1.5rem] border border-line bg-surface p-5"
+              className="flex min-w-0 scroll-mt-24 flex-col rounded-[1.5rem] border border-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-6"
             >
-              <p className="text-xs font-bold uppercase text-brand-soft">
+              <p className="text-xs font-bold uppercase tracking-wide text-brand-soft">
                 {lesson.subjectName} · {lesson.status}
                 {lesson.seriesTotal
                   ? ` · Session ${lesson.seriesIndex}/${lesson.seriesTotal}`
                   : ""}
               </p>
-              <h3 className="mt-1 text-xl font-extrabold text-brand">{lesson.title}</h3>
-              <p className="mt-2 font-semibold text-brand">{lesson.whenLabel}</p>
-              {lesson.scheduleLabel ? (
-                <p className="mt-1 text-sm font-semibold text-muted">
-                  {lesson.scheduleLabel}
+              <h3 className="font-heading mt-2 text-xl font-bold tracking-tight text-brand">
+                {lesson.title}
+              </h3>
+              <div className="mt-4 rounded-2xl bg-background px-4 py-3">
+                <p className="font-heading text-lg font-bold tracking-tight text-brand">
+                  {lesson.whenLabel}
+                </p>
+                {lesson.teacherWhenLabel ? (
+                  <p className="mt-1 text-sm font-semibold text-muted">
+                    {lesson.teacherWhenLabel}
+                  </p>
+                ) : null}
+                {lesson.scheduleLabel ? (
+                  <p className="mt-1 text-sm font-semibold text-muted">
+                    {lesson.scheduleLabel}
+                  </p>
+                ) : null}
+                <p className="mt-2 text-xs font-semibold text-muted">
+                  Class timezone:{" "}
+                  {lesson.teacherTimezone.replaceAll("_", " ").split("/").pop()}
+                </p>
+              </div>
+              <dl className="mt-4 grid grid-cols-2 gap-2 text-sm">
+                <div className="rounded-2xl bg-background px-3 py-3">
+                  <dt className="text-xs font-bold uppercase text-muted">Enrolled</dt>
+                  <dd className="mt-1 font-bold text-brand">
+                    {lesson.enrolledCount}/{lesson.capacity}
+                    {lesson.waitlistCount ? ` · ${lesson.waitlistCount} waiting` : ""}
+                  </dd>
+                </div>
+                <div className="rounded-2xl bg-background px-3 py-3">
+                  <dt className="text-xs font-bold uppercase text-muted">Minimum</dt>
+                  <dd className="mt-1 font-bold text-brand">
+                    {lesson.isUnderEnrolled
+                      ? `${lesson.studentsNeeded} more needed`
+                      : "Reached"}
+                    {` · ${lesson.minStudents}`}
+                  </dd>
+                </div>
+                <div className="rounded-2xl bg-background px-3 py-3">
+                  <dt className="text-xs font-bold uppercase text-muted">Student fee</dt>
+                  <dd className="mt-1 font-bold text-brand">
+                    {lesson.studentPriceFormatted}
+                    {lesson.seriesSessionCount > 1
+                      ? ` · ${lesson.seriesTotalFormatted} series`
+                      : ""}
+                  </dd>
+                </div>
+                <div className="rounded-2xl bg-background px-3 py-3">
+                  <dt className="text-xs font-bold uppercase text-muted">Level</dt>
+                  <dd className="mt-1 font-bold text-brand">
+                    {lesson.level.replaceAll("_", " ")}
+                    {lesson.minAge != null || lesson.maxAge != null
+                      ? ` · ${lesson.minAge ?? "any"}–${lesson.maxAge ?? "any"}`
+                      : " · All ages"}
+                  </dd>
+                </div>
+              </dl>
+              {lesson.teacherPaymentFormatted ? (
+                <p className="mt-2 text-sm text-muted">
+                  Teacher {lesson.teacherPaymentFormatted}/session
+                  {lesson.teacherPaymentSeriesFormatted &&
+                  lesson.seriesSessionCount > 1
+                    ? ` · ${lesson.teacherPaymentSeriesFormatted} series`
+                    : ""}
                 </p>
               ) : null}
-              <p className="mt-1 text-sm text-muted">
-                {lesson.enrolledCount}/{lesson.capacity} enrolled
-                {lesson.waitlistCount
-                  ? ` · ${lesson.waitlistCount} waiting`
-                  : ""}{" "}
-                · min {lesson.minStudents}
-                {lesson.isUnderEnrolled
-                  ? ` · ${lesson.studentsNeeded} more needed to run`
-                  : " · minimum reached"}{" "}
-                · {lesson.studentPriceFormatted} per session
-                {lesson.seriesSessionCount > 1
-                  ? ` · ${lesson.seriesTotalFormatted} series total`
-                  : ""}
-                {lesson.teacherPaymentFormatted
-                  ? ` · teacher ${lesson.teacherPaymentFormatted}/session`
-                  : ""}
-                {lesson.teacherPaymentSeriesFormatted &&
-                lesson.seriesSessionCount > 1
-                  ? ` · ${lesson.teacherPaymentSeriesFormatted} teacher series`
-                  : ""}{" "}
-                ·{" "}
-                {lesson.level.replaceAll("_", " ")}
-                {lesson.minAge != null || lesson.maxAge != null
-                  ? ` · Ages ${lesson.minAge ?? "any"}–${lesson.maxAge ?? "any"}`
-                  : " · All ages"}
-              </p>
               {lesson.visibleFromLabel || lesson.applicationDeadlineLabel ? (
-                <p className="mt-1 text-sm text-muted">
+                <p className="mt-2 text-sm text-muted">
                   {lesson.isVisible
                     ? "Visible to families"
                     : `Hidden until ${lesson.visibleFromLabel}`}
@@ -126,21 +164,33 @@ export function GroupLessonManager({
                 </p>
               ) : null}
               {lesson.status === "published" && !lesson.isVisible ? (
-                <p className="mt-2 rounded-2xl bg-mint px-3 py-2 text-sm font-semibold text-brand">
+                <p className="mt-3 rounded-2xl bg-mint px-3 py-2 text-sm font-semibold text-brand">
                   Families cannot see this class yet.
                 </p>
               ) : null}
               {lesson.status === "published" && lesson.isUnderEnrolled ? (
-                <p className="mt-2 rounded-2xl bg-gold px-3 py-2 text-sm font-semibold text-brand">
+                <p className="mt-3 rounded-2xl bg-gold px-3 py-2 text-sm font-semibold text-brand">
                   This class will be cancelled at start time if fewer than{" "}
                   {lesson.minStudents} students are enrolled.
                 </p>
               ) : null}
-              <div className="mt-4 flex flex-wrap gap-2">
-                <ClassroomJoinButton
-                  href={lesson.classroomHref}
-                  joinable={lesson.classroomJoinable}
-                />
+              <div className="mt-4 rounded-2xl border border-line bg-mint/40 px-4 py-4">
+                <p className="text-xs font-bold uppercase tracking-wide text-brand-soft">
+                  Classroom
+                </p>
+                <div className="mt-2 min-w-0">
+                  <ClassroomJoinButton
+                    href={lesson.classroomHref}
+                    joinable={lesson.classroomJoinable}
+                    startsAt={lesson.startsAt}
+                    endsAt={lesson.endsAt}
+                    status={lesson.status}
+                    role="teacher"
+                    timeZone={lesson.teacherTimezone}
+                  />
+                </div>
+              </div>
+              <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                 <Button
                   type="button"
                   variant="secondary"

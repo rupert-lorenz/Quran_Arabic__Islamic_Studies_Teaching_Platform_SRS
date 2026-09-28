@@ -514,6 +514,9 @@ export function TeacherBookForm({
                 {row.subjectName ?? row.subjectSlug}
                 {` · ${row.durationMinutes} ${t("booking.minutes")}`}
                 {row.amountFormatted ? ` · ${row.amountFormatted}` : ""}
+                {row.listedPriceFormatted
+                  ? ` · ${t("card.listed_as", { price: row.listedPriceFormatted })}`
+                  : ""}
                 {row.packageTotalFormatted
                   ? ` · ${t("booking.package_total", {
                       price: row.packageTotalFormatted,

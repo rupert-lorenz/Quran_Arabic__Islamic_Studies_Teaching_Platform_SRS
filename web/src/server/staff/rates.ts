@@ -4,7 +4,7 @@ import { currencies, platformSettings } from "@/db/schema";
 import type { ApiActor } from "@/server/api/auth";
 import { writeAuditLog } from "@/server/api/audit";
 import { ApiError } from "@/server/api/errors";
-import { parseMajorAmount } from "./money";
+import { parseMajorAmount, parseNonNegativeMajorAmount } from "./money";
 import { getTeacherRateLimits } from "@/server/teacher/profile";
 import { getBookingPolicy } from "@/server/booking/policy";
 import {
@@ -60,6 +60,13 @@ export async function updateTeacherRatePolicy(
     { key: "teacher.rate.min_minor", value: minMinor },
     { key: "teacher.rate.max_minor", value: maxMinor },
     { key: "commission.default_percent", value: input.commissionPercent },
+    {
+      key: "commission.default_fixed_minor",
+      value: parseNonNegativeMajorAmount(
+        input.commissionFixedAmount ?? "0",
+        currency.decimalPlaces,
+      ),
+    },
     { key: "platform.default_currency", value: currency.code },
     { key: "lesson.default_duration_minutes", value: input.lessonDurationMinutes },
     ...(input.minNoticeMinutes != null
@@ -93,6 +100,10 @@ export async function updateTeacherRatePolicy(
       minMinor,
       maxMinor,
       commissionPercent: input.commissionPercent,
+      commissionFixedMinor: parseNonNegativeMajorAmount(
+        input.commissionFixedAmount ?? "0",
+        currency.decimalPlaces,
+      ),
       defaultCurrencyCode: currency.code,
       lessonDurationMinutes: input.lessonDurationMinutes,
       minNoticeMinutes: input.minNoticeMinutes,

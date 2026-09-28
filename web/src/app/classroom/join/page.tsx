@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { ClassroomJoinButton } from "@/components/classroom/classroom-join-button";
 import { ClassroomOverlay } from "@/components/classroom/classroom-overlay";
 import { ButtonLink } from "@/components/ui/button";
+import { classroomTimesFromDetails } from "@/lib/classroom";
 import { isApiError } from "@/server/api/errors";
 import { getClassroomOverlay } from "@/server/classroom/brand";
 import { joinClassroom } from "@/server/classroom/service";
@@ -69,12 +71,26 @@ export default async function ClassroomJoinPage({
     error = caught;
   }
   if (!session) {
+    const wait = isApiError(error) ? classroomTimesFromDetails(error.details) : null;
     return (
       <main className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center px-4 py-10">
         <ClassroomOverlay brand={brand} overlay={overlay} placement="bar" />
-        <h1 className="mt-6 text-2xl font-extrabold text-brand">{t("classroom.title")}</h1>
-        <p className="mt-3 text-sm leading-6 text-muted">{t(joinErrorKey(error))}</p>
-        <p className="mt-2 text-sm font-semibold text-brand">
+        <h1 className="mt-6 font-heading text-2xl font-bold tracking-tight text-brand">
+          {t("classroom.title")}
+        </h1>
+        {wait ? (
+          <div className="mt-5 rounded-2xl border border-line bg-surface px-4 py-4">
+            <ClassroomJoinButton
+              startsAt={wait.startsAt}
+              endsAt={wait.endsAt}
+              role={access.user.roleKey}
+              allowed
+            />
+          </div>
+        ) : (
+          <p className="mt-3 text-sm leading-6 text-muted">{t(joinErrorKey(error))}</p>
+        )}
+        <p className="mt-4 text-sm font-semibold text-brand">
           <Link href="/family/bookings" className="underline">
             {t("classroom.back")}
           </Link>

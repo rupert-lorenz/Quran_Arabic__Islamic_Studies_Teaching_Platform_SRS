@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
 import { GroupLessonForm } from "@/components/bookings/group-lesson-form";
+import { GroupClassPaymentsFacultyView } from "@/components/finance/group-class-payments-faculty";
 import { GroupLessonManager } from "@/components/bookings/group-lesson-manager";
 import { GroupTeachingSettings } from "@/components/bookings/group-teaching-settings";
 import { TeacherGroupOpportunityBoard } from "@/components/bookings/teacher-group-opportunity-board";
@@ -10,6 +11,7 @@ import { db } from "@/db";
 import { subjects, teacherProfiles, teacherSubjects } from "@/db/schema";
 import { listTeacherGroupClassOpportunities } from "@/server/booking/group-class-opportunities";
 import { listTeacherGroupLessons } from "@/server/booking/group-lessons";
+import { getGroupClassPaymentsFaculty } from "@/server/finance/group-class-payments";
 import { requireApprovedTeacher } from "@/server/rbac/guard";
 import { getTeacherRateLimits } from "@/server/teacher/profile";
 
@@ -17,7 +19,12 @@ export const metadata = { title: "Group lessons" };
 
 export default async function TeacherGroupLessonsPage() {
   const access = await requireApprovedTeacher();
-  const [offered, [profile], lessons, rateLimits, opportunities] = await Promise.all([
+  const actor = {
+    userId: access.user.id,
+    roleKey: access.user.roleKey,
+    permissions: access.permissions,
+  };
+  const [offered, [profile], lessons, rateLimits, opportunities, groupPayments] = await Promise.all([
     db
       .select({ slug: subjects.slug, name: subjects.name })
       .from(teacherSubjects)
@@ -36,6 +43,7 @@ export default async function TeacherGroupLessonsPage() {
     listTeacherGroupLessons(access.user.id),
     getTeacherRateLimits(),
     listTeacherGroupClassOpportunities(access.user.id),
+    getGroupClassPaymentsFaculty(actor),
   ]);
 
   return (
@@ -43,9 +51,10 @@ export default async function TeacherGroupLessonsPage() {
       <PageHero
         eyebrow="Teaching schedule"
         title="Group lessons"
-        description="Publish a scheduled class for multiple students. Each learner reserves one place."
+        description="Publish a scheduled class for multiple students. Each learner pays the listed student session price once per sitting. Listed teacher pay stays internal."
       />
       <Container className="space-y-8 py-10">
+        <GroupClassPaymentsFacultyView faculty={groupPayments} />
         <GroupTeachingSettings
           initialEnabled={profile?.offersGroupTeaching ?? false}
           initialCapacity={profile?.defaultGroupCapacity ?? 6}

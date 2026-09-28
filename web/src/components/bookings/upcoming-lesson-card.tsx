@@ -7,10 +7,12 @@ export async function UpcomingLessonCard({
   lesson,
   href,
   withName,
+  role,
 }: {
   lesson: BookingView | null;
   href: string;
   withName?: "teacher" | "student";
+  role?: string;
 }) {
   const { t } = await getI18n();
 
@@ -40,6 +42,9 @@ export async function UpcomingLessonCard({
           <p className="mt-1 text-sm text-muted">
             {lesson.durationMinutes} {t("booking.minutes")}
             {lesson.amountFormatted ? ` · ${lesson.amountFormatted}` : ""}
+            {lesson.listedPriceFormatted
+              ? ` · ${t("card.listed_as", { price: lesson.listedPriceFormatted })}`
+              : ""}
           </p>
         </>
       ) : (
@@ -48,8 +53,15 @@ export async function UpcomingLessonCard({
       <div className="mt-4 flex flex-wrap gap-2">
         {lesson ? (
           <ClassroomJoinButton
+            className="w-full"
             href={lesson.classroomHref}
             joinable={lesson.classroomJoinable}
+            startsAt={lesson.startsAt}
+            endsAt={lesson.endsAt}
+            status={lesson.status}
+            kind="booking"
+            role={role}
+            timeZone={lesson.timezone}
           />
         ) : null}
         <ButtonLink href={href} variant="secondary">

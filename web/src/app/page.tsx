@@ -1,5 +1,6 @@
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { MarketPriceNote } from "@/components/finance/location-price-faculty";
 import { PublicShell } from "@/components/layout/public-shell";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { FeaturedTeacherShowcase } from "@/components/teachers/featured-teacher-showcase";
@@ -16,6 +17,7 @@ import { getConfig } from "@/server/config";
 import { ClassroomPreview } from "@/components/classroom/classroom-preview";
 import { getClassroomOverlay } from "@/server/classroom/brand";
 import { getI18n, listTranslatedSubjects } from "@/server/i18n/locale";
+import { getLocationPriceFaculty } from "@/server/finance/location-prices";
 import { getRequestMoney } from "@/server/money/currency";
 import { getSiteSeo } from "@/server/seo/site";
 import { listPublicTeachers } from "@/server/teacher/public";
@@ -38,7 +40,7 @@ const tones: Record<string, string> = {
 };
 
 export default async function Home() {
-  const [i18n, subjects, money, announcements, liveTeachers, overlay] =
+  const [i18n, subjects, money, announcements, liveTeachers, overlay, locationPrices] =
     await Promise.all([
       getI18n(),
       listTranslatedSubjects(),
@@ -46,6 +48,7 @@ export default async function Home() {
       listPublishedCms("announcement", 2).catch(() => []),
       listPublicTeachers().catch(() => []),
       getClassroomOverlay(),
+      getLocationPriceFaculty({ includeRules: false }),
     ]);
   const sampleCards = sampleTeachers.map((teacher) => ({
     ...teacher,
@@ -278,6 +281,9 @@ export default async function Home() {
             title={t("home.teachers_title")}
             description={t("home.teachers_description")}
           />
+          <div className="mt-6">
+            <MarketPriceNote faculty={locationPrices} />
+          </div>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
             {usingLiveTeachers
               ? liveCards.map((teacher) => (

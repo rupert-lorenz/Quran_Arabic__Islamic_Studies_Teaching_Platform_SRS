@@ -21,6 +21,7 @@ import {
   type AiSpeakerRole,
   type AiTranscriptSource,
 } from "@/lib/ai-systems";
+import type { AiModuleId, AiProviderId } from "@/lib/ai-modules";
 import type {
   AiClassroomOption,
   AiHomeworkView,
@@ -29,9 +30,11 @@ import type {
   AiRecommendationView,
   AiReviewItem,
   AiSummaryView,
+  AiSupportView,
   AiSystemsDesk,
   AiTranscriptView,
 } from "@/server/ai/service";
+import type { AiSupportSourceKind } from "@/lib/ai-support";
 
 const kindKeys: Record<AiJobKind, UiMessageKey> = {
   transcription: "ai.kind.transcription",
@@ -41,9 +44,27 @@ const kindKeys: Record<AiJobKind, UiMessageKey> = {
   quiz: "ai.kind.quiz",
   recommendation: "ai.kind.recommendation",
   search: "ai.kind.search",
+  support: "ai.module.support",
 };
 
-const kindHelpKeys: Record<AiJobKind, UiMessageKey> = {
+const moduleTitleKeys: Record<AiModuleId, UiMessageKey> = {
+  architecture: "ai.architecture.title",
+  transcription: "ai.kind.transcription",
+  summary: "ai.kind.summary",
+  notes: "ai.kind.notes",
+  homework: "ai.kind.homework",
+  quiz: "ai.kind.quiz",
+  recommendation: "ai.kind.recommendation",
+  search: "ai.kind.search",
+  review: "ai.review.title",
+  identification: "ai.identify.title",
+  safety: "ai.safety.title",
+  decisions: "ai.decisions.title",
+  support: "ai.module.support",
+};
+
+const moduleHelpKeys: Record<AiModuleId, UiMessageKey> = {
+  architecture: "ai.module.help.architecture",
   transcription: "ai.kind.help.transcription",
   summary: "ai.kind.help.summary",
   notes: "ai.kind.help.notes",
@@ -51,6 +72,28 @@ const kindHelpKeys: Record<AiJobKind, UiMessageKey> = {
   quiz: "ai.kind.help.quiz",
   recommendation: "ai.kind.help.recommendation",
   search: "ai.kind.help.search",
+  review: "ai.module.help.review",
+  identification: "ai.module.help.identification",
+  safety: "ai.module.help.safety",
+  decisions: "ai.module.help.decisions",
+  support: "ai.module.help.support",
+};
+
+const providerKeys: Record<AiProviderId, UiMessageKey> = {
+  builtin: "ai.architecture.builtin",
+  openai: "ai.architecture.openai",
+  deepgram: "ai.architecture.deepgram",
+};
+
+const supportSourceKeys: Record<AiSupportSourceKind, UiMessageKey> = {
+  help: "ai.support.source.help",
+  faq: "ai.support.source.faq",
+  page: "ai.support.source.page",
+  transcript: "ai.support.source.transcript",
+  summary: "ai.support.source.summary",
+  homework: "ai.support.source.homework",
+  quiz: "ai.support.source.quiz",
+  recommendation: "ai.support.source.recommendation",
 };
 
 const statusKeys: Record<AiJobStatus, UiMessageKey> = {
@@ -107,6 +150,7 @@ export function AiSystemsDeskView({ desk }: { desk: AiSystemsDesk }) {
   const [message, setMessage] = useState("");
   const [pending, setPending] = useState(false);
   const [query, setQuery] = useState(desk.query);
+  const [supportQuery, setSupportQuery] = useState("");
   const [language, setLanguage] = useState<AiLocale | "all">(
     uiLocale.startsWith("ar") ? "ar" : "en",
   );
@@ -259,6 +303,69 @@ export function AiSystemsDeskView({ desk }: { desk: AiSystemsDesk }) {
         </article>
       </section>
 
+      <section className="rounded-[2rem] border border-line bg-surface p-6 shadow-[var(--shadow-card)]">
+        <p className="text-sm font-semibold uppercase tracking-wide text-[#CB9F64]">
+          {t("ai.module.live")}
+        </p>
+        <h2 className="font-heading mt-2 text-2xl font-bold tracking-tight text-brand">
+          {t("ai.architecture.title")}
+        </h2>
+        <p className="mt-2 text-sm text-muted">{t("ai.architecture.help")}</p>
+        <ul className="mt-3 grid gap-2 text-sm text-brand">
+          <li>{t("ai.architecture.independent")}</li>
+          <li>{t("ai.architecture.adapters")}</li>
+          <li>{t("ai.architecture.server")}</li>
+          <li>{t("ai.architecture.hooks")}</li>
+          <li>
+            {t("ai.architecture.active", {
+              provider: t(providerKeys[current.architecture.activeProvider]),
+            })}
+          </li>
+        </ul>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          {current.architecture.providers.map((provider) => (
+            <article
+              key={provider.id}
+              className="rounded-2xl border border-line bg-[#F3F4F2] p-4"
+            >
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#CB9F64]">
+                {provider.canGenerate
+                  ? t("ai.module.live")
+                  : provider.configured
+                    ? t("ai.architecture.reserved")
+                    : t("ai.architecture.unconfigured")}
+              </p>
+              <h3 className="font-heading mt-1 text-lg font-bold tracking-tight text-brand">
+                {t(providerKeys[provider.id])}
+              </h3>
+              <p className="mt-1 text-sm text-muted">
+                {provider.canGenerate
+                  ? t("ai.architecture.builtin_help")
+                  : t("ai.architecture.vendor_help")}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <SupportSearchSection
+        items={
+          language === "all"
+            ? current.supports ?? []
+            : (current.supports ?? []).filter((item) => item.locale === language)
+        }
+        pending={pending}
+        query={supportQuery}
+        onQueryChange={setSupportQuery}
+        onAsk={() =>
+          run({
+            action: "ask_support",
+            query: supportQuery,
+            locale: language === "all" ? undefined : language,
+          })
+        }
+      />
+
       <section className="rounded-[2rem] border border-line bg-[#F3E6D0] p-6">
         <p className="text-sm font-semibold uppercase tracking-wide text-[#CB9F64]">
           {t("ai.module.live")}
@@ -356,18 +463,23 @@ export function AiSystemsDeskView({ desk }: { desk: AiSystemsDesk }) {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {current.modules.map((module) => (
+        {current.modules.map((item) => (
           <article
-            key={module.kind}
+            key={item.id}
             className="rounded-[2rem] border border-line bg-surface p-6 shadow-[var(--shadow-card)]"
           >
             <p className="text-sm font-semibold uppercase tracking-wide text-[#CB9F64]">
-              {module.live ? t("ai.module.live") : t("ai.module.planned")}
+              {item.live ? t("ai.module.live") : t("ai.module.planned")}
             </p>
             <h3 className="font-heading mt-2 text-xl font-bold tracking-tight text-brand">
-              {t(kindKeys[module.kind])}
+              {t(moduleTitleKeys[item.id])}
             </h3>
-            <p className="mt-2 text-sm text-muted">{t(kindHelpKeys[module.kind])}</p>
+            <p className="mt-2 text-sm text-muted">{t(moduleHelpKeys[item.id])}</p>
+            <p className="mt-3 text-sm text-brand">
+              {item.independent ? t("ai.architecture.independent_badge") : null}
+              {item.providerBound ? ` · ${t("ai.architecture.provider_bound")}` : null}
+              {item.requiresReview ? ` · ${t("ai.architecture.review_hook")}` : null}
+            </p>
           </article>
         ))}
       </section>
@@ -1813,6 +1925,100 @@ function ImprovementAreasForm({
         {t("ai.improve.save")}
       </Button>
     </form>
+  );
+}
+
+function SupportSearchSection({
+  items,
+  pending,
+  query,
+  onQueryChange,
+  onAsk,
+}: {
+  items: AiSupportView[];
+  pending: boolean;
+  query: string;
+  onQueryChange: (value: string) => void;
+  onAsk: () => void;
+}) {
+  const t = useT();
+  const latest = items[0];
+  return (
+    <section className="rounded-[2rem] border border-line bg-surface p-6 shadow-[var(--shadow-card)]">
+      <p className="text-sm font-semibold uppercase tracking-wide text-[#CB9F64]">
+        {t("ai.module.live")}
+      </p>
+      <h2 className="font-heading mt-2 text-2xl font-bold tracking-tight text-brand">
+        {t("ai.support.title")}
+      </h2>
+      <p className="mt-2 text-sm text-muted">{t("ai.support.help")}</p>
+      <form
+        className="mt-4 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]"
+        onSubmit={(event) => {
+          event.preventDefault();
+          onAsk();
+        }}
+      >
+        <label className="grid gap-1 text-sm font-semibold text-muted">
+          {t("ai.support.label")}
+          <input
+            value={query}
+            onChange={(event) => onQueryChange(event.target.value)}
+            className={fieldClass}
+            minLength={3}
+            required
+            placeholder={t("ai.support.placeholder")}
+          />
+        </label>
+        <Button type="submit" className="sm:mt-6" disabled={pending || query.trim().length < 3}>
+          {t("ai.support.submit")}
+        </Button>
+      </form>
+      {latest ? (
+        <article className="mt-5 rounded-2xl border border-line bg-[#F3F4F2] p-4">
+          <p className="text-sm font-semibold text-brand">
+            {latest.query}
+            <AiOriginMark origin={latest.origin} />
+          </p>
+          {latest.body ? (
+            <p className="mt-2 text-sm text-brand">{latest.body}</p>
+          ) : (
+            <p className="mt-2 text-sm text-muted">{t("ai.support.none")}</p>
+          )}
+          {latest.hits.length ? (
+            <ul className="mt-3 grid gap-2">
+              {latest.hits.map((hit) => (
+                <li key={`${hit.kind}-${hit.title}`} className="text-sm text-brand">
+                  <span className="font-semibold">{t(supportSourceKeys[hit.kind])}</span>
+                  {": "}
+                  {hit.href ? (
+                    <a href={hit.href} className="underline">
+                      {hit.title}
+                    </a>
+                  ) : (
+                    hit.title
+                  )}
+                  <span className="block text-muted">{hit.excerpt}</span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </article>
+      ) : (
+        <p className="mt-3 text-sm text-muted">{t("ai.support.empty")}</p>
+      )}
+      {items.length > 1 ? (
+        <div className="mt-4 grid gap-3">
+          <p className="text-sm font-semibold text-brand">{t("ai.support.recent")}</p>
+          {items.slice(1).map((item) => (
+            <article key={item.id} className="rounded-2xl border border-line p-4">
+              <p className="text-sm font-semibold text-brand">{item.query}</p>
+              <p className="mt-1 text-sm text-muted">{item.body || t("ai.support.none")}</p>
+            </article>
+          ))}
+        </div>
+      ) : null}
+    </section>
   );
 }
 

@@ -200,10 +200,16 @@ export function BookingCalendar({
         <p className="mt-1 text-sm text-muted">
           {row.durationMinutes} {t("booking.minutes")}
           {row.amountFormatted ? ` · ${row.amountFormatted}` : ""}
+          {row.listedPriceFormatted
+            ? ` · ${t("card.listed_as", { price: row.listedPriceFormatted })}`
+            : ""}
           {row.packageTotalFormatted
             ? ` · ${t("booking.package_total", {
                 price: row.packageTotalFormatted,
               })}`
+            : ""}
+          {row.packageListedTotalFormatted
+            ? ` · ${t("card.listed_as", { price: row.packageListedTotalFormatted })}`
             : ""}
           {row.packageDiscountPercent
             ? ` · ${t("booking.package_discount", {
@@ -215,8 +221,15 @@ export function BookingCalendar({
         {confirmed ? (
           <div className="mt-4 flex flex-wrap gap-2">
             <ClassroomJoinButton
+              className="w-full"
               href={row.classroomHref}
               joinable={row.classroomJoinable}
+              startsAt={row.startsAt}
+              endsAt={row.endsAt}
+              status={row.status}
+              kind="booking"
+              role={role}
+              timeZone={row.timezone}
             />
             {!started ? (
               <>

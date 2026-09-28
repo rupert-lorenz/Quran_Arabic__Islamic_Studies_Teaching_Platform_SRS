@@ -129,6 +129,16 @@ async function attachLocales<
   });
 }
 
+export async function listPublishedCmsForLocale(
+  locale: string,
+  type?: CmsDocumentType | CmsDocumentType[],
+  limit?: number,
+) {
+  const rows = await loadPublished(type);
+  const presented = await attachLocales(rows, locale, "en");
+  return limit ? presented.slice(0, limit) : presented;
+}
+
 export async function listPublishedCms(
   type?: CmsDocumentType | CmsDocumentType[],
   limit?: number,

@@ -12,6 +12,7 @@ import { LibraryPrerecordedPanel } from "@/components/lms/library-prerecorded-pa
 import { LibraryLicencesPanel } from "@/components/lms/library-licences-panel";
 import { LibraryPurchasesPanel } from "@/components/lms/library-purchases-panel";
 import { LibraryRentalsPanel } from "@/components/lms/library-rentals-panel";
+import { MonthlySubscriptionsFacultyView } from "@/components/finance/monthly-subscriptions-faculty";
 import { LibrarySubscriptionsPanel } from "@/components/lms/library-subscriptions-panel";
 import { TeachingMaterialLibrary } from "@/components/lms/teaching-material-library";
 import { Container } from "@/components/ui/container";
@@ -29,6 +30,7 @@ import { listLibraryPrerecordedDesk } from "@/server/lms/prerecorded-courses";
 import { listLibraryLicenceDesk } from "@/server/lms/licences";
 import { listLibraryPurchaseDesk } from "@/server/lms/purchases";
 import { listLibraryRentalDesk } from "@/server/lms/rentals";
+import { getMonthlySubscriptionsFaculty } from "@/server/finance/monthly-subscriptions";
 import { listLibrarySubscriptionDesk } from "@/server/lms/subscriptions";
 import { requireStaffPage } from "@/server/rbac/guard";
 import { listAcademicWorkspace } from "@/server/staff/academic";
@@ -49,12 +51,13 @@ export default async function StaffAcademicPage() {
     permissions: access.permissions,
   };
   const canCurriculum = hasAnyPermission(access, "academic.curriculum");
-  const [workspace, library, licences, rentals, subscriptions, purchases, expiry, downloads, courses, homework, games, quizDesk, examDesk, marking, bank] = await Promise.all([
+  const [workspace, library, licences, rentals, subscriptions, monthly, purchases, expiry, downloads, courses, homework, games, quizDesk, examDesk, marking, bank] = await Promise.all([
     listAcademicWorkspace(),
     listTeachingLibrary(actor),
     canCurriculum ? listLibraryLicenceDesk(actor) : Promise.resolve(null),
     canCurriculum ? listLibraryRentalDesk(actor) : Promise.resolve(null),
     canCurriculum ? listLibrarySubscriptionDesk(actor) : Promise.resolve(null),
+    canCurriculum ? getMonthlySubscriptionsFaculty(actor) : Promise.resolve(null),
     canCurriculum ? listLibraryPurchaseDesk(actor) : Promise.resolve(null),
     canCurriculum ? listLibraryExpiryDesk(actor) : Promise.resolve(null),
     canCurriculum ? listLibraryDownloadDesk(actor) : Promise.resolve(null),
@@ -141,6 +144,7 @@ export default async function StaffAcademicPage() {
         {courses ? <LibraryPrerecordedPanel initial={courses} /> : null}
         {downloads ? <LibraryDownloadsPanel initial={downloads} /> : null}
         {expiry ? <LibraryExpiryPanel initial={expiry} /> : null}
+        {monthly ? <MonthlySubscriptionsFacultyView faculty={monthly} /> : null}
         {subscriptions ? <LibrarySubscriptionsPanel initial={subscriptions} /> : null}
         {purchases ? <LibraryPurchasesPanel initial={purchases} /> : null}
         {licences ? <LibraryLicencesPanel initial={licences} /> : null}

@@ -1,7 +1,9 @@
+import { MonthlySubscriptionsFacultyView } from "@/components/finance/monthly-subscriptions-faculty";
 import { TeachingMaterialLibrary } from "@/components/lms/teaching-material-library";
 import { PublicShell } from "@/components/layout/public-shell";
 import { Container } from "@/components/ui/container";
 import { PageHero } from "@/components/ui/page-hero";
+import { getMonthlySubscriptionsFaculty } from "@/server/finance/monthly-subscriptions";
 import { getI18n } from "@/server/i18n/locale";
 import { listTeachingLibrary } from "@/server/lms/library";
 import { requireStudent } from "@/server/rbac/guard";
@@ -13,13 +15,15 @@ export const metadata = {
 
 export default async function StudentLibraryPage() {
   const access = await requireStudent();
-  const [{ t }, library] = await Promise.all([
+  const actor = {
+    userId: access.user.id,
+    roleKey: access.user.roleKey,
+    permissions: access.permissions,
+  };
+  const [{ t }, library, monthly] = await Promise.all([
     getI18n(),
-    listTeachingLibrary({
-      userId: access.user.id,
-      roleKey: access.user.roleKey,
-      permissions: access.permissions,
-    }),
+    listTeachingLibrary(actor),
+    getMonthlySubscriptionsFaculty(actor),
   ]);
 
   return (
@@ -29,12 +33,13 @@ export default async function StudentLibraryPage() {
         title={t("library.title")}
         description={t("library.student_help")}
       />
-      <Container className="py-10">
+      <Container className="space-y-8 py-10">
         <p className="mb-6 text-sm font-semibold">
           <Link href="/learn" className="text-brand underline">
             {t("library.back_learn")}
           </Link>
         </p>
+        <MonthlySubscriptionsFacultyView faculty={monthly} hideStudentNames />
         <TeachingMaterialLibrary
           materials={library.materials}
           subjects={library.subjects}

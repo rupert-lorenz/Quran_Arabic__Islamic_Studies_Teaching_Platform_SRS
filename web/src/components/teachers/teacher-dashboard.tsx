@@ -38,6 +38,7 @@ export async function TeacherDashboard({
           lesson={dashboard.nextLesson}
           href="/teach/bookings"
           withName="student"
+          role="teacher"
         />
       ) : null}
 
@@ -63,7 +64,7 @@ export async function TeacherDashboard({
             ))}
           </ul>
         ) : null}
-        <ShortcutLinkGrid label={t("teach_dash.status")} className="mt-6">
+        <ShortcutLinkGrid label={t("teach_dash.status")} className="mt-6 xl:grid-cols-3">
           <ButtonLink href="/teach/status" variant="secondary" className={shortcutLinkClass}>
             {t("teach_dash.status")}
           </ButtonLink>
@@ -125,6 +126,9 @@ export async function TeacherDashboard({
               </ButtonLink>
               <ButtonLink href="/teach/ai" variant="secondary" className={shortcutLinkClass}>
                 {t("teach_nav.ai")}
+              </ButtonLink>
+              <ButtonLink href="/teach/earnings" variant="secondary" className={shortcutLinkClass}>
+                {t("teach_nav.earnings")}
               </ButtonLink>
               <ButtonLink href="/teach/questions" variant="secondary" className={shortcutLinkClass}>
                 {t("teach_nav.questions")}

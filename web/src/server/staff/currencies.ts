@@ -2,6 +2,7 @@ import { count, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { currencies, fxRates, platformSettings } from "@/db/schema";
 import { DEFAULT_CURRENCY, FX_RATE_SCALE, formatFxMajorRate } from "@/lib/currency";
+import { ensureSeedCurrencies, getCurrenciesFaculty } from "@/server/money/currency";
 import { normalizeCurrencyCode } from "@/lib/geo";
 import { hasAnyPermission } from "@/lib/rbac";
 import { writeAuditLog } from "@/server/api/audit";
@@ -36,7 +37,8 @@ export async function listCurrencyWorkspace(actor: ApiActor) {
     throw new ApiError(403, "FORBIDDEN", "You cannot manage currencies");
   }
 
-  const [currencyRows, rateRows, defaultCode, enabledCount] = await Promise.all([
+  await ensureSeedCurrencies();
+  const [currencyRows, rateRows, defaultCode, enabledCount, faculty] = await Promise.all([
     db
       .select({
         code: currencies.code,
@@ -57,6 +59,7 @@ export async function listCurrencyWorkspace(actor: ApiActor) {
       .where(eq(fxRates.baseCode, await loadDefaultCurrencyCode())),
     loadDefaultCurrencyCode(),
     countEnabledCurrencies(),
+    getCurrenciesFaculty(),
   ]);
 
   const rateByQuote = new Map(rateRows.map((row) => [row.quoteCode, row]));
@@ -64,6 +67,7 @@ export async function listCurrencyWorkspace(actor: ApiActor) {
   return {
     defaultCurrency: defaultCode,
     canManage: hasAnyPermission(actor, "settings.write"),
+    faculty,
     summary: {
       currencies: currencyRows.length,
       enabled: enabledCount,
@@ -76,6 +80,7 @@ export async function listCurrencyWorkspace(actor: ApiActor) {
       return {
         ...row,
         isDefault: row.code === defaultCode,
+        hasRate: rateInteger != null,
         rateInteger,
         rate: rateInteger == null ? "" : formatFxMajorRate(rateInteger),
         asOf: rate?.asOf?.toISOString() ?? null,

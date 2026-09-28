@@ -399,9 +399,12 @@ export type BookingView = {
   packageId: string | null;
   packageDiscountPercent: number | null;
   packageTotalFormatted: string | null;
+  packageListedTotalFormatted: string | null;
   amountMinor: number;
   currencyCode: string;
   amountFormatted: string | null;
+  listedPriceFormatted: string | null;
+  priceConverted: boolean;
   cancelOutcome: string | null;
   cancelOutcomeLabel: string | null;
   cancelReason: string | null;
