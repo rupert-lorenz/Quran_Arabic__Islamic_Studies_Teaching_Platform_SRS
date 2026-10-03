@@ -1,0 +1,415 @@
+STAGE 1 — UI/UX, Architecture, Users, Marketplace & Core Administration
+Complete modern, premium, child-friendly and fully responsive UI/UX
+Desktop, laptop, tablet, iPad, iPhone, Android and mobile-browser responsive support
+Scalable global platform architecture and database design
+Development, staging and production environment structure
+Secure API/integration architecture
+Company branding throughout the platform
+Authentication and secure account management
+Role-based access control with granular permissions
+Two-factor authentication for privileged accounts
+Super Admin account and controls
+Configurable Admin accounts and permissions
+Dedicated staff roles and access permissions, including:
+Accounts
+Marketing
+Academic
+Safeguarding
+Teacher registration and onboarding
+Teacher identity, qualification and document verification
+Teacher introduction videos
+Interview/application status management
+Teacher agreement acceptance and digital signature records
+Teacher approval, rejection and suspension workflow
+Teacher profile creation and management
+Teacher verification status
+Teacher ratings, reviews, statistics, response rate and reliability indicators
+Teacher rate configuration
+Minimum/maximum, country, subject and teacher-specific pricing controls
+Automatic display of student price, platform commission and teacher net earnings
+Teacher search and advanced filtering
+Teacher search sorting/recommendation functionality
+Student registration and profiles
+Parent/guardian accounts
+Multiple children under one parent account
+Learning goals
+Student profile and lesson history
+Teacher, Student, Parent and Admin dashboards
+Admin global search
+Country management
+Multi-language-ready architecture
+Full Arabic and RTL architecture
+Multi-currency architecture
+Content Management System (CMS)
+Public pages, landing pages, FAQs, policies, blogs/articles, announcements and promotional banners
+SEO-ready public teacher, course, subject and landing pages
+SEO controls including titles, descriptions, clean URLs, sitemap, canonical tags and structured data where appropriate
+
+This is considerably more precise than simply saying “role setup” and “core dashboard.” The SRS has separate requirements for Super Admin, configurable Admin permissions and specialist Accounts, Marketing, Academic and Safeguarding roles.
+
+STAGE 2 — Scheduling, Teaching, LMS, Academic Systems & Virtual Classroom
+Scheduling & Booking
+Teacher availability/calendar management
+Recurring availability
+Individual availability
+Blocked dates and holidays
+Breaks and working hours
+Minimum booking notice
+Student/teacher/parent/admin calendars
+Automatic international timezone conversion
+One-to-one lessons
+Group lessons
+Live courses
+Trial lessons
+Single bookings
+Recurring bookings
+Block/package bookings
+Minimum commitment rules
+Rescheduling workflows and restrictions
+Cancellation workflows and policies
+Separate teacher/student cancellation and rescheduling records
+Refund/credit/payment consequences of cancellations
+
+The SRS gives considerably more detail here than the original proposal, including configurable minimum commitments and formal cancellation/rescheduling records.
+
+Group Classes
+Teacher-created/available group teaching
+Admin-created group classes
+Class title, subject, level and age configuration
+Start/end dates and schedules
+Capacity and minimum-student rules
+Student pricing
+Teacher payment
+Visibility/application deadlines
+Teacher bidding/application for group-class opportunities
+Admin teacher selection
+Internal teacher-payment information hidden from students
+Group-class waiting lists
+Place-availability notifications
+
+These are particularly important omissions from the developer's current breakdown. The SRS specifically requires teacher bidding/application and waitlists, not merely “group class functionality.”
+
+Virtual Classroom
+Integrated branded virtual classroom
+Video and audio
+Multiple participants
+Teacher/student camera and microphone controls
+Screen sharing
+Text chat
+Lesson timer
+File sharing
+Interactive whiteboard
+Pen, highlighter, eraser, shapes, text, images and pointer
+Undo/redo and multiple whiteboard pages
+Teacher/student collaborative annotation where applicable
+Arabic and RTL annotation
+Tajweed-rule marking
+PowerPoint/presentation upload and presentation inside classroom
+Presentation annotation
+PDF and digital book display
+Flipbook/page-turning
+Page navigation, zoom, fullscreen, bookmarks and thumbnails
+Teacher/student page synchronisation
+Lesson recording
+Secure recording storage
+Recording access controls and retention rules
+
+These requirements are specified across the virtual classroom, whiteboard, Arabic annotation, presentation and flipbook sections.
+
+LMS, Content & Academic Systems
+Teaching material library
+Qur'an books
+Arabic books
+Islamic Studies books
+Teacher guides
+Worksheets
+Presentations
+Videos
+Games
+Assessments
+Role/course/subscription/licence/purchase-based content permissions
+Content licensing
+Rental access
+Subscription access
+Purchase access
+Expiry dates
+Restricted downloads
+Prerecorded courses
+Video/audio/PDF/flipbook course content
+Course-progress tracking
+Homework creation, assignment, attachments, deadlines, marking and feedback
+Interactive educational games
+Quiz system
+Question bank
+Examination system
+Automatic/manual marking
+Exam timing and pass marks
+Randomised questions
+Student reports
+Certificate generation and configurable certificate templates
+Gamification
+Points, stars, badges, streaks and achievement levels
+Attendance and lesson-duration tracking
+Login/lesson entry/exit tracking
+Specialist Islamic Education Progress
+Qur'an/Hifdh progress tracker:
+Surah
+Juz'
+Page
+Ayah
+Memorisation
+Revision
+Tajweed
+Reading
+Weekly targets
+Teacher comments
+Current position
+Next lesson target
+Visual progress
+Arabic Language progress:
+Reading
+Writing
+Speaking
+Listening
+Vocabulary
+Grammar
+Book/level/unit/lesson/pages/skills
+Islamic Studies progress:
+Course
+Level
+Unit
+Lesson
+Homework
+Assessment
+Completion
+
+The detailed subject-specific trackers are a major part of what differentiates this from an ordinary tutoring platform.
+
+STAGE 3 — AI, Payments, Communication, CRM, Safeguarding & Business Systems
+AI Systems
+AI lesson speech-to-text/transcription
+English transcription
+Arabic transcription where technically available
+Searchable transcripts
+Speaker differentiation where possible
+AI lesson summaries
+Key learning points
+Vocabulary extraction
+Improvement areas
+Next-lesson recommendations
+AI student notes
+Personal/private student note-taking
+AI-assisted homework generation
+AI-assisted quiz generation from:
+Lessons
+Books
+Topics
+Uploaded documents
+Previous lesson content
+AI learning recommendations
+Human teacher review/approval before academically important AI content is published
+AI-generated content identification
+AI safety controls
+No autonomous sensitive academic or safeguarding decisions
+Modular AI architecture
+AI-assisted search/support capability
+Payments & Marketplace Finance
+Multiple currencies
+Market/location-based price display where configured
+Hourly lessons
+Single payments
+Block bookings
+Monthly subscriptions
+One-off payments
+Course payments
+Group-class payments
+Customer wallet/platform credit
+Credit transaction history
+Automatic platform commission calculation
+Percentage/fixed commission
+Teacher/country/course/class-specific commission rules
+Teacher earnings dashboard
+Gross, commission, net, pending, available and paid earnings
+Teacher payout management
+Automated marketplace payout integration where suitable
+Full and partial refunds
+Account credit
+Dispute-management system
+Promo/discount codes
+Referral programme
+Communication & Notifications
+Secure internal messaging:
+Teacher Student
+Teacher Parent
+Teacher Admin
+Student/Parent Admin
+Protection against unnecessary exchange of private telephone/email details
+Contact-sharing detection/flagging where technically appropriate
+Email notifications
+In-platform notifications
+Push notifications
+SMS integration where implemented
+WhatsApp integration where implemented and legally permitted
+Configurable lesson reminders
+Editable transactional email templates
+Reviews, Quality Control & Safeguarding
+Teacher review/rating system
+Admin review moderation
+Teacher-performance monitoring
+Attendance/lateness/cancellation/rescheduling monitoring
+Retention, complaint and teaching-quality monitoring
+Automated performance/risk flags
+Contact-detail sharing alerts
+Unusual payment/refund flags
+Parent-linked child safeguarding
+Secure communication
+Safeguarding incident reporting
+Restricted safeguarding access
+Safeguarding investigation workflow
+Account restriction/suspension
+Authorised communication/recording review
+
+The SRS makes safeguarding a critical requirement, with dedicated reporting and investigation workflows rather than simply an audit-log feature.
+
+CRM, Support & Analytics
+CRM lead/customer management
+Lead, Registered, Trial Booked, Trial Completed, Active, Inactive and Cancelled statuses
+CRM notes and follow-up actions
+Searchable Help Centre
+Support ticket system
+Ticket category, priority, attachments, status and staff ownership
+User analytics
+Session analytics
+Financial analytics
+Retention analytics
+Academic analytics
+Marketing analytics
+Trial-conversion reporting
+Teacher/student retention
+Revenue by teacher/course/country/subject/month
+Report export to CSV, Excel and PDF where relevant
+
+STAGE 4 — Mobile Apps, Security, Infrastructure, Testing, Deployment, Documentation & Complete Handover
+Mobile Applications
+
+This is one of the largest omissions in the developer's proposed stages.
+
+The SRS specifies iOS and Android applications, not merely a mobile-responsive website.
+
+Stage 4 must therefore explicitly include:
+
+Dedicated iOS application
+Dedicated Android application
+Mobile login
+Teacher search
+Booking
+Payments
+Virtual classroom
+Messaging
+Homework
+Reports
+Student progress
+Notifications
+Recordings
+Learning materials
+Mobile/web push notifications
+
+This point should not be left as “Mobile and Browser compatibility testing.” That only promises testing on mobile; it does not promise development of the iOS and Android apps required by the SRS.
+
+Security, Privacy & Infrastructure
+SSL
+Secure authentication
+Secure password storage
+Two-factor authentication for privileged accounts
+API security
+Rate limiting
+Session management
+File security
+Payment security/tokenised gateway implementation
+Granular role permissions
+Data privacy and consent controls
+Marketing consent
+Data retention/deletion processes
+Children's-data considerations
+Secure qualification/identity/student-document storage
+Secure recording storage and retention
+Audit logs for sensitive administrative actions
+Scalable architecture
+Performance optimisation
+CDN/geographically appropriate infrastructure where appropriate
+High availability for login, booking, payments and classroom
+Integration architecture for video, payments, AI, email, SMS, WhatsApp, cloud storage, analytics, CRM, accounting and push notifications
+
+The SRS specifically requires the platform to scale across teachers, students, lessons, countries, currencies, recordings, materials and courses without fundamental redevelopment.
+
+Testing & UAT
+Functional testing
+Integration testing
+Payment testing
+Virtual-classroom testing
+Load testing
+Security/vulnerability testing
+Mobile testing
+Browser testing
+Timezone testing
+Currency testing
+Arabic/RTL testing
+AI testing
+Permission testing
+Performance/stability optimisation
+Final bug fixing and QA
+UAT accounts for:
+Super Admin
+Admin
+Teacher
+Student
+Parent
+Accounts
+Marketing
+Safeguarding
+Testing all role workflows
+Chrome
+Safari
+Firefox
+Microsoft Edge
+Mainstream mobile browsers
+
+The SRS expressly lists these testing categories and requires separate role-based UAT accounts.
+
+Documentation & Training
+System architecture documentation
+Database documentation
+API documentation
+Integration documentation
+Deployment documentation
+Admin manual
+Teacher guide
+Student guide
+Parent guide
+Source-code documentation
+Training for:
+Super Admin
+Administration
+Accounts
+Academic
+Marketing
+Safeguarding staff
+Final Deployment, Ownership & Handover
+Production deployment
+Fully configured production environment
+Complete source code
+Complete source-code repositories
+Database and database access
+Cloud/infrastructure accounts
+API/integration accounts
+Application accounts
+Design/source files
+Documentation
+Configuration
+Credentials/access under Client control
+Client ownership/control of bespoke project assets
+No critical infrastructure remaining solely under developer-controlled accounts
+Final testing
+Final bug fixes
+Client approval
+Complete commercial-ready handover
