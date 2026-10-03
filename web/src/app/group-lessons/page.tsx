@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { GroupClassCatalogCard } from "@/components/bookings/group-class-catalog-card";
 import { GroupClassPaymentsFacultyView } from "@/components/finance/group-class-payments-faculty";
 import { MarketPriceNote } from "@/components/finance/location-price-faculty";
@@ -57,6 +58,13 @@ export default async function GroupLessonsPage({
         />
       </PageHero>
       <Container className="space-y-5 py-12">
+        <p className="rounded-[var(--radius-card)] border border-line bg-surface px-4 py-3 text-sm font-semibold text-brand">
+          {t("group.private_note")}{" "}
+          <Link href="/live-courses" className="font-bold text-brand underline">
+            {t("nav.live_courses")}
+          </Link>
+          .
+        </p>
         <MarketPriceNote faculty={locationPrices} />
         {groupPayments ? (
           <GroupClassPaymentsFacultyView

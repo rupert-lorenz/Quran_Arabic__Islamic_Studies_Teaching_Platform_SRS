@@ -2,7 +2,7 @@ export const defaultUiMessages = {
   "nav.find_teachers": "Find teachers",
   "nav.subjects": "Subjects",
   "nav.courses": "Courses",
-  "nav.live_courses": "Live courses",
+  "nav.live_courses": "One-to-One / Private Lessons",
   "nav.group_lessons": "Group lessons",
   "nav.for_parents": "For parents",
   "nav.teach": "Teach with us",
@@ -3125,6 +3125,13 @@ export const defaultUiMessages = {
   "bank.status.draft": "Draft",
   "bank.status.published": "Published",
   "bank.status.archived": "Archived",
+  "private.eyebrow": "Individual tuition",
+  "private.title": "One-to-One / Private Lessons",
+  "private.description":
+    "Choose one approved teacher for a private lesson. Search by subject, language, and the same filters as Find teachers, then open a profile to book.",
+  "private.choose": "Choose this teacher",
+  "private.group_note":
+    "These are private lessons with one teacher and one learner. For a class with other students, open",
   "live.eyebrow": "Weekly cohort learning",
   "live.title": "Live courses",
   "live.description":
@@ -3144,7 +3151,9 @@ export const defaultUiMessages = {
   "group.description":
     "Join a scheduled small-group class with an approved teacher. Times are converted automatically to your timezone.",
   "group.catalog_description":
-    "Browse each class by name, length, schedule, and student session price. One enrolment is one group-class payment. Open a class to see every session date.",
+    "Browse each class by name, length, schedule, and student session price. One enrolment is one group-class payment. Open a class to see every session date. These are group classes, not private one-to-one lessons.",
+  "group.private_note":
+    "Group lessons are taught with other students. For a private lesson with one teacher, open",
   "group.schedule_description": "Daily sessions for {title}.",
   "group.view_schedule": "View daily schedule",
   "group.daily_schedule": "Daily schedule",
@@ -4093,7 +4102,7 @@ export const uiMessageKeys = Object.keys(defaultUiMessages) as UiMessageKey[];
 export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
   ar: {
     "nav.find_teachers": "ابحث عن معلم",
-    "nav.live_courses": "دورات مباشرة",
+    "nav.live_courses": "دروس فردية / خاصة",
     "nav.group_lessons": "دروس جماعية",
     "nav.subjects": "المواد",
     "nav.courses": "الدورات",
@@ -7202,6 +7211,13 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "bank.status.draft": "مسودة",
     "bank.status.published": "منشور",
     "bank.status.archived": "مؤرشف",
+    "private.eyebrow": "تعليم فردي",
+    "private.title": "دروس فردية / خاصة",
+    "private.description":
+      "اختر معلماً معتمداً لدرس خاص. ابحث بالمادة واللغة وبنفس عوامل التصفية في «اعثر على معلم»، ثم افتح الملف للحجز.",
+    "private.choose": "اختر هذا المعلم",
+    "private.group_note":
+      "هذه دروس خاصة مع معلم واحد ومتعلم واحد. للصف مع طلاب آخرين، افتح",
     "live.eyebrow": "تعلم جماعي أسبوعي",
     "live.title": "دورات مباشرة",
     "live.description":
@@ -7221,7 +7237,9 @@ export const bundledUiMessages: Record<string, Partial<UiMessages>> = {
     "group.description":
       "انضم إلى درس جماعي صغير مجدول مع معلم معتمد. تُحوَّل الأوقات تلقائياً إلى منطقتك الزمنية.",
     "group.catalog_description":
-      "تصفّح كل صف بالاسم والمدة والجدول وسعر جلسة الطالب. التسجيل الواحد دفعة حصة جماعية واحدة. افتح الصف لترى مواعيد كل جلسة.",
+      "تصفّح كل صف بالاسم والمدة والجدول وسعر جلسة الطالب. التسجيل الواحد دفعة حصة جماعية واحدة. افتح الصف لترى مواعيد كل جلسة. هذه صفوف جماعية وليست دروساً فردية خاصة.",
+    "group.private_note":
+      "الدروس الجماعية تُدرَّس مع طلاب آخرين. لدرس خاص مع معلم واحد، افتح",
     "group.schedule_description": "جلسات يومية لـ {title}.",
     "group.view_schedule": "عرض الجدول اليومي",
     "group.daily_schedule": "الجدول اليومي",

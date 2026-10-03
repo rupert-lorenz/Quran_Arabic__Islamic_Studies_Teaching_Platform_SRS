@@ -13,8 +13,10 @@ import {
 export async function TeacherSearchForm({
   filters,
   options,
+  clearHref = "/teachers",
 }: {
   filters: TeacherSearchQuery;
+  clearHref?: string;
   options: {
     subjects: { slug: string; name: string }[];
     languages: string[];
@@ -212,7 +214,7 @@ export async function TeacherSearchForm({
           {t("teachers.search_button")}
         </button>
         {hasTeacherSearchFilters(filters) ? (
-          <a href="/teachers" className="text-sm font-bold text-brand underline">
+          <a href={clearHref} className="text-sm font-bold text-brand underline">
             {t("teachers.clear")}
           </a>
         ) : null}

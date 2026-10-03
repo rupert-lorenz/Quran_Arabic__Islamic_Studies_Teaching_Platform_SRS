@@ -110,7 +110,7 @@ export const PAYMENTS_MODULES: PaymentsModuleDefinition[] = [
     layer: "catalogue",
     live: true,
     independent: true,
-    staffHref: "/live-courses",
+    staffHref: "/live-courses/catalogue",
     hidesTeacherPayment: true,
   },
   {

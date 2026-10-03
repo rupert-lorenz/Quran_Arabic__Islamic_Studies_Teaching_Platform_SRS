@@ -878,7 +878,7 @@ export async function getPaymentsFinanceDesk(actor: ApiActor) {
               : item.id === "courses"
                 ? role === "teacher"
                   ? "/teach/live-courses"
-                  : "/live-courses"
+                  : "/live-courses/catalogue"
                 : item.id === "groups"
                   ? role === "staff"
                     ? "/staff/group-classes"

@@ -222,7 +222,7 @@ export function PaymentsFinanceDeskView({ desk }: { desk: Desk }) {
       <CoursePaymentsFacultyView
         faculty={desk.coursePayments}
         manageHref={
-          desk.role === "teacher" ? "/teach/live-courses" : "/live-courses"
+          desk.role === "teacher" ? "/teach/live-courses" : "/live-courses/catalogue"
         }
       />
       <GroupClassPaymentsFacultyView

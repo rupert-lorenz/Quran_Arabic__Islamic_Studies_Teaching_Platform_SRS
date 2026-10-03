@@ -5,7 +5,7 @@ export const publicNav = [
   { href: "/teachers", label: "Find teachers", messageKey: "nav.find_teachers" },
   { href: "/subjects", label: "Subjects", messageKey: "nav.subjects" },
   { href: "/courses", label: "Courses", messageKey: "nav.courses" },
-  { href: "/live-courses", label: "Live courses", messageKey: "nav.live_courses" },
+  { href: "/live-courses", label: "One-to-One / Private Lessons", messageKey: "nav.live_courses" },
   { href: "/group-lessons", label: "Group lessons", messageKey: "nav.group_lessons" },
   { href: "/parents", label: "For parents", messageKey: "nav.for_parents" },
   { href: "/teach", label: "Teach with us", messageKey: "nav.teach" },

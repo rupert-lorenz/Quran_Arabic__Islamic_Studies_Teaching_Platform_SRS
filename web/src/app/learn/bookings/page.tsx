@@ -53,7 +53,7 @@ export default async function StudentBookingsPage() {
         <BlockBookingsFacultyView faculty={blocks} hideStudentNames />
         <CoursePaymentsFacultyView
           faculty={coursePayments}
-          manageHref="/live-courses"
+          manageHref="/live-courses/catalogue"
           hideStudentNames
         />
         <GroupClassPaymentsFacultyView

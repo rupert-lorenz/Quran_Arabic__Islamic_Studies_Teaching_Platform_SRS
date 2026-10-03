@@ -51,7 +51,7 @@ export default async function FamilyBookingsPage() {
         <HourlyLessonsFacultyView faculty={hourly} />
         <SinglePaymentsFacultyView faculty={single} />
         <BlockBookingsFacultyView faculty={blocks} />
-        <CoursePaymentsFacultyView faculty={coursePayments} manageHref="/live-courses" />
+        <CoursePaymentsFacultyView faculty={coursePayments} manageHref="/live-courses/catalogue" />
         <GroupClassPaymentsFacultyView faculty={groupPayments} manageHref="/group-lessons" />
         <p className="text-sm font-semibold">
           <Link href="/family" className="text-brand underline">

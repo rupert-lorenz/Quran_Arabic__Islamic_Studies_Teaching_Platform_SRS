@@ -26,6 +26,7 @@ export async function TeacherCard({
   recommendationReasons,
   photoUrl,
   videoThumbnailUrl,
+  actionKey,
 }: {
   name: string;
   subjects: string;
@@ -46,6 +47,7 @@ export async function TeacherCard({
   recommendationReasons?: string[];
   photoUrl?: string | null;
   videoThumbnailUrl?: string | null;
+  actionKey?: UiMessageKey;
 }) {
   const { t } = await getI18n();
   const genderLabel =
@@ -154,7 +156,7 @@ export async function TeacherCard({
         <p className="mt-4 text-sm text-muted">{languages}</p>
         <div className="mt-6">
           <ButtonLink href={href} variant="secondary" className="w-full">
-            {hasVideo ? t("card.watch") : t("card.view")}
+            {actionKey ? t(actionKey) : hasVideo ? t("card.watch") : t("card.view")}
           </ButtonLink>
         </div>
       </div>

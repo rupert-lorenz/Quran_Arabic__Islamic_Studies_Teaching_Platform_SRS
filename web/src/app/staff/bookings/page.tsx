@@ -49,7 +49,7 @@ export default async function StaffBookingsPage() {
         <HourlyLessonsFacultyView faculty={hourly} />
         <SinglePaymentsFacultyView faculty={single} />
         <BlockBookingsFacultyView faculty={blocks} />
-        <CoursePaymentsFacultyView faculty={coursePayments} manageHref="/live-courses" />
+        <CoursePaymentsFacultyView faculty={coursePayments} manageHref="/live-courses/catalogue" />
         <GroupClassPaymentsFacultyView faculty={groupPayments} manageHref="/staff/group-classes" />
         <BookingCalendar initial={state} calendar={calendar} role="staff" />
       </Container>
