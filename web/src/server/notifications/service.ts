@@ -15,7 +15,7 @@ import type { ApiActor } from "@/server/api/auth";
 
 export type UserNotificationView = {
   id: string;
-  kind: "group_place_reserved" | "group_place_available";
+  kind: "group_place_reserved" | "group_place_available" | "lesson_reminder";
   title: string;
   body: string;
   href: string;
@@ -112,6 +112,8 @@ async function writeNotifications(input: {
 }
 
 export async function listActorNotifications(actor: ApiActor) {
+  const { ensureLessonReminders } = await import("@/server/communications/reminders");
+  await ensureLessonReminders(actor);
   const rows = await db
     .select()
     .from(userNotifications)

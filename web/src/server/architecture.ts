@@ -177,4 +177,5 @@ export const designRules = [
   "Integrations are called only through server adapters, never from the browser",
   "Locale is resolved from cookie, then the signed-in account, then Accept-Language; routes stay unprefixed",
   "Display currency is resolved from cookie, then the signed-in account, then the country default; amounts stay integer minor units plus an ISO code and FX is display-only",
+  "Teachers, students, lessons, countries, currencies, recordings, materials, and courses scale as new records in the existing tables. Growing those volumes does not require a new application",
 ] as const;

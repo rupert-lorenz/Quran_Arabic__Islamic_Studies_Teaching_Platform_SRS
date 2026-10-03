@@ -1,9 +1,13 @@
 import { ClassroomRecordingLibrary } from "@/components/classroom/classroom-recording-library";
+import { QualityFacultyView } from "@/components/finance/notice-faculties";
+import { SafeguardFacultiesView } from "@/components/quality/safeguard-faculties";
 import { SafeguardingWorkspace } from "@/components/staff/safeguarding-workspace";
 import { StaffRecordingRetention } from "@/components/staff/staff-recording-retention";
 import { Container } from "@/components/ui/container";
 import { hasAnyPermission } from "@/lib/rbac";
 import { listAccessibleRecordings } from "@/server/classroom/recording-access";
+import { getQualityFaculty } from "@/server/finance/notice-faculties";
+import { getSafeguardFaculties } from "@/server/quality/faculties";
 import { requireStaffPage } from "@/server/rbac/guard";
 import { listSafeguardingWorkspace } from "@/server/staff/safeguarding";
 
@@ -17,7 +21,12 @@ export default async function StaffSafeguardingPage() {
     "safeguarding.recordings",
   ]);
   const canRecordings = hasAnyPermission(access, "safeguarding.recordings");
-  const [workspace, library] = await Promise.all([
+  const actor = {
+    userId: access.user.id,
+    roleKey: access.user.roleKey,
+    permissions: access.permissions,
+  };
+  const [workspace, library, quality, safeguard] = await Promise.all([
     listSafeguardingWorkspace(),
     canRecordings
       ? listAccessibleRecordings({
@@ -26,6 +35,8 @@ export default async function StaffSafeguardingPage() {
           permissions: access.permissions,
         })
       : Promise.resolve({ recordings: [], retentionDays: 365, canRetain: false }),
+    getQualityFaculty(actor),
+    getSafeguardFaculties(actor),
   ]);
   const canReadAudit = hasAnyPermission(access, "audit.read");
 
@@ -36,6 +47,12 @@ export default async function StaffSafeguardingPage() {
         Restricted incident and recording reviews. Other staff roles cannot open
         this workspace.
       </p>
+      <div className="mt-8">
+        <QualityFacultyView quality={quality} staff />
+        <div className="mt-8">
+          <SafeguardFacultiesView faculties={safeguard} />
+        </div>
+      </div>
       <div className="mt-8">
         <SafeguardingWorkspace
           initial={{

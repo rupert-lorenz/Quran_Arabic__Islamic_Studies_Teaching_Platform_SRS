@@ -94,14 +94,23 @@ export function AccountsWorkspace({
           setError("");
           setMessage("");
           const form = new FormData(event.currentTarget);
+          const kind = String(form.get("kind") ?? "payment");
+          const coverage = String(form.get("coverage") ?? "full");
+          const written = String(form.get("notes") ?? "").trim();
+          const notes =
+            kind === "refund"
+              ? `${coverage === "partial" ? "Partial refund" : "Full refund"}${
+                  written ? `. ${written}` : ""
+                }`
+              : written;
           try {
             await postJson("/api/v1/staff/finance/operations", {
-              kind: String(form.get("kind") ?? "payment"),
+              kind,
               amount: String(form.get("amount") ?? ""),
               currencyCode: String(form.get("currencyCode") ?? "GBP"),
               counterpartyEmail: String(form.get("counterpartyEmail") ?? ""),
               reference: String(form.get("reference") ?? ""),
-              notes: String(form.get("notes") ?? ""),
+              notes,
             });
             event.currentTarget.reset();
             await refresh();
@@ -158,6 +167,15 @@ export function AccountsWorkspace({
           <label className="block">
             <span className="mb-1 block text-sm font-bold text-brand">Reference</span>
             <input name="reference" className={fieldClass} />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-sm font-bold text-brand">
+              Refund coverage
+            </span>
+            <select name="coverage" className={fieldClass} defaultValue="full">
+              <option value="full">Full refund</option>
+              <option value="partial">Partial refund</option>
+            </select>
           </label>
           <label className="block">
             <span className="mb-1 block text-sm font-bold text-brand">Notes</span>

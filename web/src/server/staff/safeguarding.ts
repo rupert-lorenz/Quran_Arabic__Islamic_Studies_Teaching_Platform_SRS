@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import {
   auditLogs,
@@ -7,6 +7,7 @@ import {
   safeguardingRecordingReviews,
   users,
 } from "@/db/schema";
+import { canMoveIncident } from "@/lib/safeguarding-workflow";
 import type { ApiActor } from "@/server/api/auth";
 import { writeAuditLog } from "@/server/api/audit";
 import { requireHumanSensitiveDecision } from "@/server/ai/human-decision";
@@ -41,9 +42,16 @@ export async function listSafeguardingWorkspace() {
       .orderBy(desc(safeguardingIncidents.createdAt))
       .limit(100),
     db
-      .select()
+      .select({
+        id: safeguardingIncidentNotes.id,
+        incidentId: safeguardingIncidentNotes.incidentId,
+        body: safeguardingIncidentNotes.body,
+        createdAt: safeguardingIncidentNotes.createdAt,
+        authorName: users.displayName,
+      })
       .from(safeguardingIncidentNotes)
-      .orderBy(desc(safeguardingIncidentNotes.createdAt))
+      .leftJoin(users, eq(safeguardingIncidentNotes.createdByUserId, users.id))
+      .orderBy(asc(safeguardingIncidentNotes.createdAt))
       .limit(200),
     db
       .select({
@@ -112,6 +120,12 @@ export async function createIncident(
     throw new ApiError(500, "INTERNAL", "Could not create the incident");
   }
 
+  await db.insert(safeguardingIncidentNotes).values({
+    incidentId: created.id,
+    body: "Report opened.",
+    createdByUserId: actor.userId,
+  });
+
   await writeAuditLog({
     actor,
     action: "safeguarding.incident_created",
@@ -131,6 +145,39 @@ export async function updateIncident(
   ip: string,
 ) {
   requireHumanSensitiveDecision();
+  const [current] = await db
+    .select()
+    .from(safeguardingIncidents)
+    .where(eq(safeguardingIncidents.id, id))
+    .limit(1);
+  if (!current) {
+    throw new ApiError(404, "NOT_FOUND", "Incident not found");
+  }
+  if (!canMoveIncident(current.status, input.status)) {
+    throw new ApiError(
+      422,
+      "VALIDATION",
+      "Move the report one investigation step at a time",
+    );
+  }
+  if (input.status === "resolved" || input.status === "closed") {
+    const notes = await db
+      .select({ body: safeguardingIncidentNotes.body })
+      .from(safeguardingIncidentNotes)
+      .where(eq(safeguardingIncidentNotes.incidentId, id));
+    const finding = notes.some(
+      (note) =>
+        note.body !== "Report opened." &&
+        !note.body.startsWith("Investigation moved from "),
+    );
+    if (!finding) {
+      throw new ApiError(
+        422,
+        "VALIDATION",
+        "Write an investigation finding before this step",
+      );
+    }
+  }
   const [updated] = await db
     .update(safeguardingIncidents)
     .set({ status: input.status })
@@ -140,6 +187,12 @@ export async function updateIncident(
   if (!updated) {
     throw new ApiError(404, "NOT_FOUND", "Incident not found");
   }
+
+  await db.insert(safeguardingIncidentNotes).values({
+    incidentId: id,
+    body: `Investigation moved from ${current.status} to ${input.status}.`,
+    createdByUserId: actor.userId,
+  });
 
   await writeAuditLog({
     actor,
@@ -212,16 +265,33 @@ export async function suspendInvolvedUser(
       "This incident has no involved account to suspend",
     );
   }
+  if (incident.status === "resolved" || incident.status === "closed") {
+    throw new ApiError(
+      422,
+      "VALIDATION",
+      "Reopen the investigation before restricting an account",
+    );
+  }
 
   const result = await updateDirectoryUser(actor, incident.involvedUserId, {
     status: "suspended",
     ip,
   });
 
-  await db
-    .update(safeguardingIncidents)
-    .set({ status: "escalated" })
-    .where(eq(safeguardingIncidents.id, incidentId));
+  if (incident.status !== "escalated") {
+    await db
+      .update(safeguardingIncidents)
+      .set({ status: "escalated" })
+      .where(eq(safeguardingIncidents.id, incidentId));
+  }
+  await db.insert(safeguardingIncidentNotes).values({
+    incidentId,
+    body:
+      incident.status === "open"
+        ? "Account restricted. Investigation escalated from the open report."
+        : "Account restricted during the investigation.",
+    createdByUserId: actor.userId,
+  });
 
   return result;
 }

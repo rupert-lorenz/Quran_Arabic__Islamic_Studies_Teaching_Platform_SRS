@@ -3,6 +3,8 @@ import { Container } from "@/components/ui/container";
 import { staffDashboardTitle } from "@/lib/dashboard";
 import { dedicatedStaffRoles, hasAnyPermission, staffModules } from "@/lib/rbac";
 import { getStaffDashboard } from "@/server/dashboard";
+import { trainingPath } from "@/server/docs/training";
+import { getI18n } from "@/server/i18n/locale";
 import { requireStaffPage } from "@/server/rbac/guard";
 import Link from "next/link";
 
@@ -12,7 +14,10 @@ export const metadata = {
 
 export default async function StaffHomePage() {
   const access = await requireStaffPage();
-  const dashboard = await getStaffDashboard(access);
+  const [{ t }, dashboard] = await Promise.all([
+    getI18n(),
+    getStaffDashboard(access),
+  ]);
   const modules = staffModules.filter((item) =>
     hasAnyPermission(access, item.permission),
   );
@@ -24,6 +29,11 @@ export default async function StaffHomePage() {
       <p className="mt-2 max-w-2xl text-muted">
         Live counts for the areas granted to the{" "}
         <strong>{access.user.roleKey.replaceAll("_", " ")}</strong> role.
+      </p>
+      <p className="mt-4 text-sm">
+        <Link href={trainingPath(access.user.roleKey)} className="font-bold text-brand-accent underline">
+          {t("tr.open.yours")}
+        </Link>
       </p>
       {access.user.roleKey === "super_admin" ? (
         <p className="mt-6 rounded-[2rem] bg-mint px-5 py-4 font-semibold text-brand">

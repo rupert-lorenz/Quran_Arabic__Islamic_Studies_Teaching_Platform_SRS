@@ -121,6 +121,15 @@ export async function ParentHome({
           <ButtonLink href="/family/wallet" variant="secondary" className={shortcutLinkClass}>
             {t("pay.wallet.title")}
           </ButtonLink>
+          <ButtonLink href="/messages" variant="secondary" className={shortcutLinkClass}>
+            {t("messages.nav")}
+          </ButtonLink>
+          <ButtonLink href="/family/guide" variant="secondary" className={shortcutLinkClass}>
+            {t("dc.parent.title")}
+          </ButtonLink>
+          <ButtonLink href="/mobile" variant="secondary" className={shortcutLinkClass}>
+            {t("mb.nav")}
+          </ButtonLink>
           <ButtonLink href="/teachers" variant="secondary" className={shortcutLinkClass}>
             {t("nav.find_teachers")}
           </ButtonLink>

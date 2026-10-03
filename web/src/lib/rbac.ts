@@ -89,6 +89,20 @@ export const staffModules = [
     permission: "marketing.campaigns",
   },
   {
+    href: "/staff/crm",
+    label: "CRM",
+    description: "Leads, support tickets, help, and reports",
+    permission: [
+      "crm.manage",
+      "support.tickets",
+      "reports.finance",
+      "reports.academic",
+      "reports.marketing",
+      "users.read",
+      "payments.read",
+    ],
+  },
+  {
     href: "/staff/academic",
     label: "Academic",
     description: "Curriculum, teaching library, student reports, and certificates",

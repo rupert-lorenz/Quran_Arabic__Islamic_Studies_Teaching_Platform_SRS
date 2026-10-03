@@ -96,6 +96,7 @@ export async function PublicShell({ children }: { children: React.ReactNode }) {
               { href: "/blog", label: t("footer.blog") },
               { href: "/pages", label: t("footer.pages") },
               { href: "/faq", label: t("footer.faq") },
+              { href: "/help", label: t("footer.help") },
             ],
           },
           {
@@ -109,6 +110,8 @@ export async function PublicShell({ children }: { children: React.ReactNode }) {
             title: t("footer.trust"),
             links: [
               { href: "/safeguarding", label: t("footer.safeguarding") },
+              { href: "/support", label: t("footer.support") },
+              { href: "/mobile", label: t("footer.apps") },
               { href: "/about", label: t("footer.about") },
               { href: "/policies", label: t("footer.policies") },
               { href: "/news", label: t("footer.news") },

@@ -1,4 +1,5 @@
 import { apiRoute } from "@/server/api/handler";
+import { bearerToken } from "@/server/api/mobile-client";
 import { getCookie, SESSION_COOKIE_NAME } from "@/server/api/request";
 import { writeAuditLog } from "@/server/api/audit";
 import { safeRecordPresence } from "@/server/lms/presence";
@@ -14,7 +15,9 @@ export const runtime = "nodejs";
 export const POST = apiRoute(
   { auth: "public", csrf: true, rateLimit: "sensitive" },
   async ({ request, requestId, actor, ip }) => {
-    await destroyCurrentSession(getCookie(request, SESSION_COOKIE_NAME));
+    await destroyCurrentSession(
+      getCookie(request, SESSION_COOKIE_NAME) || bearerToken(request) || undefined,
+    );
     if (actor) {
       await writeAuditLog({
         actor,

@@ -82,7 +82,14 @@ export function MarketingWorkspace({
           }
         }}
       >
-        <h2 className="text-xl font-extrabold text-brand">New campaign</h2>
+        <h2 className="font-heading text-xl font-bold tracking-tight text-brand">
+          New campaign
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-muted">
+          Promo code uses the name as the code and the summary as the offer.
+          Referral uses the Referral channel. Set the campaign to active to
+          publish it.
+        </p>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <label className="block">
             <span className="mb-1 block text-sm font-bold text-brand">Name</span>
@@ -95,7 +102,7 @@ export function MarketingWorkspace({
               <option value="banner">Banner</option>
               <option value="social">Social</option>
               <option value="referral">Referral</option>
-              <option value="other">Other</option>
+              <option value="other">Promo code</option>
             </select>
           </label>
           <label className="block">

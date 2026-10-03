@@ -44,6 +44,8 @@ export function TeacherWorkspaceNav({
           { href: "/teach/islamic-studies", labelKey: "teach_nav.islamic" },
           { href: "/teach/ai", labelKey: "teach_nav.ai" },
           { href: "/teach/earnings", labelKey: "teach_nav.earnings" },
+          { href: "/messages", labelKey: "messages.nav" },
+          { href: "/mobile", labelKey: "mb.nav" },
           { href: "/teach/questions", labelKey: "teach_nav.questions" },
           { href: "/teach/video", labelKey: "teach_nav.video" },
           { href: "/teach/status", labelKey: "teach_nav.status" },
@@ -53,6 +55,7 @@ export function TeacherWorkspaceNav({
             labelKey: "teach_nav.public",
           },
           { href: "/account", labelKey: "teach_nav.account" },
+          { href: "/teach/guide", labelKey: "dc.teacher.title" },
         ]
       : [
           { href: "/teach/home", labelKey: "teach_nav.dashboard", match: "exact" },
@@ -60,6 +63,7 @@ export function TeacherWorkspaceNav({
           { href: "/teach/status", labelKey: "teach_nav.status" },
           { href: "/teach/agreement", labelKey: "teach_nav.agreement" },
           { href: "/account", labelKey: "teach_nav.account" },
+          { href: "/teach/guide", labelKey: "dc.teacher.title" },
         ];
 
   return (

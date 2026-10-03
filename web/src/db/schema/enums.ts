@@ -39,6 +39,7 @@ export const filePurposeEnum = pgEnum("file_purpose", [
   "teaching_material",
   "recording",
   "homework",
+  "student_document",
   "other",
 ]);
 
@@ -219,6 +220,7 @@ export const bookingStatusEnum = pgEnum("booking_status", [
 export const userNotificationKindEnum = pgEnum("user_notification_kind", [
   "group_place_reserved",
   "group_place_available",
+  "lesson_reminder",
 ]);
 
 export const bookingKindEnum = pgEnum("booking_kind", ["trial", "lesson"]);
@@ -326,4 +328,48 @@ export const assessmentMarkingStatusEnum = pgEnum("assessment_marking_status", [
   "auto",
   "pending",
   "marked",
+]);
+
+export const crmAccountStatusEnum = pgEnum("crm_account_status", [
+  "lead",
+  "registered",
+  "trial_booked",
+  "trial_completed",
+  "active",
+  "inactive",
+  "cancelled",
+]);
+
+export const supportTicketCategoryEnum = pgEnum("support_ticket_category", [
+  "lesson",
+  "billing",
+  "account",
+  "technical",
+  "other",
+]);
+
+export const supportTicketPriorityEnum = pgEnum("support_ticket_priority", [
+  "low",
+  "normal",
+  "high",
+  "urgent",
+]);
+
+export const supportTicketStatusEnum = pgEnum("support_ticket_status", [
+  "open",
+  "in_progress",
+  "waiting",
+  "resolved",
+  "closed",
+]);
+
+export const mobilePlatformEnum = pgEnum("mobile_platform", [
+  "ios",
+  "android",
+  "web",
+]);
+
+export const privacyConsentKindEnum = pgEnum("privacy_consent_kind", [
+  "privacy",
+  "marketing",
 ]);

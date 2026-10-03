@@ -1,5 +1,6 @@
 import { apiRoute } from "@/server/api/handler";
 import { TWO_FACTOR_COOKIE_NAME } from "@/server/api/constants";
+import { bearerToken, mobileClient } from "@/server/api/mobile-client";
 import { getCookie } from "@/server/api/request";
 import {
   authResponse,
@@ -22,8 +23,9 @@ export const POST = apiRoute(
     input: twoFactorCodeSchema,
   },
   async ({ input, request, ip, userAgent, requestId }) => {
+    const native = mobileClient(request);
     const { user, session } = await verifyTwoFactorLogin({
-      token: getCookie(request, TWO_FACTOR_COOKIE_NAME),
+      token: getCookie(request, TWO_FACTOR_COOKIE_NAME) || bearerToken(request) || undefined,
       code: input.code,
       ip,
       userAgent,
@@ -35,6 +37,7 @@ export const POST = apiRoute(
         user: publicUser(user, await getEffectivePermissions(user.id, user.roleKey), {
           twoFactorEnabled: true,
         }),
+        ...(native ? { sessionToken: session.token, client: native } : {}),
       },
       [
         sessionCookie(session.token, getConfig().sessionTtlSeconds),

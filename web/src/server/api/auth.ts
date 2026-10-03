@@ -3,6 +3,7 @@ import { resolveSessionToken } from "@/server/auth/session";
 import { isTotpEnabled } from "@/server/auth/two-factor-status";
 import { getEffectivePermissions } from "@/server/rbac/effective";
 import { ApiError } from "./errors";
+import { bearerToken } from "./mobile-client";
 import { getCookie, SESSION_COOKIE_NAME } from "./request";
 
 export type ApiActor = {
@@ -16,7 +17,7 @@ export type ApiActor = {
 };
 
 export async function getActor(request: Request): Promise<ApiActor | null> {
-  const token = getCookie(request, SESSION_COOKIE_NAME);
+  const token = getCookie(request, SESSION_COOKIE_NAME) || bearerToken(request);
   if (!token) {
     return null;
   }

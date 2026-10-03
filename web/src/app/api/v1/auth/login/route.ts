@@ -1,4 +1,5 @@
 import { apiRoute } from "@/server/api/handler";
+import { mobileClient } from "@/server/api/mobile-client";
 import {
   authResponse,
   clearSessionCookie,
@@ -19,7 +20,7 @@ export const runtime = "nodejs";
 
 export const POST = apiRoute(
   { auth: "public", csrf: true, rateLimit: "sensitive", input: loginSchema },
-  async ({ input, ip, userAgent, requestId }) => {
+  async ({ input, ip, userAgent, requestId, request }) => {
     const result = await authenticateUser({
       ...input,
       ip,
@@ -41,6 +42,8 @@ export const POST = apiRoute(
       },
     );
 
+    const native = mobileClient(request);
+
     if (result.twoFactor) {
       return authResponse(
         requestId,
@@ -49,6 +52,9 @@ export const POST = apiRoute(
           twoFactor: {
             required: true,
             enrolled: result.twoFactor.enrolled,
+            ...(native
+              ? { challengeToken: result.twoFactor.challengeToken }
+              : {}),
           },
         },
         [twoFactorCookie(result.twoFactor.challengeToken), clearSessionCookie()],
@@ -57,7 +63,12 @@ export const POST = apiRoute(
 
     return authResponse(
       requestId,
-      { user },
+      {
+        user,
+        ...(native && result.session
+          ? { sessionToken: result.session.token, client: native }
+          : {}),
+      },
       [
         sessionCookie(result.session!.token, getConfig().sessionTtlSeconds),
         clearTwoFactorCookie(),

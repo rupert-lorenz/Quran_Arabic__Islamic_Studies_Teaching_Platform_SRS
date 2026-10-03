@@ -32,6 +32,42 @@ export function StaffNav({
         {t("staff.dashboard")}
       </Link>
       <Link
+        href="/messages"
+        className={workspacePillClass(pathname.startsWith("/messages"))}
+      >
+        {t("messages.nav")}
+      </Link>
+      <Link
+        href="/mobile"
+        className={workspacePillClass(pathname.startsWith("/mobile"))}
+      >
+        {t("mb.nav")}
+      </Link>
+      <Link
+        href="/staff/testing"
+        className={workspacePillClass(pathname.startsWith("/staff/testing"))}
+      >
+        {t("tq.nav")}
+      </Link>
+      <Link
+        href="/staff/docs"
+        className={workspacePillClass(pathname.startsWith("/staff/docs"))}
+      >
+        {t("dc.nav")}
+      </Link>
+      <Link
+        href="/staff/training"
+        className={workspacePillClass(pathname.startsWith("/staff/training"))}
+      >
+        {t("tr.nav")}
+      </Link>
+      <Link
+        href="/staff/handover"
+        className={workspacePillClass(pathname.startsWith("/staff/handover"))}
+      >
+        {t("ho.nav")}
+      </Link>
+      <Link
         href="/staff/search"
         className={workspacePillClass(pathname.startsWith("/staff/search"))}
       >

@@ -35,6 +35,19 @@ import { getCoursePaymentsFaculty } from "@/server/finance/course-payments";
 import { getCommissionAutoFaculty } from "@/server/finance/commission-auto";
 import { getCommissionRulesFaculty } from "@/server/finance/commission-rules";
 import { getCommissionScopedFaculty } from "@/server/finance/commission-scoped";
+import { getCommunicationsFaculty } from "@/server/finance/communications";
+import { getNoticeFaculties } from "@/server/finance/notice-faculties";
+import { getSafeguardFaculties } from "@/server/quality/faculties";
+import { getCrmFaculties } from "@/server/crm/faculties";
+import { getMobileFaculties } from "@/server/mobile/faculties";
+import { getInfrastructureFaculties } from "@/server/infrastructure/faculties";
+import { getDocumentationFaculties } from "@/server/docs/faculties";
+import { getHandoverFaculties } from "@/server/handover/faculties";
+import { getTestingFaculties } from "@/server/testing/faculties";
+import { getSecurityFaculties } from "@/server/security/faculties";
+import { getEarningsFaculties } from "@/server/finance/earnings-board";
+import { getOfferFaculties } from "@/server/finance/offer-faculties";
+import { getSettlementFaculties } from "@/server/finance/settlement-faculties";
 import { getCreditHistoryFaculty } from "@/server/finance/credit-history";
 import { getCustomerWalletFaculty } from "@/server/finance/customer-wallet";
 import { getGroupClassPaymentsFaculty } from "@/server/finance/group-class-payments";
@@ -777,6 +790,17 @@ export async function getPaymentsFinanceDesk(actor: ApiActor) {
     commissionAuto,
     commissionRules,
     commissionScoped,
+    earningsBoard,
+    settlement,
+    offers,
+    communications,
+    notices,
+    safeguard,
+    crm,
+    mobile,
+    security,
+    infrastructure,
+    testing,
   ] = await Promise.all([
     getTeacherRateLimits(),
     loadEnabledCurrencies(),
@@ -795,6 +819,17 @@ export async function getPaymentsFinanceDesk(actor: ApiActor) {
     getCommissionAutoFaculty(actor),
     getCommissionRulesFaculty(actor),
     getCommissionScopedFaculty(actor),
+    getEarningsFaculties(actor),
+    getSettlementFaculties(actor),
+    getOfferFaculties(actor),
+    getCommunicationsFaculty(actor),
+    getNoticeFaculties(actor),
+    getSafeguardFaculties(actor),
+    getCrmFaculties(actor),
+    getMobileFaculties(actor),
+    getSecurityFaculties(actor),
+    getInfrastructureFaculties(actor),
+    getTestingFaculties(),
   ]);
 
   const modules = listPaymentsModules()
@@ -864,7 +899,32 @@ export async function getPaymentsFinanceDesk(actor: ApiActor) {
                         : role === "teacher"
                           ? "/teach/earnings"
                           : null
-                      : role === "staff"
+                      : item.id === "earnings" ||
+                          item.id === "earnings_split" ||
+                          item.id === "payouts" ||
+                          item.id === "payouts_auto"
+                        ? role === "staff"
+                          ? "/staff/accounts"
+                          : role === "teacher"
+                            ? "/teach/earnings"
+                            : null
+                        : item.id === "refunds" || item.id === "account_credit"
+                          ? role === "staff"
+                            ? "/staff/accounts"
+                            : role === "parent"
+                              ? "/family/wallet"
+                              : null
+                          : item.id === "disputes"
+                            ? role === "staff"
+                              ? "/staff/accounts"
+                              : role === "teacher"
+                                ? "/teach/earnings"
+                                : null
+                            : item.id === "promo" || item.id === "referral"
+                              ? role === "staff"
+                                ? "/staff/marketing"
+                                : null
+                              : role === "staff"
                         ? item.staffHref ?? null
                         : null,
     }));
@@ -900,6 +960,17 @@ export async function getPaymentsFinanceDesk(actor: ApiActor) {
     commissionAuto,
     commissionRules,
     commissionScoped,
+    earningsBoard,
+    settlement,
+    offers,
+    communications,
+    notices,
+    safeguard,
+    crm,
+    mobile,
+    security,
+    infrastructure,
+    testing,
     catalogue,
     commission,
   };
@@ -912,6 +983,8 @@ export async function getPaymentsFinanceDesk(actor: ApiActor) {
     const disputes = workspace.operations.filter((item) => item.status === "on_hold");
     return {
       ...base,
+      documentation: getDocumentationFaculties(),
+      handover: await getHandoverFaculties(),
       workspace,
       disputes,
       wallet: null,

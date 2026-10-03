@@ -1,82 +1,53 @@
 @echo off
 setlocal EnableExtensions
-title Education Platform build
-
-set "PAUSE_AT_END=0"
-echo %CMDCMDLINE% | find /I "%~nx0" >nul && set "PAUSE_AT_END=1"
-
-rem Works from the repo root or from web\
-set "ROOT=%~dp0"
-if exist "%ROOT%web\package.json" (
-  cd /d "%ROOT%web"
-) else if exist "%ROOT%package.json" (
-  cd /d "%ROOT%"
-) else (
-  echo Could not find web\package.json next to this script.
-  goto :fail
+cd /d "%~dp0web"
+if not exist package.json (
+  echo Could not find web\package.json.
+  pause
+  exit /b 1
 )
 
 where node >nul 2>&1
 if errorlevel 1 (
-  echo Node.js is required. Install it, then run this file again.
-  goto :fail
+  echo Node.js is required.
+  pause
+  exit /b 1
 )
-
 where pnpm >nul 2>&1
 if errorlevel 1 (
-  echo pnpm not found. Enabling it with Corepack...
-  call corepack enable
-  if errorlevel 1 goto :fail
-  call corepack prepare pnpm@10.34.5 --activate
-  if errorlevel 1 goto :fail
+  echo pnpm is required.
+  pause
+  exit /b 1
 )
 
-set "TARGET_ENV=%~1"
-if not "%TARGET_ENV%"=="" (
-  if /I not "%TARGET_ENV%"=="development" if /I not "%TARGET_ENV%"=="staging" if /I not "%TARGET_ENV%"=="production" (
-    echo Usage: %~nx0 [development^|staging^|production]
-    echo   No argument uses APP_ENV from .env / .env.local
-    goto :fail
-  )
-  set "APP_ENV=%TARGET_ENV%"
-)
+echo Stopping any previous build or server for this app...
+powershell -NoProfile -Command "Get-CimInstance Win32_Process -Filter 'Name = ''node.exe''' | Where-Object { $_.CommandLine -match 'Education Platform\\web' -and ($_.CommandLine -match 'next' -or $_.CommandLine -match 'pool_entry') } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }"
+for /f "tokens=5" %%P in ('netstat -ano ^| findstr "LISTENING" ^| findstr ":3000"') do call :stopnode %%P
+if exist .next\lock del /f /q .next\lock >nul 2>&1
 
-echo.
-echo == Installing dependencies ==
 call pnpm install
-if errorlevel 1 goto :fail
+if errorlevel 1 goto fail
 
-echo.
-echo == Checking environment ==
-if "%TARGET_ENV%"=="" (
-  call pnpm env:check
-) else (
-  call pnpm exec tsx scripts/check-env.ts --env %TARGET_ENV%
-)
-if errorlevel 1 goto :fail
+echo Building. The site opens when the server is ready.
+node node_modules\next\dist\bin\next build > "%TEMP%\education-platform-build.log" 2>&1
+if errorlevel 1 goto fail
 
-echo.
-echo == Building Next.js app ==
-call pnpm build
-if errorlevel 1 goto :fail
+start "" /MIN powershell -NoProfile -Command "$deadline=(Get-Date).AddMinutes(3); while((Get-Date) -lt $deadline){ foreach($url in @('http://127.0.0.1:3000/','http://163.245.201.77:3000/')){ try { $r=Invoke-WebRequest -UseBasicParsing $url -TimeoutSec 5; if($r.StatusCode -ge 200 -and $r.StatusCode -lt 400){ Start-Process 'http://163.245.201.77:3000/'; exit 0 } } catch {} }; Start-Sleep -Seconds 2 }"
 
-echo.
-echo Build finished.
-echo Output is in web\.next
-echo Start it with:
-echo   cd /d "%CD%"
-if /I "%APP_ENV%"=="staging" (
-  echo   pnpm start:staging
-) else if /I "%APP_ENV%"=="production" (
-  echo   pnpm start:production
-) else (
-  echo   pnpm start
-)
-if "%PAUSE_AT_END%"=="1" pause
+echo http://163.245.201.77:3000/
+node node_modules\next\dist\bin\next start -H 0.0.0.0 -p 3000
+exit /b %errorlevel%
+
+:stopnode
+tasklist /FI "PID eq %~1" /NH | findstr /I "node.exe" >nul
+if errorlevel 1 exit /b 0
+taskkill /F /PID %~1 >nul 2>&1
 exit /b 0
 
 :fail
 echo.
-echo Build failed.
-if "%PAUSE_AT_END%"=="1" pause
+echo Build failed. The site was not started.
+echo Details are in %TEMP%\education-platform-build.log
+if exist "%TEMP%\education-platform-build.log" type "%TEMP%\education-platform-build.log"
+pause
 exit /b 1

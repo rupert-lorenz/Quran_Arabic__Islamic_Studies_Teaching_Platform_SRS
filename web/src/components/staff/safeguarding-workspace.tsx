@@ -3,9 +3,15 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { fieldClass, getJson, patchJson, postJson } from "@/lib/api";
+import { nextIncidentStatuses } from "@/lib/safeguarding-workflow";
 import { StaffFlash, StaffStat } from "./staff-stat";
 
-type Note = { id: string; body: string; createdAt: string | Date };
+type Note = {
+  id: string;
+  body: string;
+  createdAt: string | Date;
+  authorName: string | null;
+};
 
 type Incident = {
   id: string;
@@ -41,14 +47,6 @@ type Workspace = {
     createdAt: string | Date;
   }[];
 };
-
-const incidentStatuses = [
-  "open",
-  "investigating",
-  "escalated",
-  "resolved",
-  "closed",
-] as const;
 
 export function SafeguardingWorkspace({
   initial,
@@ -110,7 +108,13 @@ export function SafeguardingWorkspace({
             }
           }}
         >
-          <h2 className="text-xl font-extrabold text-brand">Log incident</h2>
+          <h2 className="font-heading text-xl font-bold tracking-tight text-brand">
+            Open a safeguarding report
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-muted">
+            This opens a case. Investigation notes stay on the case. The access
+            record at the bottom is not the investigation.
+          </p>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <label className="block">
               <span className="mb-1 block text-sm font-bold text-brand">Title</span>
@@ -153,7 +157,7 @@ export function SafeguardingWorkspace({
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <h3 className="text-lg font-extrabold text-brand">
+                  <h3 className="font-heading text-lg font-bold tracking-tight text-brand">
                     {incident.title}
                   </h3>
                   <p className="text-sm text-muted">
@@ -166,8 +170,9 @@ export function SafeguardingWorkspace({
                 <select
                   className="min-h-10 rounded-xl border border-line bg-background px-2 font-semibold"
                   value={incident.status}
-                  disabled={pending}
+                  disabled={pending || nextIncidentStatuses(incident.status).length === 0}
                   onChange={async (event) => {
+                    if (event.target.value === incident.status) return;
                     setPending(true);
                     setError("");
                     try {
@@ -185,20 +190,33 @@ export function SafeguardingWorkspace({
                     }
                   }}
                 >
-                  {incidentStatuses.map((status) => (
+                  <option value={incident.status}>{incident.status}</option>
+                  {nextIncidentStatuses(incident.status).map((status) => (
                     <option key={status} value={status}>
                       {status}
                     </option>
                   ))}
                 </select>
               </div>
+              <h4 className="mt-4 font-heading text-sm font-bold tracking-tight text-brand">
+                Investigation record
+              </h4>
               {incident.notes.length > 0 ? (
-                <ul className="mt-3 space-y-2 text-sm text-muted">
+                <ul className="mt-2 space-y-2 text-sm text-muted">
                   {incident.notes.map((note) => (
-                    <li key={note.id}>{note.body}</li>
+                    <li key={note.id}>
+                      <span className="font-bold text-brand">
+                        {note.authorName ?? "Staff"}
+                      </span>
+                      {" · "}
+                      {String(note.createdAt).slice(0, 16).replace("T", " ")}
+                      <span className="mt-1 block">{note.body}</span>
+                    </li>
                   ))}
                 </ul>
-              ) : null}
+              ) : (
+                <p className="mt-2 text-sm text-muted">No investigation record yet.</p>
+              )}
               <form
                 className="mt-4 flex flex-wrap gap-2"
                 onSubmit={async (event) => {
@@ -224,15 +242,17 @@ export function SafeguardingWorkspace({
                   name="body"
                   required
                   minLength={3}
-                  placeholder="Add a note"
+                  placeholder="Add an investigation finding"
                   className={`${fieldClass} max-w-md`}
                 />
                 <Button type="submit" variant="secondary" disabled={pending}>
-                  Add note
+                  Add finding
                 </Button>
                 {canSuspend &&
                 incident.involvedUserId &&
-                incident.involvedStatus !== "suspended" ? (
+                incident.involvedStatus !== "suspended" &&
+                incident.status !== "resolved" &&
+                incident.status !== "closed" ? (
                   <Button
                     type="button"
                     variant="secondary"
@@ -291,7 +311,9 @@ export function SafeguardingWorkspace({
               }
             }}
           >
-            <h2 className="text-xl font-extrabold text-brand">Flag a recording</h2>
+            <h2 className="font-heading text-xl font-bold tracking-tight text-brand">
+              Flag a recording
+            </h2>
             <div className="mt-4 grid gap-4 md:grid-cols-3">
               <label className="block">
                 <span className="mb-1 block text-sm font-bold text-brand">
@@ -321,7 +343,9 @@ export function SafeguardingWorkspace({
                 className="flex flex-wrap items-center justify-between gap-3 rounded-[2rem] border border-line bg-surface px-5 py-4"
               >
                 <div>
-                  <h3 className="font-extrabold text-brand">{recording.reference}</h3>
+                  <h3 className="font-heading font-bold tracking-tight text-brand">
+                    {recording.reference}
+                  </h3>
                   <p className="text-sm text-muted">
                     {recording.relatedName ?? recording.relatedEmail ?? "No account"}
                     {recording.notes ? ` · ${recording.notes}` : ""}
@@ -362,7 +386,13 @@ export function SafeguardingWorkspace({
 
       {canReadAudit ? (
         <section className="mt-10">
-          <h2 className="text-xl font-extrabold text-brand">Recent audit</h2>
+          <h2 className="font-heading text-xl font-bold tracking-tight text-brand">
+            Access record
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
+            This lists that a step was taken. It is not the investigation. The
+            case file above holds the report and the findings.
+          </p>
           <ul className="mt-3 space-y-2 text-sm text-muted">
             {data.recentAudit.map((entry) => (
               <li key={entry.id}>

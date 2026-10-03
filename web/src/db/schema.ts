@@ -4,6 +4,7 @@ export * from "./schema/booking-packages";
 export * from "./schema/catalog";
 export * from "./schema/classrooms";
 export * from "./schema/cms";
+export * from "./schema/crm";
 export * from "./schema/enums";
 export * from "./schema/exams";
 export * from "./schema/files";
@@ -18,16 +19,19 @@ export * from "./schema/islamic-progress";
 export * from "./schema/identity";
 export * from "./schema/lessons";
 export * from "./schema/lms";
+export * from "./schema/mobile";
 export * from "./schema/notifications";
 export * from "./schema/live-courses";
 export * from "./schema/operations";
 export * from "./schema/platform";
 export * from "./schema/presence";
 export * from "./schema/pricing";
+export * from "./schema/privacy";
 export * from "./schema/profiles";
 export * from "./schema/question-bank";
 export * from "./schema/quizzes";
 export * from "./schema/reviews";
+export * from "./schema/secure-messages";
 export * from "./schema/security";
 
 export const platformRoles = [

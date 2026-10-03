@@ -95,6 +95,7 @@ export function NotificationMenu({
           {inbox.notifications.length ? (
             <ul className="max-h-80 space-y-2 overflow-y-auto">
               {inbox.notifications.map((item) => {
+                const reminder = item.kind === "lesson_reminder";
                 const titleKey = (
                   item.kind === "group_place_reserved"
                     ? "group.notify_reserved_title"
@@ -117,15 +118,19 @@ export function NotificationMenu({
                         if (!item.readAt) void markRead(item.id);
                       }}
                     >
-                      <p className="font-extrabold text-brand">{t(titleKey)}</p>
+                      <p className="font-extrabold text-brand">
+                        {reminder ? item.title : t(titleKey)}
+                      </p>
                       <p className="mt-1 font-semibold text-brand">
-                        {item.classTitle
-                          ? t(bodyKey, {
-                              student: item.studentName ?? "",
-                              title: item.classTitle,
-                              when: item.whenLabel ?? "",
-                            })
-                          : item.body}
+                        {reminder
+                          ? item.body
+                          : item.classTitle
+                            ? t(bodyKey, {
+                                student: item.studentName ?? "",
+                                title: item.classTitle,
+                                when: item.whenLabel ?? "",
+                              })
+                            : item.body}
                       </p>
                     </Link>
                   </li>

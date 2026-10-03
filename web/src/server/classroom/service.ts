@@ -1139,6 +1139,8 @@ export async function postClassroomMessage(
 ) {
   const { row, access } = await requireLiveClassroom(actor, classroomId);
   if (classroomContainsContactDetails(body)) {
+    const { flagContactShare } = await import("@/server/communications/guard");
+    await flagContactShare(actor, "classroom");
     throw new ApiError(
       422,
       "CONTACT_BLOCKED",
@@ -1187,6 +1189,8 @@ export async function uploadClassroomFile(
   }
   const name = sanitizeClassroomFileName(input.name);
   if (classroomContainsContactDetails(name)) {
+    const { flagContactShare } = await import("@/server/communications/guard");
+    await flagContactShare(actor, "files");
     throw new ApiError(
       422,
       "CONTACT_BLOCKED",
@@ -1557,6 +1561,8 @@ export async function updateClassroomWhiteboard(
       throw new ApiError(400, "VALIDATION", "Write text for the board");
     }
     if (classroomContainsContactDetails(text)) {
+      const { flagContactShare } = await import("@/server/communications/guard");
+      await flagContactShare(actor, "whiteboard");
       throw new ApiError(
         422,
         "CONTACT_BLOCKED",
@@ -1727,6 +1733,8 @@ async function annotateClassroomPresentation(
       throw new ApiError(400, "VALIDATION", "Write text for the slide");
     }
     if (classroomContainsContactDetails(text)) {
+      const { flagContactShare } = await import("@/server/communications/guard");
+      await flagContactShare(actor, "whiteboard");
       throw new ApiError(
         422,
         "CONTACT_BLOCKED",

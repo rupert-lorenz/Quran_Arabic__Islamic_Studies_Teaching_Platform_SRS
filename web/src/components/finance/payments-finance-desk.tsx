@@ -11,6 +11,17 @@ import { CoursePaymentsFacultyView } from "@/components/finance/course-payments-
 import { CommissionAutoFacultyView } from "@/components/finance/commission-auto-faculty";
 import { CommissionRulesFacultyView } from "@/components/finance/commission-rules-faculty";
 import { CommissionScopedFacultyView } from "@/components/finance/commission-scoped-faculty";
+import { CommunicationsFacultyView } from "@/components/finance/communications-faculty";
+import { NoticeFacultiesView } from "@/components/finance/notice-faculties";
+import { SafeguardFacultiesView } from "@/components/quality/safeguard-faculties";
+import { CrmFacultiesView } from "@/components/crm/crm-faculties";
+import { MobileFacultiesView } from "@/components/mobile/mobile-faculties";
+import { InfrastructureFacultiesView } from "@/components/infrastructure/infrastructure-faculties";
+import { DocumentationFacultiesView } from "@/components/docs/documentation-faculties";
+import { HandoverFacultiesView } from "@/components/handover/handover-faculties";
+import { TestingFacultiesView } from "@/components/testing/testing-faculties";
+import { SecurityFacultiesView } from "@/components/security/security-faculties";
+import { LedgerFacultyView } from "@/components/finance/ledger-faculty";
 import { CreditHistoryFacultyView } from "@/components/finance/credit-history-faculty";
 import { CustomerWalletFacultyView } from "@/components/finance/customer-wallet-faculty";
 import { GroupClassPaymentsFacultyView } from "@/components/finance/group-class-payments-faculty";
@@ -262,8 +273,270 @@ export function PaymentsFinanceDeskView({ desk }: { desk: Desk }) {
             }
             hideTeacherNames={desk.role !== "staff"}
           />
+          <LedgerFacultyView
+            titleKey="earnings_dashboard.faculty.title"
+            helpKey="earnings_dashboard.faculty.help"
+            manageKey="earnings_dashboard.faculty.manage"
+            emptyKey="earnings_dashboard.faculty.empty"
+            manageHref={
+              desk.role === "staff" ? "/staff/accounts" : "/teach/earnings"
+            }
+            tiles={[
+              {
+                labelKey: "earnings_dashboard.faculty.lines",
+                value: desk.earningsBoard.dashboard.lineCount,
+              },
+              {
+                labelKey: "earnings_dashboard.faculty.teachers",
+                value: desk.earningsBoard.dashboard.teacherCount,
+              },
+              {
+                labelKey: "earnings_dashboard.faculty.pending",
+                value: desk.earningsBoard.dashboard.pendingLabel,
+              },
+              {
+                labelKey: "earnings_dashboard.faculty.available",
+                value: desk.earningsBoard.dashboard.availableLabel,
+              },
+            ]}
+            rows={desk.earningsBoard.dashboard.recent.map((row) => ({
+              id: `${row.source}-${row.id}`,
+              title:
+                desk.role === "staff" && row.teacherName
+                  ? `${row.source} · ${row.teacherName}`
+                  : row.source,
+              meta: `${row.grossLabel} · ${row.netLabel} · ${row.status.replaceAll("_", " ")}`,
+            }))}
+          />
+          <LedgerFacultyView
+            titleKey="earnings_split.faculty.title"
+            helpKey="earnings_split.faculty.help"
+            manageKey="earnings_split.faculty.manage"
+            emptyKey="earnings_split.faculty.empty"
+            hideEmpty
+            manageHref={
+              desk.role === "staff" ? "/staff/accounts" : "/teach/earnings"
+            }
+            tiles={[
+              {
+                labelKey: "earnings_split.faculty.gross",
+                value: desk.earningsBoard.split.grossLabel,
+              },
+              {
+                labelKey: "earnings_split.faculty.commission",
+                value: desk.earningsBoard.split.commissionLabel,
+              },
+              {
+                labelKey: "earnings_split.faculty.net",
+                value: desk.earningsBoard.split.netLabel,
+              },
+              {
+                labelKey: "earnings_split.faculty.pending",
+                value: desk.earningsBoard.split.pendingLabel,
+              },
+              {
+                labelKey: "earnings_split.faculty.available",
+                value: desk.earningsBoard.split.availableLabel,
+              },
+              {
+                labelKey: "earnings_split.faculty.paid",
+                value: desk.earningsBoard.split.paidLabel,
+              },
+            ]}
+            rows={[]}
+          />
+          <LedgerFacultyView
+            titleKey="payouts.faculty.title"
+            helpKey="payouts.faculty.help"
+            manageKey="payouts.faculty.manage"
+            emptyKey="payouts.faculty.empty"
+            manageHref={
+              desk.role === "staff" ? "/staff/accounts" : "/teach/earnings"
+            }
+            tiles={[
+              {
+                labelKey: "payouts.faculty.pending",
+                value: desk.settlement.payouts.pending,
+              },
+              {
+                labelKey: "payouts.faculty.completed",
+                value: desk.settlement.payouts.completed,
+              },
+              {
+                labelKey: "payouts.faculty.held",
+                value: desk.settlement.payouts.held,
+              },
+              {
+                labelKey: "payouts.faculty.rejected",
+                value: desk.settlement.payouts.rejected,
+              },
+            ]}
+            rows={desk.settlement.payouts.recent}
+          />
+          <LedgerFacultyView
+            titleKey="payouts_auto.faculty.title"
+            helpKey={
+              desk.settlement.payoutsAuto.configured
+                ? "payouts_auto.faculty.help_on"
+                : "payouts_auto.faculty.help"
+            }
+            manageKey="payouts_auto.faculty.manage"
+            emptyKey="payouts_auto.faculty.empty"
+            manageHref={desk.role === "staff" ? "/staff/accounts" : null}
+            tiles={[
+              {
+                labelKey: "payouts_auto.faculty.provider",
+                value: desk.settlement.payoutsAuto.provider,
+              },
+              {
+                labelKey: "payouts_auto.faculty.queued",
+                value: desk.settlement.payoutsAuto.queued,
+              },
+            ]}
+            rows={desk.settlement.payoutsAuto.recent}
+          />
+          <LedgerFacultyView
+              titleKey="disputes.faculty.title"
+              helpKey="disputes.faculty.help"
+              manageKey="disputes.faculty.manage"
+              emptyKey="disputes.faculty.empty"
+              manageHref={
+                desk.role === "staff" ? "/staff/accounts" : "/teach/earnings"
+              }
+              tiles={[
+                {
+                  labelKey: "disputes.faculty.held",
+                  value: desk.settlement.disputes.held,
+                },
+                {
+                  labelKey: "disputes.faculty.payments",
+                  value: desk.settlement.disputes.payments,
+                },
+                {
+                  labelKey: "disputes.faculty.refunds",
+                  value: desk.settlement.disputes.refunds,
+                },
+                {
+                  labelKey: "disputes.faculty.credits",
+                  value: desk.settlement.disputes.credits,
+                },
+              ]}
+              rows={desk.settlement.disputes.recent}
+            />
         </>
       ) : null}
+      {desk.role !== "teacher" ? (
+        <>
+          <LedgerFacultyView
+            titleKey="refunds.faculty.title"
+            helpKey="refunds.faculty.help"
+            manageKey="refunds.faculty.manage"
+            emptyKey="refunds.faculty.empty"
+            manageHref={
+              desk.role === "staff" ? "/staff/accounts" : "/family/wallet"
+            }
+            tiles={[
+              {
+                labelKey: "refunds.faculty.full",
+                value: desk.settlement.refunds.full,
+              },
+              {
+                labelKey: "refunds.faculty.partial",
+                value: desk.settlement.refunds.partial,
+              },
+              {
+                labelKey: "refunds.faculty.pending",
+                value: desk.settlement.refunds.pending,
+              },
+              {
+                labelKey: "refunds.faculty.completed",
+                value: desk.settlement.refunds.completed,
+              },
+            ]}
+            rows={desk.settlement.refunds.recent}
+          />
+          <LedgerFacultyView
+            titleKey="account_credit.faculty.title"
+            helpKey="account_credit.faculty.help"
+            manageKey="account_credit.faculty.manage"
+            emptyKey="account_credit.faculty.empty"
+            manageHref={
+              desk.role === "staff" ? "/staff/accounts" : "/family/wallet"
+            }
+            tiles={[
+              {
+                labelKey: "account_credit.faculty.pending",
+                value: desk.settlement.credits.pending,
+              },
+              {
+                labelKey: "account_credit.faculty.completed",
+                value: desk.settlement.credits.completed,
+              },
+              {
+                labelKey: "account_credit.faculty.rejected",
+                value: desk.settlement.credits.rejected,
+              },
+              {
+                labelKey: "account_credit.faculty.total",
+                value: desk.settlement.credits.total,
+              },
+            ]}
+            rows={desk.settlement.credits.recent}
+          />
+        </>
+      ) : null}
+      <LedgerFacultyView
+        titleKey="promo.faculty.title"
+        helpKey="promo.faculty.help"
+        manageKey="promo.faculty.manage"
+        emptyKey="promo.faculty.empty"
+        manageHref={desk.role === "staff" ? "/staff/marketing" : null}
+        tiles={[
+          { labelKey: "promo.faculty.active", value: desk.offers.promo.active },
+          { labelKey: "promo.faculty.draft", value: desk.offers.promo.draft },
+          { labelKey: "promo.faculty.ended", value: desk.offers.promo.ended },
+          { labelKey: "promo.faculty.total", value: desk.offers.promo.total },
+        ]}
+        rows={desk.offers.promo.recent}
+      />
+      <LedgerFacultyView
+        titleKey="referral.faculty.title"
+        helpKey="referral.faculty.help"
+        manageKey="referral.faculty.manage"
+        emptyKey="referral.faculty.empty"
+        manageHref={desk.role === "staff" ? "/staff/marketing" : null}
+        tiles={[
+          {
+            labelKey: "referral.faculty.active",
+            value: desk.offers.referral.active,
+          },
+          {
+            labelKey: "referral.faculty.draft",
+            value: desk.offers.referral.draft,
+          },
+          {
+            labelKey: "referral.faculty.ended",
+            value: desk.offers.referral.ended,
+          },
+          {
+            labelKey: "referral.faculty.total",
+            value: desk.offers.referral.total,
+          },
+        ]}
+        rows={desk.offers.referral.recent}
+      />
+      <CommunicationsFacultyView faculty={desk.communications} />
+      <NoticeFacultiesView notices={desk.notices} role={desk.role} />
+      <SafeguardFacultiesView faculties={desk.safeguard} />
+      <CrmFacultiesView faculties={desk.crm} />
+      <MobileFacultiesView faculties={desk.mobile} />
+      <SecurityFacultiesView faculties={desk.security} />
+      <InfrastructureFacultiesView faculties={desk.infrastructure} />
+      <TestingFacultiesView faculties={desk.testing} />
+      {"documentation" in desk ? (
+        <DocumentationFacultiesView faculties={desk.documentation} />
+      ) : null}
+      {"handover" in desk ? <HandoverFacultiesView faculties={desk.handover} /> : null}
 
       <section>
         <h2 className="font-heading text-xl font-bold tracking-tight text-brand">

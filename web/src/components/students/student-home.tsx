@@ -84,6 +84,15 @@ export async function StudentHome({
           <ButtonLink href="/learn/bookings" variant="secondary" className={shortcutLinkClass}>
             {t("booking.your_bookings")}
           </ButtonLink>
+          <ButtonLink href="/messages" variant="secondary" className={shortcutLinkClass}>
+            {t("messages.nav")}
+          </ButtonLink>
+          <ButtonLink href="/learn/guide" variant="secondary" className={shortcutLinkClass}>
+            {t("dc.student.title")}
+          </ButtonLink>
+          <ButtonLink href="/mobile" variant="secondary" className={shortcutLinkClass}>
+            {t("mb.nav")}
+          </ButtonLink>
           <ButtonLink href="/learn/library" variant="secondary" className={shortcutLinkClass}>
             {t("library.title")}
           </ButtonLink>
@@ -176,8 +185,8 @@ export async function StudentHome({
                 <p className="font-extrabold">{goal.title}</p>
                 <p className="mt-1 text-muted">
                   {goal.statusLabel}
-                  {goal.subjectName ? ` · ${goal.subjectName}` : ""}
-                  {goal.targetDate ? ` · ${goal.targetDate}` : ""}
+                  {goal.subjectName ? ` - ${goal.subjectName}` : ""}
+                  {goal.targetDate ? ` - ${goal.targetDate}` : ""}
                 </p>
               </li>
             ))}

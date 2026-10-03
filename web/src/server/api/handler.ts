@@ -30,6 +30,7 @@ type ApiRouteOptions<TInput> = {
   rateLimit?: RateLimitKind | false;
   envelope?: boolean;
   input?: ZodType<TInput>;
+  maxBody?: number;
 };
 
 function withApiHeaders(
@@ -105,14 +106,14 @@ function errorMessage(error: unknown, requestId: string) {
   };
 }
 
-async function readJson(request: Request) {
+async function readJson(request: Request, maxBytes = MAX_JSON_BYTES) {
   const contentType = request.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) {
     throw new ApiError(415, "UNSUPPORTED_MEDIA", "JSON content type is required");
   }
 
   const raw = await request.text();
-  if (raw.length > MAX_JSON_BYTES) {
+  if (raw.length > maxBytes) {
     throw new ApiError(413, "PAYLOAD_TOO_LARGE", "Request body is too large");
   }
 
@@ -177,7 +178,7 @@ export function apiRoute<TInput = unknown, TData = unknown>(
       let input = undefined as TInput;
       if (options.input) {
         const query = Object.fromEntries(new URL(request.url).searchParams.entries());
-        const body = mutating ? await readJson(request) : {};
+        const body = mutating ? await readJson(request, options.maxBody) : {};
         input = options.input.parse(
           mutating ? { ...query, ...(typeof body === "object" && body ? body : {}) } : query,
         );

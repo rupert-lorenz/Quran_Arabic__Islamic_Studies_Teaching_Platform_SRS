@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Al Haramain Schools",
+    "slug": "al-haramain-schools",
+    "scheme": "alharamain",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "uk.co.alharamainschools.app",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Used when you join a virtual classroom.",
+        "NSMicrophoneUsageDescription": "Used when you join a virtual classroom."
+      }
+    },
+    "android": {
+      "package": "uk.co.alharamainschools.app",
+      "permissions": ["INTERNET"]
+    },
+    "extra": {
+      "apiUrl": "http://163.245.201.77:3000"
+    }
+  }
+}

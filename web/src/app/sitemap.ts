@@ -15,6 +15,8 @@ const staticPaths = [
   "/about",
   "/safeguarding",
   "/faq",
+  "/help",
+  "/mobile",
   "/blog",
   "/news",
   "/policies",
